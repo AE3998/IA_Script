@@ -9,12 +9,12 @@ velApren= 0.02
 tasaErr = 0.15
 maxEpoca = 10
 graficar = True
-print("Comienza el entrenamiento de caso OR...")
+print("Comenzando el entrenamiento de caso OR...")
 Wi = entrenarPesos(nombreArchivo, velApren, tasaErr, maxEpoca, graficar)
 
 # Prueba 
 nombreArchivo = "datos/OR_tst.csv"
-print("\nComprobar el funcionamiento de la neurona entrenada...")
+print("\nComprobando la neurona entrenada...")
 probar(nombreArchivo, Wi)
 
 
@@ -25,10 +25,10 @@ tasaErr = 0.15
 maxEpoca = 10
 graficar = False
 print("\n" * 2)
-print("Comienza el entrenamiento de caso XOR...")
+print("Comenzando el entrenamiento de caso XOR...")
 Wi = entrenarPesos(nombreArchivo, velApren, tasaErr, maxEpoca, graficar)
 
 # Prueba 
 nombreArchivo = "datos/XOR_tst.csv"
-print("\nComprobar el funcionamiento de la neurona entrenada...")
+print("\nComprobando la neurona entrenada...")
 probar(nombreArchivo, Wi)
