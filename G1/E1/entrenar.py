@@ -100,7 +100,8 @@ def entrenarPesos(nombreArchivo, velApren, tasaErr, maxEpoca, graficar = False):
         tasaErrActual = contError/nPatron
     
     if(tasaErrActual < tasaErr):
-        print("La rutina ha logrado minimizar la tasa de error:", tasaErrActual * 100, "%")
+        print("La rutina ha logrado minimizar la tasa de error:", tasaErrActual * 100, "%",
+              "en ", maxEpocaCont, "epocas")
     else:
         print("La rutina llego la cantidad maxima de Epoca definida.")
 
