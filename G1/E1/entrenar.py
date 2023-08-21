@@ -21,6 +21,13 @@ def cargarDatos(archivo):
     # excluir la ultima columna y agregar una columna 
     # al inicio que corresponde a la entrada x0 = -1.  
 
+    # --- Desordeno las filas del archivo por si venian ordenadas por categoria ---
+    # Es para que la red (el perceptron) no se aprenda todos los de una categoria y luego los de otra.
+    # Obtener un indice aleatorio para permutar las filas
+    indices_aleatorios = np.random.permutation(datos.shape[0])  # matriz.shape[0] = cantidad de filas
+    # Ordenar las filas de la matriz de forma aleatoria
+    datos = datos[indices_aleatorios]
+
     # [0.9, -1.1, 1] => xn = [[-1], 0.9, -1.1] yd = [1]
     x0 = -1*np.ones(shape=(np.size(datos, 0), 1))
     xn = np.hstack((x0, datos[:, :-1]))
