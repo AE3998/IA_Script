@@ -5,12 +5,14 @@ from herramientas.percMulticapa import *
 nombreArchivo = "datos/XOR_trn.csv"
 capas = [3, 1]
 alpha = 1
-tasaAp = 0.02
+tasaAp = 1.9
 maxErr = 0.01
 maxEpoc = 50
+umbral = 1e-1
 graf = True
 
-Wji = entrenar(nombreArchivo, capas, alpha, tasaAp, maxErr, maxEpoc, graf)
+Wji = entrenar(nombreArchivo, capas, alpha, tasaAp, maxErr, 
+                maxEpoc,umbral ,graf)
 
 nombreArchivo = "datos/XOR_tst.csv"
 # probar(nombreArchivo, Wji, alpha)

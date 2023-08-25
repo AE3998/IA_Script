@@ -29,7 +29,6 @@ def sigmoidea(Wji, Xi, alpha):
 
     return Y
 
-
 def entrenar(nombreArchivo, capas, alpha,tasaAp, 
              maxErr, maxEpoc, umbral = 1e-1, graf = False):
     
@@ -89,34 +88,42 @@ def entrenar(nombreArchivo, capas, alpha,tasaAp,
             for j in range(cantCapas):
                 yy[j] = sigmoidea(Wji[j], entrada, alpha)
                 
-                # Recordar la entrada X0 que existe en cada capa 
+                # Recordar la entrada X0 = -1 existe en cada capa 
                 entrada = np.hstack((np.array([-1]), yy[j]))
             
             # ===========[Propagacion hacia atras]===========
 
-            # Asignar directamente la delta de la capa de salida
+            # Asignar la delta de la capa de salida
             ySalida = yy[-1][:]
             deltas[-1] = 0.5 * (Yd[i, :] - ySalida) * (1 + ySalida) * (1 - ySalida)
 
             for j in range(cantCapas - 2, -1, -1):
-                # Recordar que cada columna de Wji corresponde a una entrada particular
-                # Por ejemplo Wj1 corresponde a cada peso sinaptico que conecta de
-                # X1 hacia las j entradas.
+                # Recordar que cada columna de Wji corresponde a una entrada Xi particular
+                # Por ejemplo Wj1 corresponde a cada peso sinaptico que sale de 
+                # X1 y se conectan a las j neuronas
                 
 
                 # delta de capa 1 = 1/2(dta2@Wji2)(1+y1)(1-y1)
-                # d1 = 1/2([0.11]@[0.1, 0.2])(1+y2[])
-                # Por un problema tecnico, debo agregar una dimension al vector 
-                # de delta y pasarlo a un vector columna
+                # En Octave seria como:
 
-                # [dta11; dta12] .* [1 1; 1 1] = [dta11 dta11 ; dta12 dta12] 
-                # Y luego sumarlo, dando un vector 1D para asignar a las deltas
-                # de la capa -.-
+                # d2 = [0.1 0.2]
+                # Wji = [1 2; 
+                #        1 2]
+                # d1 = 1/2(d2*Wji)(1+y1)(1-y1)
+                # d1 = 1.2 * [0.3 0.6] * (1 + [y1(1) y1(2)]) ...
+                #                      * (1 - [y1(1) y1(2)])
 
+                # En python no te permite trabajar vector 1D junto con una matriz 2D
+                # por esta razon habra que aumentar la dimension del vector 1D usando
+                # np.newaxis
+
+
+                # ===Version "intuitiva"
                 # dTa = deltas[j + 1]
                 # producto = np.multiply(dTa[:, np.newaxis], Wji[j + 1][:, 1:])
                 # sumatoria = np.sum(producto, axis=0)
 
+                # Mi version favorita
                 sumatoria = (deltas[j + 1][np.newaxis]@Wji[j + 1][:, 1:])[0]
 
                 ySalida = yy[j][:]
@@ -126,12 +133,16 @@ def entrenar(nombreArchivo, capas, alpha,tasaAp,
             # ===========[Ajuste de pesos]===========
             
             # Recorrer nuevamente cada capa ajustando los pesos
-            # delta*entrada = 
-            # vector columna(cant de delta) * vector fila(cant de entrada) 
-            # dWji = matriz shape = (nNeurona, nEntrada)
-            # Recordar que delta guarda solamente vector 1D
-            # Lo mismo sucede cuando hago slicing de X[i, :] devuelve
-            # un vector 1D. Hay que agregar dimension para que sean 2D
+            # En Octave es como:
+            # delta = [1;
+            #          2]
+            # entrada = [-1 2 3]
+
+            # dWji = tasaAp * delta*entrada
+            # dWji = tasaAp * [-1 2 3;
+            #                  -2 4 6]
+
+            # Hay que agregar dimension para que sean 2D
             # y aplicar producto matricial 
 
             # Delta Wji de capa 1
@@ -142,20 +153,14 @@ def entrenar(nombreArchivo, capas, alpha,tasaAp,
                 entradaCapa =  np.hstack((np.array([-1]), yy[j]))
                 dWji = tasaAp * deltas[j + 1][:, np.newaxis] @ entradaCapa[np.newaxis]
 
-            # Guardar el error del patron
-            errPlot = np.hstack((errPlot, 0.5 * np.linalg.norm(Yd[i, :] - yy[-1][:], 2)))
             
             # =======Fin del patron=======
-        plt.plot(errPlot, label="Err/Patron")
-        plt.grid(True)
-        plt.legend()
 
         # Una vez terminado todos los patrones, se procede a comprobar  
         # la tasa de acierto
 
         # ===========[Comprobar acierto]===========
         cantErr = 0
-        
         # Recorrer cada patron de entrada y despejar su salida y
         for i in range(X.shape[0]):
             entrada = X[i, :]
@@ -167,12 +172,17 @@ def entrenar(nombreArchivo, capas, alpha,tasaAp,
             # Comparar si el error del patron supera o no 
             # el umbral definido
             E = 0.5 * np.linalg.norm(Yd[i, :] - yy[-1][:], 2)
+
             cantErr += E > umbral
 
         err = cantErr/X.shape[0]
+        errPlot = np.hstack((errPlot, err))
 
         # print(err*100, "%", " de error")
     
+    plt.plot(errPlot, label="Err/Epoca")
+    plt.grid(True)
+    plt.legend()
     pbar.close()
     if(err < maxErr):
         print("Entrenamiento finalizado por tasa de acierto " +
