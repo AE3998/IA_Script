@@ -156,10 +156,7 @@ def entrenar(nombreArchivo, capas, alpha,tasaAp,
             
             # =======Fin del patron=======
 
-        # Una vez terminado todos los patrones, se procede a comprobar  
-        # la tasa de acierto
-
-        # ===========[Comprobar acierto]===========
+        # ===========[Comprobar aciertos]===========
         cantErr = 0
         # Recorrer cada patron de entrada y despejar su salida y
         for i in range(X.shape[0]):
@@ -175,8 +172,11 @@ def entrenar(nombreArchivo, capas, alpha,tasaAp,
 
             cantErr += E > umbral
 
+        # Siempre vale 1, ??
         err = cantErr/X.shape[0]
-        errPlot = np.hstack((errPlot, err))
+        # errPlot = np.hstack((errPlot, err))
+        # Compruebo con el ultimo E
+        errPlot = np.hstack((errPlot, E))
 
         # print(err*100, "%", " de error")
     

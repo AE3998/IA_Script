@@ -4,10 +4,10 @@ from herramientas.percMulticapa import *
 
 nombreArchivo = "datos/XOR_trn.csv"
 capas = [3, 1]
-alpha = 1
-tasaAp = 1.9
-maxErr = 0.01
-maxEpoc = 50
+alpha = 5
+tasaAp = 5
+maxErr = 0.3
+maxEpoc = 80
 umbral = 1e-1
 graf = True
 
