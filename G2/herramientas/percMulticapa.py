@@ -50,20 +50,11 @@ def entrenar(nombreArchivo, capas, alpha,tasaAp,
     # La cantidad de columnas SIEMPRE debe coincidir con la cantidad de entrada Xi (o Yi)
     Wji = [np.random.rand(capas[0], nEntrada) - 0.5]
 
-    dWjiPrev = [np.zeros(Wji[0].shape)] # <================================== Ver si esta bien
-
-
     for i in range(cantCapas - 1):
         # Numero de columna debe coincidir con la cantidad de entradas
         # Recordar que habia X0 como entrada adicional, por eso se suma 1
         # a la cantidad de columna
         Wji.append(np.random.rand(capas[i + 1], capas[i] + 1) - 0.5)
-        dWjiPrev.append(np.zeros(Wji[i + 1].shape)) 
-
-    # visualizar la matriz Wji
-    # print("Matriz Wji:")
-    # for i in Wji:
-    #     print(i, "\n")
     
     # =========[Inicializar las salidas y las deltas de cada capa]=========
     yy = []
@@ -77,6 +68,7 @@ def entrenar(nombreArchivo, capas, alpha,tasaAp,
 
     err = 1
     epoca = 0
+    errPlot = np.array([])
     
     pbar = tqdm(total=maxEpoc)
 
@@ -93,24 +85,18 @@ def entrenar(nombreArchivo, capas, alpha,tasaAp,
             # ===========[Propagacion hacia adelante]===========
 
             entrada = X[i, :]
-            # print("entrada = ", entrada)
 
             for j in range(cantCapas):
                 yy[j] = sigmoidea(Wji[j], entrada, alpha)
                 
                 # Recordar la entrada X0 que existe en cada capa 
                 entrada = np.hstack((np.array([-1]), yy[j]))
-
-                # print("nueva entrada = ", entrada, "\n")
             
             # ===========[Propagacion hacia atras]===========
 
             # Asignar directamente la delta de la capa de salida
-            # VER si la salida hay mas de 1 <=================================
             ySalida = yy[-1][:]
             deltas[-1] = 0.5 * (Yd[i, :] - ySalida) * (1 + ySalida) * (1 - ySalida)
-
-            # print("delta de capa final = ", deltas[-1])
 
             for j in range(cantCapas - 2, -1, -1):
                 # Recordar que cada columna de Wji corresponde a una entrada particular
@@ -136,30 +122,34 @@ def entrenar(nombreArchivo, capas, alpha,tasaAp,
                 ySalida = yy[j][:]
                 deltas[j] = 0.5 * sumatoria * (1 + ySalida) * (1 - ySalida)
 
-                # print("delta de capa", j, " = ", deltas[j])
-
 
             # ===========[Ajuste de pesos]===========
             
             # Recorrer nuevamente cada capa ajustando los pesos
-            # delta*entrada,  columna(cant de neurona) * fila(cant de entrada) 
+            # delta*entrada = 
+            # vector columna(cant de delta) * vector fila(cant de entrada) 
             # dWji = matriz shape = (nNeurona, nEntrada)
             # Recordar que delta guarda solamente vector 1D
             # Lo mismo sucede cuando hago slicing de X[i, :] devuelve
-            # un vector 1D. Hay que agregar dimension 
+            # un vector 1D. Hay que agregar dimension para que sean 2D
+            # y aplicar producto matricial 
 
+            # Delta Wji de capa 1
             dWji = tasaAp * deltas[0][:, np.newaxis] @ X[i, :][np.newaxis]
-            # print("Delta de Wji de entrada = \n", dWji)
 
             for j in range(cantCapas - 1):
-                Wji[j] += dWji + dWjiPrev[j]
-                # if(algo que no me acuerdo bruh)
-                    # dWjiPrev[j] = dWji
+                Wji[j] += dWji 
                 entradaCapa =  np.hstack((np.array([-1]), yy[j]))
                 dWji = tasaAp * deltas[j + 1][:, np.newaxis] @ entradaCapa[np.newaxis]
-                # print("Delta de Wji de entrada = \n", dWji)
 
+            # Guardar el error del patron
+            errPlot = np.hstack((errPlot, 0.5 * np.linalg.norm(Yd[i, :] - yy[-1][:], 2)))
             
+            # =======Fin del patron=======
+        plt.plot(errPlot, label="Err/Patron")
+        plt.grid(True)
+        plt.legend()
+
         # Una vez terminado todos los patrones, se procede a comprobar  
         # la tasa de acierto
 
@@ -178,7 +168,6 @@ def entrenar(nombreArchivo, capas, alpha,tasaAp,
             # el umbral definido
             E = 0.5 * np.linalg.norm(Yd[i, :] - yy[-1][:], 2)
             cantErr += E > umbral
-            # err += 0.5 * np.linalg.norm(Yd[i, :] - yy[-1][:], 2)
 
         err = cantErr/X.shape[0]
 

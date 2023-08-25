@@ -13,7 +13,8 @@ graf = True
 Wji = entrenar(nombreArchivo, capas, alpha, tasaAp, maxErr, maxEpoc, graf)
 
 nombreArchivo = "datos/XOR_tst.csv"
-probar(nombreArchivo, Wji, alpha)
+# probar(nombreArchivo, Wji, alpha)
+plt.show()
 
 
 
