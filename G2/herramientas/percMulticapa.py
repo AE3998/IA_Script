@@ -1,6 +1,8 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from tqdm import tqdm
+from .grafXOR import *
+from .grafConcent import *
 
 
 def cargarDatos(nombreArchivo, nCapaFinal):
@@ -65,11 +67,20 @@ def entrenar(nombreArchivo, capas, alpha,tasaAp,
     
     # ===========[Ciclo de entrenamiento]===========
 
+
     err = 1
     epoca = 0
     errPlot = np.array([])
     
     pbar = tqdm(total=maxEpoc)
+
+    # ===========[Graficar]===========
+    if(graf):
+        import matplotlib.pyplot as plt
+        fig, ax = plt.subplots()
+        # Graficar XOR
+        if True:
+            grafErrorXOR(ax, errPlot, epoca)
 
     while(err > maxErr and epoca < maxEpoc):
         
@@ -158,6 +169,7 @@ def entrenar(nombreArchivo, capas, alpha,tasaAp,
 
         # ===========[Comprobar aciertos]===========
         cantErr = 0
+        errPromedio = 0
         # Recorrer cada patron de entrada y despejar su salida y
         for i in range(X.shape[0]):
             entrada = X[i, :]
@@ -169,20 +181,28 @@ def entrenar(nombreArchivo, capas, alpha,tasaAp,
             # Comparar si el error del patron supera o no 
             # el umbral definido
             E = 0.5 * np.linalg.norm(Yd[i, :] - yy[-1][:], 2)
-
             cantErr += E > umbral
 
-        # Siempre vale 1, ??
+            # Promedio de error para luego hacer la grafica
+            errPromedio += E
+
         err = cantErr/X.shape[0]
-        # errPlot = np.hstack((errPlot, err))
-        # Compruebo con el ultimo E
-        errPlot = np.hstack((errPlot, E))
+
+        errPromedio = errPromedio/X.shape[0]
+
+        errPlot = np.hstack((errPlot, errPromedio))
 
         # print(err*100, "%", " de error")
     
-    plt.plot(errPlot, label="Err/Epoca")
-    plt.grid(True)
-    plt.legend()
+        if(graf):
+            if (epoca % 25 == 0):
+                # Graf XOR
+                if(True):
+                    grafErrorXOR(ax, errPlot, epoca)
+    # End while
+
+
+
     pbar.close()
     if(err < maxErr):
         print("Entrenamiento finalizado por tasa de acierto " +
