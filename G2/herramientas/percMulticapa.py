@@ -34,7 +34,7 @@ def sigmoidea(Wji, Xi, alpha):
 def entrenar(nombreArchivo, capas, alpha,tasaAp, 
              maxErr, maxEpoc, umbral = 1e-1, graf = False):
     
-    np.random.seed(10000)
+    # np.random.seed(10000)
     # ===========[Inicializar los datos]===========
     
     # Pasar la ruta del archivo y la cantidad de neuronas de la capa de salida
@@ -180,7 +180,7 @@ def entrenar(nombreArchivo, capas, alpha,tasaAp,
             
             # Comparar si el error del patron supera o no 
             # el umbral definido
-            E = 0.5 * np.linalg.norm(Yd[i, :] - yy[-1][:], 2)
+            E = 0.5 * np.sum(np.power(Yd[i, :] - yy[-1][:], 2))
             cantErr += E > umbral
 
             # Promedio de error para luego hacer la grafica
@@ -195,7 +195,7 @@ def entrenar(nombreArchivo, capas, alpha,tasaAp,
         # print(err*100, "%", " de error")
     
         if(graf):
-            if (epoca % 25 == 0):
+            if (epoca % 10 == 0):
                 # Graf XOR
                 if(True):
                     grafErrorXOR(ax, errPlot, epoca)

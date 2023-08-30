@@ -22,8 +22,8 @@ def grafErrorXOR(ax, Err, epoca):
     # fig, ax = plt.subplots()
     ax.cla()
     ax.grid(True)
-    ax.plot(Err)
-    ax.legend("Error/Epoca" , str(epoca))
+    ax.plot(Err, label="Error/Epoca"+str(epoca))
+    ax.legend()
     ax.set_title("Epoca" + str(epoca))
     plt.pause(0.1)
 

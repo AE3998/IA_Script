@@ -3,11 +3,11 @@ import matplotlib.pyplot as plt
 from herramientas.percMulticapa import *
 
 nombreArchivo = "datos/XOR_trn.csv"
-capas = [3, 1]
-alpha = 3
-tasaAp = 0.5
-maxErr = 0.3
-maxEpoc = 800
+capas = [2, 1]
+alpha = 1.2
+tasaAp = 0.003
+maxErr = 0.1
+maxEpoc = 200
 umbral = 1e-1
 graf = True
 
@@ -16,6 +16,7 @@ Wji = entrenar(nombreArchivo, capas, alpha, tasaAp, maxErr,
 
 nombreArchivo = "datos/XOR_tst.csv"
 # probar(nombreArchivo, Wji, alpha)
+
 plt.show()
 
 
