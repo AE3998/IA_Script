@@ -1,7 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from .grafXOR import *
-from .grafConcent import *
+from .graficar import *
 
 
 def cargarDatos(nombreArchivo, nCapaFinal):
@@ -31,9 +30,10 @@ def sigmoidea(Wji, Xi, alpha):
     return Y
 
 def entrenar(nombreArchivo, capas, alpha,tasaAp, 
-             maxErr, maxEpoc, umbral = 1e-1, graf = False):
+             maxErr, maxEpoc, umbral = 1e-1, graf = False,
+            XOR = False):
     
-    np.random.seed(10000)
+    # np.random.seed(10000)
     # ===========[Inicializar los datos]===========
     
     # Pasar la ruta del archivo y la cantidad de neuronas de la capa de salida
@@ -71,8 +71,9 @@ def entrenar(nombreArchivo, capas, alpha,tasaAp,
 
     # ===========[Graficar]===========
     if(graf):
-        import matplotlib.pyplot as plt
-        fig, ax = plt.subplots()
+        title = "XOR" if XOR else "Concent"
+        nMesh = 30
+        fig, ax = initGraf(title, X, Yd, nMesh, XOR)
 
     while(err > maxErr and epoca < maxEpoc):
 
@@ -184,12 +185,10 @@ def entrenar(nombreArchivo, capas, alpha,tasaAp,
         # print(err*100, "%", " de error")
     
         if(graf):
-            if (epoca % 25 == 0):
-                # Graf XOR
-                if(True):
-                    # grafErrorXOR(ax, errPlot, epoca)
+            if ((epoca - 1) % 10 == 0):
+                actualizarMesh(ax, X, Yd, Wji, alpha, nMesh, XOR, epoca)
+                plt.pause(0.3)
                 # Graf Concent
-                    ...
     # End while
 
 
@@ -202,6 +201,7 @@ def entrenar(nombreArchivo, capas, alpha,tasaAp,
         print("Entrenamiento finalizado por Maxima Epoca con ", 
               "un tasa de error ", err * 100, "%")
 
+    plt.show()
     return Wji
 
             

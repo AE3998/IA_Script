@@ -3,13 +3,14 @@ import matplotlib.pyplot as plt
 from herramientas.percMulticapa import *
 
 nombreArchivo = "datos/concent_trn.csv"
-capas = [5, 1]
+capas = [4, 1]
 maxErr = 0.1
 maxEpoc = 500
-tasaAp = 0.1
-alpha = 1
+tasaAp = 0.2
+alpha = 5
 umbral = 0.08
 graf = True
+XOR = False
 
 Wji = entrenar(nombreArchivo, capas, alpha, tasaAp, maxErr, 
-                maxEpoc,umbral ,graf)
+                maxEpoc,umbral ,graf, XOR)

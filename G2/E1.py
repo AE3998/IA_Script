@@ -8,11 +8,13 @@ maxErr = 0.1
 maxEpoc = 100
 tasaAp = 0.5
 alpha = 1
-umbral = 1e-2
+umbral = 0.08
 graf = True
+XOR = True
+
 
 Wji = entrenar(nombreArchivo, capas, alpha, tasaAp, maxErr, 
-                maxEpoc,umbral ,graf)
+                maxEpoc,umbral ,graf, XOR)
 
 # plt.show()
 
