@@ -1,6 +1,5 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from tqdm import tqdm
 from .grafXOR import *
 from .grafConcent import *
 
@@ -34,7 +33,7 @@ def sigmoidea(Wji, Xi, alpha):
 def entrenar(nombreArchivo, capas, alpha,tasaAp, 
              maxErr, maxEpoc, umbral = 1e-1, graf = False):
     
-    # np.random.seed(10000)
+    np.random.seed(10000)
     # ===========[Inicializar los datos]===========
     
     # Pasar la ruta del archivo y la cantidad de neuronas de la capa de salida
@@ -43,13 +42,14 @@ def entrenar(nombreArchivo, capas, alpha,tasaAp,
     X, Yd = cargarDatos(nombreArchivo, capas[-1])
 
     cantCapas = len(capas)
-
-    ##### Asumo que la entrada debe ser al menos 2D======
-    nEntrada = X.shape[1] # columna
+    cantPatrones = X.shape[0]
+    err = 1
+    epoca = 0
+    errPlot = np.array([])
     
     # =========[Inicializar los matrices de pesos]=========
     # La cantidad de columnas SIEMPRE debe coincidir con la cantidad de entrada Xi (o Yi)
-    Wji = [np.random.rand(capas[0], nEntrada) - 0.5]
+    Wji = [np.random.rand(capas[0], X.shape[1]) - 0.5]
 
     for i in range(cantCapas - 1):
         # Numero de columna debe coincidir con la cantidad de entradas
@@ -67,31 +67,19 @@ def entrenar(nombreArchivo, capas, alpha,tasaAp,
     
     # ===========[Ciclo de entrenamiento]===========
 
-
-    err = 1
-    epoca = 0
-    errPlot = np.array([])
     
-    pbar = tqdm(total=maxEpoc)
 
     # ===========[Graficar]===========
     if(graf):
         import matplotlib.pyplot as plt
         fig, ax = plt.subplots()
-        # Graficar XOR
-        if True:
-            grafErrorXOR(ax, errPlot, epoca)
 
     while(err > maxErr and epoca < maxEpoc):
-        
-        description = "Epoca " + str(epoca + 1) + ":"
-        pbar.set_description(description)
-        pbar.update(1)
-        
+
         epoca += 1
         
         # Recorrer todo los patrones de entrada 
-        for i in range(X.shape[0]):
+        for i in range(cantPatrones):
             # ===========[Propagacion hacia adelante]===========
 
             entrada = X[i, :]
@@ -164,6 +152,7 @@ def entrenar(nombreArchivo, capas, alpha,tasaAp,
                 entradaCapa =  np.hstack((np.array([-1]), yy[j]))
                 dWji = tasaAp * deltas[j + 1][:, np.newaxis] @ entradaCapa[np.newaxis]
 
+            Wji[-1] += dWji
             
             # =======Fin del patron=======
 
@@ -171,7 +160,7 @@ def entrenar(nombreArchivo, capas, alpha,tasaAp,
         cantErr = 0
         errPromedio = 0
         # Recorrer cada patron de entrada y despejar su salida y
-        for i in range(X.shape[0]):
+        for i in range(cantPatrones):
             entrada = X[i, :]
             for j in range(cantCapas):
                 yy[j] = sigmoidea(Wji[j], entrada, alpha)
@@ -186,27 +175,29 @@ def entrenar(nombreArchivo, capas, alpha,tasaAp,
             # Promedio de error para luego hacer la grafica
             errPromedio += E
 
-        err = cantErr/X.shape[0]
+        err = cantErr/cantPatrones
 
-        errPromedio = errPromedio/X.shape[0]
+        errPromedio = errPromedio/cantPatrones
 
         errPlot = np.hstack((errPlot, errPromedio))
 
         # print(err*100, "%", " de error")
     
         if(graf):
-            if (epoca % 10 == 0):
+            if (epoca % 25 == 0):
                 # Graf XOR
                 if(True):
-                    grafErrorXOR(ax, errPlot, epoca)
+                    # grafErrorXOR(ax, errPlot, epoca)
+                # Graf Concent
+                    ...
     # End while
 
 
-
-    pbar.close()
+    
     if(err < maxErr):
         print("Entrenamiento finalizado por tasa de acierto " +
-                str((1 - err) * 100) + "%")  
+                str((1 - err) * 100) + "%" + "en la epoca" +
+                str(epoca))
     else:
         print("Entrenamiento finalizado por Maxima Epoca con ", 
               "un tasa de error ", err * 100, "%")
@@ -223,6 +214,7 @@ def probar(nombreArchivo, Wji, alpha, umbral = 1e-1, graf = False):
     # ===========[Comprobar acierto]===========
     cantErr = 0
     cantCapas = len(Wji)
+    cantPatrones = X.shape[0]
     
     yy = []
     for i in range(cantCapas):
@@ -230,7 +222,7 @@ def probar(nombreArchivo, Wji, alpha, umbral = 1e-1, graf = False):
     
     # Recorrer cada patron de entrada y despejar su salida y
     # En = 0
-    for i in range(X.shape[0]):
+    for i in range(cantPatrones):
         entrada = X[i, :]
         for j in range(cantCapas):
             yy[j] = sigmoidea(Wji[j], entrada, alpha)
@@ -240,12 +232,11 @@ def probar(nombreArchivo, Wji, alpha, umbral = 1e-1, graf = False):
         # Comparar si el error del patron supera o no 
         # el umbral definido
         E = 0.5 * np.linalg.norm(Yd[i, :] - yy[-1][:], 2)
-        # En += 0.5 * np.linalg.norm(Yd[i, :] - yy[-1][:], 2)
         cantErr += E > umbral
 
 
     # Despejar el porcentaje de error 
-    err = cantErr/X.shape[0]
+    err = cantErr/cantPatrones
 
     print("Prueba con tasa de acierto " + str((1 - err) * 100) + "%")
 
@@ -259,9 +250,3 @@ def probar(nombreArchivo, Wji, alpha, umbral = 1e-1, graf = False):
 
 
 
-
-
-# capaFinal = 1
-# X, Y = cargarDatos("datos/XOR_trn.csv", capaFinal)
-# print(X)
-# print(Y)

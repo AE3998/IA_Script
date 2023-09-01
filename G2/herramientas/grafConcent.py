@@ -1,10 +1,10 @@
 import matplotlib as plt
+import numpy as np
 
-def asignarColor(yd):
-    color = []
-    for i in yd:
-        color.append("#00EEEE" if i < 0 else "#EE4000")
-    return color
+def asignarColor(Yd):
+    colores = np.full(shape=Yd.shape[0], fill_value= "#EE4000", dtype='U7')
+    colores[np.ravel(Yd)<0] = "#00EEEE"
+    return colores
 
 def crearLegend(ax):
     # fake_blue, fake_red, blue, red
@@ -18,3 +18,7 @@ def crearLegend(ax):
     legend1 = ax.legend(handles = handle[:n//2], loc = "upper left")
     ax.add_artist(legend1)
     ax.legend(handles = handle[n//2:], loc = "upper right")
+
+def grafPuntosConc(ax, X, Yd):
+    colores = asignarColor(Yd)
+    return ax.scatter(X[:, 0], X[:, 1], c=colores)
