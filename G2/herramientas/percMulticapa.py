@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from .graficar import *
+from .winnerTakesAll import *
 
 
 def cargarDatos(nombreArchivo, nCapaFinal):
@@ -71,9 +72,10 @@ def entrenar(nombreArchivo, capas, alpha, tasaAp,
 
     # ===========[Graficar]===========
     if(graf):
-        title = "XOR" if XOR else "Concent"
-        nMesh = 33
-        fig, ax = initGraf(title, X, Yd, nMesh, XOR)
+        if(capas[-1] == 1):
+            title = "XOR" if XOR else "Concent"
+            nMesh = 33
+            fig, ax = initGraf(title, X, Yd, nMesh, XOR)
 
     while(err > maxErr and epoca < maxEpoc):
 
@@ -166,10 +168,16 @@ def entrenar(nombreArchivo, capas, alpha, tasaAp,
                # Recordar la entrada X0 que existe en cada capa 
                 entrada = np.hstack((np.array([-1]), yy[j]))
             
-            # Comparar si el error del patron supera o no 
-            # el umbral definido
+
             E = 0.5 * np.sum(np.power(Yd[i, :] - yy[-1][:], 2))
-            cantErr += E > umbral
+            # Validar si hay multiple salida en la capa de salida 
+            if(capas[-1] > 1):
+                newY = winnerTakesAll(yy)
+                cantErr += not((newY == Yd[i]).all())
+            else:    
+                # Comparar si el error del patron supera o no 
+                # el umbral definido
+                cantErr += E > umbral
 
             # Promedio de error para luego hacer la grafica
             errPromedio += E
@@ -183,9 +191,9 @@ def entrenar(nombreArchivo, capas, alpha, tasaAp,
         # print(err*100, "%", " de error")
     
         if(graf):
-            if (epoca % 10 == 0):
+            if (epoca % 10 == 0 and capas[-1] == 1):
                 actualizarMesh(ax, X, Yd, Wji, alpha, nMesh, XOR, epoca, err)
-                plt.pause(0.3)
+                plt.pause(0.2)
                 # Graf Concent
         epoca += 1
     # End while
@@ -194,19 +202,27 @@ def entrenar(nombreArchivo, capas, alpha, tasaAp,
     
     if(err < maxErr):
         print("Entrenamiento finalizado por tasa de acierto " +
-                str(round((1 - err) * 100, 3)) + "%" + "en la epoca" +
+                str(round((1 - err) * 100, 3)) + "%" + " en la epoca " +
                 str(epoca-1))
     else:
         print("Entrenamiento finalizado por Maxima Epoca con ", 
               "un tasa de error ", err * 100, "%")
 
-    actualizarMesh(ax, X, Yd, Wji, alpha, nMesh, XOR, epoca-1, err)
+    if(capas[-1] == 1):
+        actualizarMesh(ax, X, Yd, Wji, alpha, nMesh, XOR, epoca-1, err)
+    # Graficar trayectoria de error promedio
+    fig2 ,ax2 = plt.subplots()
+    ax2.plot(errPlot)
+    ax2.set_title("Trayectoria de error promedio")
+
     plt.show()
+
     return Wji
 
             
 
-def probar(nombreArchivo, Wji, alpha, umbral = 1e-1, graf = False):
+def probar(nombreArchivo, Wji, alpha, umbral, 
+           graf = False, XOR = False):
 
     X, Yd = cargarDatos(nombreArchivo, Wji[-1].shape[0])
     
@@ -220,8 +236,7 @@ def probar(nombreArchivo, Wji, alpha, umbral = 1e-1, graf = False):
     for i in range(cantCapas):
         yy.append(np.empty(Wji[i].shape[0]))
     
-    # Recorrer cada patron de entrada y despejar su salida y
-    # En = 0
+    # Recorrer cada patron de entrada y despejar su salida
     for i in range(cantPatrones):
         entrada = X[i, :]
         for j in range(cantCapas):
@@ -229,24 +244,34 @@ def probar(nombreArchivo, Wji, alpha, umbral = 1e-1, graf = False):
             # Recordar la entrada X0 que existe en cada capa 
             entrada = np.hstack((np.array([-1]), yy[j]))
         
-        # Comparar si el error del patron supera o no 
-        # el umbral definido
-        E = 0.5 * np.linalg.norm(Yd[i, :] - yy[-1][:], 2)
-        cantErr += E > umbral
+        E = 0.5 * np.sum(np.power(Yd[i, :] - yy[-1][:], 2))
+        # Validar si hay multiple salida en la capa de salida 
+        if(Wji[-1].shape[0] > 1):
+            newY = winnerTakesAll(yy)
+            cantErr += not((newY == Yd[i]).all())
+        else:    
+            cantErr += E > umbral
 
 
-    # Despejar el porcentaje de error 
     err = cantErr/cantPatrones
+
+        # print(err*100, "%", " de error")
+    
+    if(graf):
+        # Graficar solamente para los casos XOR y Concent
+        if(Wji[-1].shape[0] == 1):
+            fig, ax = plt.subplots()
+            ax.axis('equal')
+            nMesh = 33
+            epoca = 0
+            actualizarMesh(ax, X, Yd, Wji, alpha, nMesh, XOR, epoca, err)
+            plt.pause(0.3)
+            # Graf Concent
+        # fig2 ,ax2 = plt.subplots()
+        # ax2.plot(errPlot)
+        # ax2.set_title("Trayectoria de error promedio")
 
     print("Prueba con tasa de acierto " + str((1 - err) * 100) + "%")
 
-    # Verificar los datos
-    # for i in Wji:
-    #     print(i)
-
-    # fig, ax = plt.subplots()
-    # crearLegend(ax)
-    # plt.show()
-
-
+    plt.show()
 

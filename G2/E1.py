@@ -16,6 +16,8 @@ XOR = True
 Wji = entrenar(nombreArchivo, capas, alpha, tasaAp, maxErr, 
                 maxEpoc,umbral ,graf, XOR)
 
+nombreArchivo = "datos/XOR_tst.csv"
+probar(nombreArchivo, Wji, alpha, umbral, graf, XOR)
 # plt.show()
 
 
