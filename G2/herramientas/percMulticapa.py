@@ -29,7 +29,7 @@ def sigmoidea(Wji, Xi, alpha):
 
     return Y
 
-def entrenar(nombreArchivo, capas, alpha,tasaAp, 
+def entrenar(nombreArchivo, capas, alpha, tasaAp, 
              maxErr, maxEpoc, umbral = 1e-1, graf = False,
             XOR = False):
     
@@ -72,13 +72,11 @@ def entrenar(nombreArchivo, capas, alpha,tasaAp,
     # ===========[Graficar]===========
     if(graf):
         title = "XOR" if XOR else "Concent"
-        nMesh = 30
+        nMesh = 33
         fig, ax = initGraf(title, X, Yd, nMesh, XOR)
 
     while(err > maxErr and epoca < maxEpoc):
 
-        epoca += 1
-        
         # Recorrer todo los patrones de entrada 
         for i in range(cantPatrones):
             # ===========[Propagacion hacia adelante]===========
@@ -185,22 +183,24 @@ def entrenar(nombreArchivo, capas, alpha,tasaAp,
         # print(err*100, "%", " de error")
     
         if(graf):
-            if ((epoca - 1) % 10 == 0):
-                actualizarMesh(ax, X, Yd, Wji, alpha, nMesh, XOR, epoca)
+            if (epoca % 10 == 0):
+                actualizarMesh(ax, X, Yd, Wji, alpha, nMesh, XOR, epoca, err)
                 plt.pause(0.3)
                 # Graf Concent
+        epoca += 1
     # End while
 
 
     
     if(err < maxErr):
         print("Entrenamiento finalizado por tasa de acierto " +
-                str((1 - err) * 100) + "%" + "en la epoca" +
-                str(epoca))
+                str(round((1 - err) * 100, 3)) + "%" + "en la epoca" +
+                str(epoca-1))
     else:
         print("Entrenamiento finalizado por Maxima Epoca con ", 
               "un tasa de error ", err * 100, "%")
 
+    actualizarMesh(ax, X, Yd, Wji, alpha, nMesh, XOR, epoca-1, err)
     plt.show()
     return Wji
 

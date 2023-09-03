@@ -26,24 +26,38 @@ def grafPuntosXOR(ax, X, Yd):
 
 # =============[Grafica de Concent]=============
 
-def crearLegendConc(ax):
-    # fake_blue, fake_red, blue, red
-    colores = ["#00EEEE", "#EE4000", "#0000FF", "#FF0000"]
-    legend = ["F-neg", "F-pos", "V-neg", "V-pos"]
-    n = len(colores)
-    handle = [(plt.Line2D([], [],
-                          color = colores[i], label=legend[i],
-                          marker="o", linewidth=0)) for i in range(n)]
-    # Agregar los legend en axes
-    legend1 = ax.legend(handles = handle[:n//2], loc = "upper left")
-    ax.add_artist(legend1)
-    ax.legend(handles = handle[n//2:], loc = "upper right")
+# def crearLegendConc(ax):
+#     # fake_blue, fake_red, blue, red
+#     colores = ["#00EEEE", "#EE4000", "#0000FF", "#FF0000"]
+#     legend = ["F-neg", "F-pos", "V-neg", "V-pos"]
+#     n = len(colores)
+#     handle = [(plt.Line2D([], [],
+#                           color = colores[i], label=legend[i],
+#                           marker="o", linewidth=0)) for i in range(n)]
+#     # Agregar los legend en axes
+#     legend1 = ax.legend(handles = handle[:n//2], loc = "upper left")
+#     ax.add_artist(legend1)
+#     ax.legend(handles = handle[n//2:], loc = "upper right")
 
+# def grafPuntosConc(ax, X, Yd):
+#     colores = np.full(shape=Yd.shape[0], fill_value= "#EE4000", dtype='U7')
+#     colores[np.ravel(Yd)<0] = "#00EEEE"
+#     return ax.scatter(X[:, 0], X[:, 1], c=colores)
+
+def crearLegendConc(ax):
+    # # Agregar legend
+    col = ['r', 'k']
+    desc = ['True', 'False']
+    mark = ['s', 'x']
+
+    handle = [(plt.Line2D([], [], color=col[i], label=desc[i], 
+                marker=mark[i], linewidth=0)) for i in range(len(col))]
+    ax.legend(handles=handle, loc='lower right')
 
 def grafPuntosConc(ax, X, Yd):
-    colores = np.full(shape=Yd.shape[0], fill_value= "#EE4000", dtype='U7')
-    colores[np.ravel(Yd)<0] = "#00EEEE"
-    return ax.scatter(X[:, 0], X[:, 1], c=colores)
+    idxYdPos = np.ravel(Yd > 0)
+    ax.scatter(X[idxYdPos, 0], X[idxYdPos, 1], c='r', marker='s')
+    ax.scatter(X[~idxYdPos, 0], X[~idxYdPos, 1], c='k', marker='x')
 
 
 # =============[Grafica de Mesh]=============
@@ -54,7 +68,7 @@ def grafPuntosConc(ax, X, Yd):
 #     A = np.zeros(shape=(n, n))
 #     return ax.pcolormesh(x0, x1, A, cmap='coolwarm')
 
-def actualizarMesh(ax, X, Yd, Wji, alpha, nMesh, XOR, epoca):
+def actualizarMesh(ax, X, Yd, Wji, alpha, nMesh, XOR, epoca, err):
     bordeMin = -1.2
     bordeMax = 1.2
 
@@ -70,7 +84,7 @@ def actualizarMesh(ax, X, Yd, Wji, alpha, nMesh, XOR, epoca):
     # Recorrer cada punto de mesh, en este caso en forma
     # matricial por columna
     for idx, val in enumerate(x2):
-        x1 = val * np.ones(shape=(nMesh, 1))   # 1er entreada  [ 1  1  1]
+        x1 = val * np.ones(shape=(nMesh, 1))   # 1er entreada  [ 1;  1;  1]
 
         entrada = np.hstack((x0, x1, x2))
         # entrada = [-1 1 1;
@@ -97,7 +111,9 @@ def actualizarMesh(ax, X, Yd, Wji, alpha, nMesh, XOR, epoca):
         grafPuntosConc(ax, X_temp, Yd)
         crearLegendConc(ax)
 
-    ax.set_title("Epoca " + str(epoca))
+    title = "Epoca " + str(epoca) + \
+            " Acierto: " + str(round((1 - err) * 100, 3)) + "%"
+    ax.set_title(title)
     # Ver si hay que retornar eso
             
 
@@ -137,43 +153,3 @@ def initGraf(title, X, Yd, nMesh, XOR):
     return fig, ax
 
 
-
-
-
-# # # test
-# import numpy as np
-
-# X = np.array([
-#     [-1, -1, 1],
-#     [-1, 1, 1],
-#     [-1, -1, -1],
-# ])
-
-# Yd = np.array([
-#     [1],
-#     [-1],
-#     [-1]
-# ])
-# W1 = np.arange(6).reshape(2, 3)
-# W2 = np.arange(3)
-# Wji = [W1, W2]
-
-# alpha = 1
-# title = "XOR"
-# nMesh = 20
-# XOR = True
-
-# fig, ax = initGraf(title, X, Yd, nMesh, XOR)
-# plt.pause(1)
-# print(1)
-
-# actualizarMesh(ax, X, Yd, Wji, alpha, nMesh, XOR)
-# print(4)
-# plt.show()
-
-# # Test de sigmoidea
-# Xi = np.arange(12).reshape(4, 3)
-# Xi[:, 0] = -1
-# print(Xi@Wji.T)
-# Y = sigmoidea(Wji, Xi, alpha)
-# print(Y)
