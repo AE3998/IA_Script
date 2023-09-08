@@ -3,11 +3,11 @@ import matplotlib.pyplot as plt
 from herramientas.percMulticapa import *
 
 nombreArchivo = "datos/concent_trn.csv"
-capas = [6, 1]
+capas = [3, 1]
 maxErr = 0.1
-maxEpoc = 501
+maxEpoc = 201
 tasaAp = 0.005
-alpha = 5
+alpha = 1
 umbral = 0.08
 graf = True
 XOR = False

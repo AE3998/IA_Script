@@ -193,7 +193,7 @@ def entrenar(nombreArchivo, capas, alpha, tasaAp,
         if(graf):
             if (epoca % 10 == 0 and capas[-1] == 1):
                 actualizarMesh(ax, X, Yd, Wji, alpha, nMesh, XOR, epoca, err)
-                plt.pause(0.2)
+                plt.pause(0.1)
                 # Graf Concent
         epoca += 1
     # End while
