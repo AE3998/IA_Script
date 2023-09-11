@@ -7,7 +7,6 @@ from sklearn.model_selection import KFold
 from sklearn.svm import SVC
 from sklearn.ensemble import BaggingClassifier
 from sklearn.ensemble import AdaBoostClassifier
-from sklearn.metrics import accuracy_score
 
 #* Cargar datos
 X, yd = load_wine(return_X_y=True)  # devuelve (data, target) directamente
@@ -20,13 +19,14 @@ X, yd = load_wine(return_X_y=True)  # devuelve (data, target) directamente
 
 # print(yd)   # se ve que las categorias vienen ordenadas
 
+#! ver los parametros que usan estos dos clasificadores y probar distintos casos.
+
 #* Bagging
 clf_Bagging = BaggingClassifier(estimator=SVC(), n_estimators=10, random_state=0)
-#! utiliza SVC que era algo de support vector machine (se ve en el ej2)
-#! leer bien de la teoria y de la documentacion
+# utiliza SVC que era de support vector machine (se ve en el ej2)
 
 #* AdaBoost
-clf_AdaBoost = AdaBoostClassifier(n_estimators=100, random_state=0)
+clf_AdaBoost = AdaBoostClassifier(n_estimators=50, random_state=0)
 
 # accuracy_bagging = []
 score_Bagging = []

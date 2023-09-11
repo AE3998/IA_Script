@@ -55,7 +55,7 @@ clf = MLPClassifier(hidden_layer_sizes=(20, 10), learning_rate_init=0.01, max_it
 #? --- Item 1: Una unica particion de datos genererada mediante train_test_split ---
 
 #* --- train_test_split ---
-X_train, X_test, y_train, y_test = train_test_split(X, yd, test_size=0.3)  
+X_train, X_test, yd_train, yd_test = train_test_split(X, yd, test_size=0.3)  
 # test_size es para indicar el porcentaje que queremos que deje para el test (0.3 = 30%)
 # shuffe=True es para que ademas de particionar los datos, los mezcle de forma aleatoria. Por defecto
 # viene como True, si se quiere que los datos queden como vienen, se debe usar shuffed=False
@@ -65,7 +65,7 @@ X_train, X_test, y_train, y_test = train_test_split(X, yd, test_size=0.3)
 # print(len(X_test))
 
 #* --- Entrenamiento ---
-clf.fit(X_train, y_train)   # "fit" es para entrenar el modelo (no hace falta devolver algo, ya lo entrena)
+clf.fit(X_train, yd_train)   # "fit" es para entrenar el modelo (no hace falta devolver algo, ya lo entrena)
 
 #* --- Prueba ---
 y_pred = clf.predict(X_test)    # "predict" es para predecir o probar el modelo 
@@ -75,7 +75,7 @@ y_pred = clf.predict(X_test)    # "predict" es para predecir o probar el modelo
 # Se podrian mostrar todas las medidas que vimos en la teoria "Medidas de desempeño y cap. de generalizacion"
 
 #? Accuracy
-ACC = accuracy_score(y_test, y_pred)    
+ACC = accuracy_score(yd_test, y_pred)    
 print("Accuracy:", ACC)  # si da 0.8 es un accuracy del 80% por ejemplo
 
 #? Score
@@ -83,13 +83,26 @@ print("Accuracy:", ACC)  # si da 0.8 es un accuracy del 80% por ejemplo
 # entiendo que utilizando el clasificador entrenado, hace como la prueba de "predict" y ya compara 
 # con las salidas deseadas en las pruebas, mientras que sino tengo que usar predict para tener las 
 # salidas que da la red y luego compararlas con las salidas deseadas usando accuary_score por 
-# ejemplo como hice antes.
+# ejemplo como hice antes. Pero si quiero obtener otras metricas si necesito usar predict,
+# por ejemplo, para usar luego classification_report que use abajo.
 # "score" de clf no es lo mismo que Score F1, para ese se usa f1_score
-score = clf.score(X_test, y_test)  
+score = clf.score(X_test, yd_test)  
 print("\nScore:", score)    
 
+#? Classification report
+print("\nClassification report:")
+report = classification_report(yd_test, y_pred, labels=digits.target_names)
+# Devuelve un informe que muestre las principales métricas de clasificación
+# En este caso en realidad "labels" no hace falta porque te muestra las categorias con numeros,
+# pero lo dejo para recordar en otro caso que nos sirva. Sino se puede armar un vector 
+# target_names = ['class 0', 'class 1', 'class 2'] y usar classification_report(y_test, y_pred, target_names=target_names))
+
+# la columna "support" que muestra se refiere a la cantidad de elementos que se usaron en el test 
+# para cada categoria y en accuracy el total de elementos
+print(report)
+
 #? Matriz de confusion
-matriz_confusion = confusion_matrix(y_test, y_pred, labels=digits.target_names) 
+matriz_confusion = confusion_matrix(yd_test, y_pred, labels=digits.target_names) 
 #? preguntar si labels ordena la matriz segun las etiquetas, porque no lo entendi bien
 #? ahi labels seria [0 1 2 3 4 5 6 7 8 9]
 # matriz_confusion = confusion_matrix(y_test, y_pred)   
@@ -100,15 +113,3 @@ print(matriz_confusion)
 disp = ConfusionMatrixDisplay(confusion_matrix=matriz_confusion, display_labels=clf.classes_)
 disp.plot()
 plt.show()
-
-#? Classification report
-print("\nClassification report:")
-report = classification_report(y_test, y_pred, labels=digits.target_names)
-# Devuelve un informe que muestre las principales métricas de clasificación
-# En este caso en realidad "labels" no hace falta porque te muestra las categorias con numeros,
-# pero lo dejo para recordar en otro caso que nos sirva. Sino se puede armar un vector 
-# target_names = ['class 0', 'class 1', 'class 2'] y usar classification_report(y_test, y_pred, target_names=target_names))
-
-# la columna "support" que muestra se refiere a la cantidad de elementos que se usaron en el test 
-# para cada categoria y en accuracy el total de elementos
-print(report)
