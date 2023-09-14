@@ -23,7 +23,7 @@ X, yd = load_digits(return_X_y=True)
 
 #* MLPClassifier 
 # Perceptron multicapa para usar como clasificador.
-clf_MLP = MLPClassifier(hidden_layer_sizes=(20, 10), learning_rate_init=0.005, max_iter=300, activation='logistic',
+clf_MLP = MLPClassifier(hidden_layer_sizes=(30, 10), learning_rate_init=0.01, max_iter=500, activation='logistic',
                     early_stopping=True, validation_fraction=0.3, shuffle=True, random_state=0)
 
 #* Naive Bayes
@@ -51,7 +51,7 @@ clf_SVC = SVC(kernel='poly')
 #-kernel: linear, poly, rbf (radial, por defecto), sigmoid o precomputed. 
 # Dependiendo de la forma de los datos puede ser mejor uno u otro nucleo o kernel, por
 # ejemplo para separar clases que son curvas o no lineales.
-# Es este caso, el mejor resultado se obtuvo con un kernel='poly' y luego con 'rbf'.
+# En este caso, el mejor resultado se obtuvo con un kernel='poly' y luego con 'rbf'.
 #-C: es un parametro de regularizacion para la penalizacion, entiendo que es cuanto error
 # es soportable, un valor pequeño de C crea un hiperplano de menor margen y un valor de 
 # C grande crea un hiperplano de mayor margen.
@@ -99,23 +99,23 @@ for train, test in (kf_5.split(X)):
 
 #* --- Muestro los resultados obtenidos con todos los clasificadores ---
 
-print("Media del MLP:", round(np.mean(scores_MLP)*100, 2), "%")
-print("Varianza del MLP:", round(np.var(scores_MLP)*100, 2) , "%\n")
+print("Media del MLP:", round(np.mean(scores_MLP), 2), "%")
+print("Varianza del MLP:", round(np.var(scores_MLP), 4) , "%\n")
 
-print("Media del Naive Bayes:", round(np.mean(scores_GNB)*100, 2), "%")
-print("Varianza del Naive Bayes:", round(np.var(scores_GNB)*100, 2) , "%\n")
+print("Media del Naive Bayes:", round(np.mean(scores_GNB), 2))
+print("Varianza del Naive Bayes:", round(np.var(scores_GNB), 4) , "\n")
 
-print("Media del Análisis discriminante lineal:", round(np.mean(scores_LDA)*100, 2), "%")
-print("Varianza del Análisis discriminante lineal:", round(np.var(scores_LDA)*100, 2) , "%\n")
+print("Media del Análisis discriminante lineal:", round(np.mean(scores_LDA), 2))
+print("Varianza del Análisis discriminante lineal:", round(np.var(scores_LDA), 4) , "\n")
 
-print("Media del K vecinos mas cercanos:", round(np.mean(scores_K_neigh)*100, 2), "%")
-print("Varianza del K vecinos mas cercanos:", round(np.var(scores_K_neigh)*100, 2) , "%\n")
+print("Media del K vecinos mas cercanos:", round(np.mean(scores_K_neigh), 2))
+print("Varianza del K vecinos mas cercanos:", round(np.var(scores_K_neigh), 4) , "\n")
 
-print("Media del árbol de decisión:", round(np.mean(scores_DTree)*100, 2), "%")
-print("Varianza del árbol de decisión:", round(np.var(scores_DTree)*100, 2) , "%\n")
+print("Media del árbol de decisión:", round(np.mean(scores_DTree), 2))
+print("Varianza del árbol de decisión:", round(np.var(scores_DTree), 4) , "\n")
 
-print("Media del Support Vector Machine:", round(np.mean(scores_SVC)*100, 2), "%")
-print("Varianza del Support Vector Machine:", round(np.var(scores_SVC)*100, 2) , "%\n")
+print("Media del Support Vector Machine:", round(np.mean(scores_SVC), 2))
+print("Varianza del Support Vector Machine:", round(np.var(scores_SVC), 4) , "\n")
 
 # En algun momento que hablaba de normalizar las entradas, lo que hacia era normalizar cada dimension
 # es decir, en el caso del Iris por ejemplo, todos los anchos de petalo los normalizo sacando la media y 

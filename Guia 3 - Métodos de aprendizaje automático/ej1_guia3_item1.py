@@ -32,18 +32,24 @@ digits = load_digits()      # lo use solo para una version de la matriz de confu
 #* --- MLPClassifier ---
 # Es un perceptron multicapa para usar como clasificador.
 # En la documentación se puede ver todos los parámetros que se pueden usar y que significa cada uno.
-clf = MLPClassifier(hidden_layer_sizes=(20, 10), learning_rate_init=0.01, max_iter=300, activation='logistic',
+clf = MLPClassifier(hidden_layer_sizes=(30, 10), learning_rate_init=0.01, max_iter=500, activation='logistic',
                     early_stopping=True, validation_fraction=0.3, shuffle=True, random_state=0)
 # hidden_layer_sizes es para definir lel numero de nueronas en cada capa. En la capa final deberian 
-# ser 10 porque son 10 numeros los que se clasifican (del 0 al 9)
+# ser 10 porque son 10 numeros los que se clasifican (del 0 al 9), y para la primera capa fui
+# probe distintos casos: (20, 10) -> 0.92, (30, 10) -> 0.95, (40, 10) -> 0.94
+# menor a 20 comienza a bajar el accuracy de 0.93 y mayor a 45 baja del 0.95.
+# (recordar que cambia segun la velocidad de aprendizaje y max_iter tambien).
+
+# learning_rate_init es la velocidad de aprendiza, con 0.01 di el mejor resultado.
+# max_iter es el numero maximo de iteraciones.
+# activation la funcion de activacion que queremos usar (identity’, ‘logistic’, ‘tanh’, ‘relu')
+
 # early_stopping es para que el criterio de parada lo haga con datos que no vio en el entrenamiento, 
 # seria la validacion o monitoreo que nosotros haciamos con los mismos datos de entrenamiento pero
 # aca se hace con un grupo aparte, que ahi se le dio un 30% (0.3) de los datos de entrenamiento
 # que los subdivide para validar y no los usa para entrenar.
 # shuffle=True mezcla los parametros en cada epoca.
-#! randam_state no entendi que es en la documentacion
-
-#! Hay que probar que resultados da cambiando los parametros de MLPClassifier
+# randam_state no entendi que es en la documentacion
 
 #* --- Particionar ---
 # train_test_split:
@@ -73,10 +79,11 @@ y_pred = clf.predict(X_test)    # "predict" es para predecir o probar el modelo
 
 #* --- Calculo de medidas de desempeño ---
 # Se podrian mostrar todas las medidas que vimos en la teoria "Medidas de desempeño y cap. de generalizacion"
+# todas estas medidas van de 0 a 1
 
 #? Accuracy
 ACC = accuracy_score(yd_test, y_pred)    
-print("Accuracy:", ACC)  # si da 0.8 es un accuracy del 80% por ejemplo
+print("Accuracy:", round(ACC, 2))  
 
 #? Score
 # El metodo "score" devuelve el accuracy o exactitud media en los datos de prueba y etiquetas dadas,
@@ -87,7 +94,7 @@ print("Accuracy:", ACC)  # si da 0.8 es un accuracy del 80% por ejemplo
 # por ejemplo, para usar luego classification_report que use abajo.
 # "score" de clf no es lo mismo que Score F1, para ese se usa f1_score
 score = clf.score(X_test, yd_test)  
-print("\nScore:", score)    
+print("\nScore:", round(score, 2))    
 
 #? Classification report
 print("\nClassification report:")
@@ -105,7 +112,7 @@ print(report)
 matriz_confusion = confusion_matrix(yd_test, y_pred, labels=digits.target_names) 
 #? preguntar si labels ordena la matriz segun las etiquetas, porque no lo entendi bien
 #? ahi labels seria [0 1 2 3 4 5 6 7 8 9]
-# matriz_confusion = confusion_matrix(y_test, y_pred)   
+ 
 print("\nMatriz de confusión:")
 print(matriz_confusion)
 

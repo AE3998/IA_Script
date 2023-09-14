@@ -5,6 +5,7 @@ import numpy as np
 from sklearn.datasets import load_wine
 from sklearn.model_selection import KFold
 from sklearn.svm import SVC
+from sklearn.tree import DecisionTreeClassifier
 from sklearn.ensemble import BaggingClassifier
 from sklearn.ensemble import AdaBoostClassifier
 
@@ -19,14 +20,26 @@ X, yd = load_wine(return_X_y=True)  # devuelve (data, target) directamente
 
 # print(yd)   # se ve que las categorias vienen ordenadas
 
-#! ver los parametros que usan estos dos clasificadores y probar distintos casos.
+# Estos metodos se basan en el ensamblado de varios clasificadores debiles base, 
+# por defecto utilizan arboles de decision, pero se puede usar otros (VSM por ejemplo).
+# buscando en internet y probando llegue a que este estimador base usando un arbol de decision
+# funciona bastante bien.
+estimator_base = DecisionTreeClassifier(max_depth=5)
+# estimator_base_VSM = SVC(kernel='poly')
 
 #* Bagging
-clf_Bagging = BaggingClassifier(estimator=SVC(), n_estimators=10, random_state=0)
-# utiliza SVC que era de support vector machine (se ve en el ej2)
+clf_Bagging = BaggingClassifier(estimator=estimator_base, n_estimators=50, max_samples=0.8, max_features=0.8)
+# n_estimators: numero de estimadores (arboles) en el ensamblado, al aumentar mejor el rendimiento y aumenta 
+# el tiempo de entrenamiento.
+# max_samples: fracción de muestras a utilizar para entrenar cada estimador. 
+# max_features: fracción de características a utilizar para entrenar cada estimador (puede ser útil si tienes un gran número de características).
+
+# otra opcion, funciona peor:
+# clf_Bagging = BaggingClassifier(estimator=estimator_base_VSM, n_estimators=10, random_state=0)     
 
 #* AdaBoost
-clf_AdaBoost = AdaBoostClassifier(n_estimators=50, random_state=0)
+clf_AdaBoost = AdaBoostClassifier(estimator=estimator_base, n_estimators=50)
+# en AdaBoost los pesos de los clasificadores posteriores se centra mas en los casos dificiles de clasificar
 
 # accuracy_bagging = []
 score_Bagging = []
@@ -56,9 +69,9 @@ for train, test in (kf_5.split(X)):
 #* --- Muestro los resultados obtenidos con los clasificadores ---
 
 # print("Accuracy media del Bagging:", round(np.mean(accuracy_bagging)*100, 2), "%")    
-print("Media del Bagging:", round(np.mean(score_Bagging)*100, 2), "%")
-print("Varianza del Bagging:", round(np.var(score_Bagging)*100, 2) , "%\n")
+print("Media del Bagging:", round(np.mean(score_Bagging), 2))
+print("Varianza del Bagging:", round(np.var(score_Bagging), 4), "\n")
 
-print("Media del AdaBoost:", round(np.mean(score_AdaBoost)*100, 2), "%")
-print("Varianza del AdaBoost:", round(np.var(score_AdaBoost)*100, 2) , "%\n")
+print("Media del AdaBoost:", round(np.mean(score_AdaBoost), 2))
+print("Varianza del AdaBoost:", round(np.var(score_AdaBoost), 4), "\n")
         
