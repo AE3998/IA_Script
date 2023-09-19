@@ -93,12 +93,14 @@ def SOM_entrenamiento(nombreArchivo, epocas, dimSom, tasaAp, radio):
             # Actualiza los pesos de las neuronas incluyendo uno mismo
             neurSom[idxVecBool] = neurSom[idxVecBool] + tasaApEtapa1 * (patron - neurSom[idxVecBool])
         
-        if(epoca % 1 == 0):
+        if(epoca % 4 == 0):
             title = "Ordenamiento global ep " + str(epoca)
             actualizarGrafica(fig, ax, title, neurSom, rectHoriz, rectVert)
-            print(epoca)
-            print(neurSom[idxVecBool])
-            print(patron)
+            
+            #? Otro print porque me parece raro algo que no cambia el patron
+            # print(epoca)
+            # print(neurSom[idxVecBool])
+            # print(patron)
 
     # Graficar la ultima epoca
     title = "Ajuste finoc ep " + str(epocas[0])
@@ -151,11 +153,11 @@ def SOM_entrenamiento(nombreArchivo, epocas, dimSom, tasaAp, radio):
     return
 
 
-nombreArchivo = "circulo.csv"
-epocas = [200, 200, 150]
-dimSom = [3, 3] # en (i, j)
-tasaAp = [0.25, 0.1]
-radio = [2, 0.1]
+# nombreArchivo = "circulo.csv"
+# epocas = [200, 200, 150]
+# dimSom = [5, 5] # en (i, j)
+# tasaAp = [0.25, 0.1]
+# radio = [2, 0.1]
 
-SOM_entrenamiento(nombreArchivo, epocas, dimSom, tasaAp, radio)
-plt.show()
+# SOM_entrenamiento(nombreArchivo, epocas, dimSom, tasaAp, radio)
+# plt.show()
