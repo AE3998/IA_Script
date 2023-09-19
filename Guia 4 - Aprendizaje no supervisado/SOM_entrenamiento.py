@@ -77,7 +77,7 @@ def SOM_entrenamiento(nombreArchivo, epocas, dimSom, tasaAp, radio):
             print(f"\n\n index = {i}")
             print(f"neurSom = \n{neurSom}")
             print(f"patron = \n{patron}")
-            print(f"neurGanadora = !Guarda por el problema de dimension, pero esta bien! \n{neurGanadora}")
+            print(f"neurGanadora = !Guarda por el problema de dimension, esta transpuesta! \n{neurGanadora}")
             print(f"idxVecBool = \n{idxVecBool.T}")
 
             # Actualiza los pesos de las neuronas incluyendo uno mismo
