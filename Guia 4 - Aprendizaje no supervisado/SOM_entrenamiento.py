@@ -100,7 +100,7 @@ def SOM_entrenamiento(nombreArchivo, epocas, dimSom, tasaAp, radio):
             # print(patron)
 
     # Graficar la ultima epoca
-    title = "Ajuste finoc ep " + str(epocas[0])
+    title = "Ordenamiento global ep " + str(epocas[0])
     actualizarGrafica(fig, ax, title, neurSom, rectHoriz, rectVert)
 
     #* 2da etapa: transicion
@@ -120,7 +120,7 @@ def SOM_entrenamiento(nombreArchivo, epocas, dimSom, tasaAp, radio):
             actualizarGrafica(fig, ax, title, neurSom, rectHoriz, rectVert)
 
     # Graficar la ultima epoca
-    title = "Ajuste finoc ep " + str(epocas[1])
+    title = "Etapa transicion ep " + str(epocas[1])
     actualizarGrafica(fig, ax, title, neurSom, rectHoriz, rectVert)
 
     # 3er etapa: ajuste fino
@@ -135,7 +135,7 @@ def SOM_entrenamiento(nombreArchivo, epocas, dimSom, tasaAp, radio):
             #? Print para verificar las cosas
         
         if(epoca % 4 == 0):
-            title = "Ajuste finoc ep " + str(epoca)
+            title = "Ajuste fino ep " + str(epoca)
             actualizarGrafica(fig, ax, title, neurSom, rectHoriz, rectVert)
             
             #? Otro print
