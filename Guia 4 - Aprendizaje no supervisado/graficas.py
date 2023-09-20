@@ -62,7 +62,7 @@ def iniciarGraficaKM3D(data, centroide):
     # col = colores[idxColor]
     col = colores[:centroide.shape[0]]
 
-    fig = plt.figure(figsize=(10, 8.8))
+    fig = plt.figure(figsize=(10, 8.3))
     ax = fig.add_subplot(projection='3d')
     ax.set_title("First three PCA directions")
     ax.set_xlabel("1st eigenvector")

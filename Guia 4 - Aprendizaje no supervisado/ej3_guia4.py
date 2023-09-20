@@ -1,4 +1,5 @@
 import numpy as np
+import matplotlib.pyplot as plt
 from sklearn.datasets import load_iris
 from sklearn.metrics import davies_bouldin_score, fowlkes_mallows_score, adjusted_rand_score
 from k_medias import *
@@ -54,6 +55,9 @@ for k in range(2, 11):
     print("\n", "Davies-Bouldin:", DB,
           "\n", "Fowlkes-Mallows:", FM, 
           "\n", "Rand Index:", RI)
+
+
+plt.show()
 
 #* Conclusiones obtenidas:
 # k=2 nos da el valor de indice Davies-Doublin mas bajo, lo cual es bueno, pero con k=3 se tiene
