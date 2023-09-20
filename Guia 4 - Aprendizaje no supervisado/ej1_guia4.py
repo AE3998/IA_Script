@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 from SOM_entrenamiento import *
 
 nombreArchivo = "circulo.csv"
-epocas = [200, 200, 150]
+epocas = [150, 300, 150]
 dimSom = [5, 5] # en (i, j)
 tasaAp = [0.25, 0.1]
 radio = [2, 0.1]
