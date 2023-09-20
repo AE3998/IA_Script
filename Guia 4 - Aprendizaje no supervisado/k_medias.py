@@ -70,10 +70,10 @@ def k_medias(data, k, numMaxIteraciones=100):
 
         # Actualizar la grafica
         iteracion += 1
-        title = "Iteracion " + str(iteracion)
+        title = "K = " + str(k) + " iteracion " + str(iteracion)
         actualizarGraficaKM3D(ax, title, dataPlot, centPlot, centroides, clusters)
     
     # Devuelvo los centroides y el vector de vectores con los indices de los puntos de datos en cada cluster.
     # return centroides, clusters
-    ax.set_title("Finalizacion en it = " + str(iteracion))
+    ax.set_title("K = " + str(k) + " finalizado en iteracion " + str(iteracion))
     return np.array(centroides), clusters   # convierte la lista a un array de numpy por si me sirve mas

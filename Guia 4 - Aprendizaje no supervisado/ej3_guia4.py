@@ -48,7 +48,7 @@ for k in range(2, 11):
     fm_scores.append(FM)
     rand_scores.append(RI)
 
-    #! graficar esos tres vectores en una misma grafica para mostrar como varian con el valor de "k"
+
 
     # Muestro los resultados
     print("\nk = ", k)
@@ -56,6 +56,17 @@ for k in range(2, 11):
           "\n", "Fowlkes-Mallows:", FM, 
           "\n", "Rand Index:", RI)
 
+#! graficar esos tres vectores en una misma grafica para mostrar como varian con el valor de "k"
+k = np.arange(2, 11)
+plt.figure(figsize=(8, 6))
+plt.plot(k, np.array(db_scores), 'o-', label="Davies-Bouldin")
+plt.plot(k, np.array(fm_scores), 'o-', label="Fowlkes-Mallows")
+plt.plot(k, np.array(rand_scores), 'o-', label="Rand Index")
+plt.title("Resultado de metricas")
+plt.xlabel("k")
+plt.ylabel("Idx")
+plt.grid(True)
+plt.legend()
 
 plt.show()
 

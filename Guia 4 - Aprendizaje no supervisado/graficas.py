@@ -62,12 +62,12 @@ def iniciarGraficaKM3D(data, centroide):
     # col = colores[idxColor]
     col = colores[:centroide.shape[0]]
 
-    fig = plt.figure(figsize=(10, 8.3))
+    fig = plt.figure(figsize=(10, 8))
     ax = fig.add_subplot(projection='3d')
-    ax.set_title("First three PCA directions")
-    ax.set_xlabel("1st eigenvector")
-    ax.set_ylabel("2nd eigenvector")
-    ax.set_zlabel("3rd eigenvector")
+    ax.set_title("Estado inicial")
+    ax.set_xlabel("1ra categoria")
+    ax.set_ylabel("2da categoria")
+    ax.set_zlabel("3ra categoria")
 
     # Mostrar los datos en gris
     dataPlot = ax.scatter(data[:, 0], data[:, 1], data[:, 2], c="#666666", linewidths=0)
