@@ -3,6 +3,7 @@
 # https://www.youtube.com/watch?v=mICySHB0fh4
 
 import numpy as np
+from graficas import iniciarGraficaKM3D, actualizarGraficaKM3D
 
 def k_medias(data, k, numMaxIteraciones=100):
     """
@@ -17,6 +18,10 @@ def k_medias(data, k, numMaxIteraciones=100):
     # ordeno de forma aleatoria los indices con permutation y luego todo los primeros "k"
     # indices [:k] y se toman esos "k" datos de "data" como centroides iniciales
     centroides = data[np.random.permutation(data.shape[0])[:k]]
+
+    #* Graficar 3D
+    fig, ax, dataPlot, centPlot = iniciarGraficaKM3D(data, centroides)
+    iteracion = 0
 
     # El _ en los bucles significa que el indice no es relevante, ya que no se utiliza dentro 
     # del bucle, solo queremos iterar una cierta cantidad de veces
@@ -61,8 +66,14 @@ def k_medias(data, k, numMaxIteraciones=100):
             break
         
         # Actualizo los centroides
-        centroides = new_centroides
+        centroides = np.array(new_centroides)
+
+        # Actualizar la grafica
+        iteracion += 1
+        title = "Iteracion " + str(iteracion)
+        actualizarGraficaKM3D(ax, title, dataPlot, centPlot, centroides, clusters)
     
     # Devuelvo los centroides y el vector de vectores con los indices de los puntos de datos en cada cluster.
     # return centroides, clusters
+    ax.set_title("Finalizacion en it = " + str(iteracion))
     return np.array(centroides), clusters   # convierte la lista a un array de numpy por si me sirve mas

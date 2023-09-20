@@ -37,7 +37,124 @@ def actualizarGrafica(fig, ax, title, neurSom, rectHoriz, rectVert):
     plt.pause(0.1)
 
 
-# #? =================[Test]=================
+def iniciarGraficaKM2D(data, centroide):
+
+    # rojo, verde, amarillo
+    colores = ["#EE0000", "#00FA9A", "#FFFF00"]
+
+    fig, ax = plt.subplots(layout='constrained')
+
+    dataPlot = ax.scatter(data[:, 0], data[:, 1], c="#666666", linewidths=0)
+
+    centPlot = ax.scatter(centroide[:, 0], centroide[:, 1], 
+                          c=colores, marker="s", linewidths=5)
+
+    return fig, ax, dataPlot, centPlot
+
+def iniciarGraficaKM3D(data, centroide):
+
+    colores = ["#EE0000", "#FF8000", "#FFFF00", "#00C957", 
+               "#1C86EE", "#104E8B", "#9400D3", "#8B008B",
+               "#333333", "#FF82AB"]
+
+    # Si tengo 3 centroide, tendre solo 3 colores
+    # idxColor = np.linspace(0, 10, centroide.shape[0]).astype(int)
+    # col = colores[idxColor]
+    col = colores[:centroide.shape[0]]
+
+    fig = plt.figure(figsize=(10, 8.8))
+    ax = fig.add_subplot(projection='3d')
+    ax.set_title("First three PCA directions")
+    ax.set_xlabel("1st eigenvector")
+    ax.set_ylabel("2nd eigenvector")
+    ax.set_zlabel("3rd eigenvector")
+
+    # Mostrar los datos en gris
+    dataPlot = ax.scatter(data[:, 0], data[:, 1], data[:, 2], c="#666666", linewidths=0)
+
+    # Mostrar los centroides colorados
+    centPlot = ax.scatter(centroide[:, 0], centroide[:, 1], centroide[:, 2], 
+                          c=col, marker="s", linewidths=5)
+
+    plt.pause(1)
+
+    return fig, ax, dataPlot, centPlot
+
+
+def actualizarGraficaKM3D(ax, title, dataPlot, centPlot, centroide, clusters):
+    colores = ["#EE0000", "#FF8000", "#FFFF00", "#00C957", 
+               "#1C86EE", "#104E8B", "#9400D3", "#8B008B",
+               "#333333", "#FF82AB"]
+    
+    ax.set_title(title)
+
+    # Calcular el total de los datos
+    totalData = 0
+    for cluster in clusters:
+        totalData += len(cluster)
+
+    # Inicializar la lista de color
+    color = np.full(shape=(totalData), fill_value=colores[0], dtype='U7')
+
+    for i in range(1, len(clusters)):
+        color[clusters[i]] = colores[i]
+
+    # Actualizar los colores de los patrones
+    dataPlot.set_facecolor(color)
+
+    # Actualizar las posiciones de los centroides
+    newCentX = centroide[:, 0]
+    newCentY = centroide[:, 1]
+    newCentZ = centroide[:, 2]
+    centPlot._offsets3d = (newCentX, newCentY, newCentZ)
+
+    plt.pause(0.2)
+
+
+
+#? =======[Test KM]=======
+#* Data 2D
+# data = np.random.rand(20, 2)
+# centroide = np.random.rand(3, 2)
+# fig, ax, dataPlot, centPlot = iniciarGraficaKM2D(data, centroide)
+# plt.show()
+
+# * Data 3D
+# categoria = 5
+
+# data = np.random.rand(100, 3)
+# centroide = np.random.rand(categoria, 3)
+# fig, ax, dataPlot, centPlot = iniciarGraficaKM3D(data, centroide)
+
+
+# # determinar clusters
+# for epoca in range(20):
+
+#     # Habria que vaciar la lista de cluster
+#     clusters = []
+#     newClusters = []
+#     for i in range(categoria):
+#         clusters.append([])
+#         newClusters.append([])
+
+#     # Agrupar los patrones en cada cluster
+#     for idx, dati in enumerate(data):
+#         idxCent = np.argmin(np.linalg.norm(centroide - dati, axis=1))
+#         clusters[idxCent].append(idx)
+
+#     # Actualizar los centroides
+#     for idx, val in enumerate(centroide):
+#         centroide[idx] = np.mean(data[clusters[idx]], axis=0)
+#     # print(centroide)
+        
+#     title = "Epoca " + str(epoca)
+#     # ax.set_title(title)
+#     actualizarGraficaKM3D(ax, title, dataPlot, centPlot, centroide, clusters)
+
+# plt.show()
+
+
+# #? =================[Test Ej 1]=================
 # ii = np.arange(3)
 # jj = np.arange(4)
 # j, i = np.array(np.meshgrid(jj, ii))
