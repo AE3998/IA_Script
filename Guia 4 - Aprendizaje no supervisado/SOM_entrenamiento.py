@@ -67,9 +67,6 @@ def SOM_entrenamiento(nombreArchivo, epocas, dimSom, tasaAp, radio):
     fig, ax, rectHoriz, rectVert = iniciarGrafica(data, neurSom)
 
     #* 1ra etapa: ordenamiento global
-    radioEtapa1 = radio[0]
-    tasaApEtapa1 = tasaAp[0]
-
     for epoca in range(epocas[0]):
 
         #? Por legibilidad no mas
@@ -82,7 +79,7 @@ def SOM_entrenamiento(nombreArchivo, epocas, dimSom, tasaAp, radio):
 
             patron = data[i, :]
             neurGanadora = obtenerNeurona(neurSom, patron)
-            idxVecBool = obtenerVecinos(Z, neurGanadora, radioEtapa1)
+            idxVecBool = obtenerVecinos(Z, neurGanadora, radio[0])
 
             #? Print para verificar las cosas
             # print(f"neurSom = \n{neurSom}")
@@ -91,7 +88,7 @@ def SOM_entrenamiento(nombreArchivo, epocas, dimSom, tasaAp, radio):
             # print(f"idxVecBool = \n{idxVecBool}")
 
             # Actualiza los pesos de las neuronas incluyendo uno mismo
-            neurSom[idxVecBool] = neurSom[idxVecBool] + tasaApEtapa1 * (patron - neurSom[idxVecBool])
+            neurSom[idxVecBool] = neurSom[idxVecBool] + tasaAp[0] * (patron - neurSom[idxVecBool])
         
         if(epoca % 4 == 0):
             title = "Ordenamiento global ep " + str(epoca)
