@@ -2,12 +2,15 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 
-def iniciarGrafica(data, neurSom):
+def iniciarGrafica(data, neurSom, iris=False):
     fig, ax = plt.subplots(layout='constrained')
     ax.set_title('Grafica inicial')
     ax.set_xlabel('X')
     ax.set_ylabel('Y')
     ax.set(xlim=(-1, 1), ylim=(-1, 1))
+    if iris:
+        ax.set_aspect('equal', 'box')
+        ax.set(xlim=(4, 8), ylim=(1, 5))
 
     # fake_blue, fake_red, blue, red
     # colores = ["#00EEEE", "#EE4000", "#0000FF", "#FF0000"]

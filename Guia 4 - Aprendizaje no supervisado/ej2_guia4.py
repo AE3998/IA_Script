@@ -1,5 +1,6 @@
 from sklearn.datasets import load_iris
 from k_medias import *
+from SOM_entrenamiento import *
 import matplotlib.pyplot as plt
 # from desordenarDatos import *
 
@@ -20,6 +21,15 @@ if (desordenarDatos):
 # print(etiquetas)
 
 centroides, clusters = k_medias(data, 4, 100, grafDim=2)
+
+nombreArchivo = "irisbin_trn.csv"
+epocas = [150, 300, 100]
+dimSom = [2, 2]
+tasaAp = [0.5, 0.1]
+radio = [2, 0.1]
+iris = True
+
+SOM_entrenamiento(nombreArchivo, epocas, dimSom, tasaAp, radio, iris)
 plt.show()
 
 # en este problema son "k" centroides que tendran 4 dimensiones porque los datos de iris vienen asi,
