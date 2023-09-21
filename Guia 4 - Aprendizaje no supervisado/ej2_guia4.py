@@ -1,10 +1,11 @@
 from sklearn.datasets import load_iris
 from k_medias import *
-from SOM_entrenamiento import *
+from SOM import *
 import matplotlib.pyplot as plt
 
 #! ----- FALTA TERMINAR -----
-#! Hacer la comparacion con el SOM que pide el ejercicio y hacer la matriz de contingencia
+#! Hacer la comparacion con el SOM que pide el ejercicio
+#! y hacer la matriz de contingencia
 
 data, yd = load_iris(return_X_y = True)
 desordenarDatos = True
@@ -19,7 +20,9 @@ if (desordenarDatos):
 # etiquetas = desordenarDatos(datos.target)
 # print(etiquetas)
 
-centroides, clusters = k_medias(data, 4, 100, grafDim=2)
+centroides, clusters = k_medias(data, 3, grafDim=2)
+
+#* Comparacion con SOM 
 
 nombreArchivo = "irisbin_trn.csv"
 epocas = [150, 300, 100]
