@@ -62,7 +62,7 @@ def SOM_entrenamiento(data, epocas, dimSom, tasaAp, radio, iris=False):
     # Inicializar pesos al azar
     neurSom = np.random.rand(dimSom[0], dimSom[1], data.shape[1]) - 0.5
 
-    fig, ax, rectHoriz, rectVert = iniciarGrafica(data, neurSom, iris)
+    fig, ax, rectHoriz, rectVert = iniciarGraficaSOM(data, neurSom, iris)
 
     #todo 1ra etapa: ordenamiento global
     #! Cambio de tasaAp
@@ -93,7 +93,7 @@ def SOM_entrenamiento(data, epocas, dimSom, tasaAp, radio, iris=False):
         
         if(epoca % 4 == 0 or epoca == epocas[0]-1):
             title = "Ordenamiento global ep " + str(epoca)
-            actualizarGrafica(fig, ax, title, neurSom, rectHoriz, rectVert)
+            actualizarGraficaSOM(fig, ax, title, neurSom, rectHoriz, rectVert)
             
             #? Otro print porque me parece raro algo que no cambia el patron
             # print(epoca)
@@ -114,7 +114,7 @@ def SOM_entrenamiento(data, epocas, dimSom, tasaAp, radio, iris=False):
         
         if(epoca % 4 == 0 or epoca == epocas[1]-1):
             title = "Etapa transicion ep " + str(epoca)
-            actualizarGrafica(fig, ax, title, neurSom, rectHoriz, rectVert)
+            actualizarGraficaSOM(fig, ax, title, neurSom, rectHoriz, rectVert)
 
     #todo 3er etapa: ajuste fino
     #! Cambio de tasaAp
@@ -131,7 +131,7 @@ def SOM_entrenamiento(data, epocas, dimSom, tasaAp, radio, iris=False):
 
         if(epoca % 4 == 0 or epoca == epocas[2]-1):
             title = "Ajuste fino ep " + str(epoca)
-            actualizarGrafica(fig, ax, title, neurSom, rectHoriz, rectVert)
+            actualizarGraficaSOM(fig, ax, title, neurSom, rectHoriz, rectVert)
             
             #? Otro print
             # print(f"neurSom = \n{neurSom}")
