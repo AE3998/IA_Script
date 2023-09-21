@@ -20,8 +20,8 @@ rand_scores = []
 # Itero sobre diferentes valores de k (desde 2 hasta 10)
 for k in range(2, 11):
     # Ejecuto el algoritmo k-medias
-    centroides, clusters = k_medias(X, k)
-    
+    centroides, clusters = k_medias(X, k, grafDim=3)
+
     # Calculo las etiquetas de cluster a partir de los indices
     etiquetas_clusters = np.zeros(X.shape[0])
     for i in range(len(clusters)):  # clusters -> vector de vectores
@@ -48,15 +48,13 @@ for k in range(2, 11):
     fm_scores.append(FM)
     rand_scores.append(RI)
 
-
-
     # Muestro los resultados
     print("\nk = ", k)
     print("\n", "Davies-Bouldin:", DB,
           "\n", "Fowlkes-Mallows:", FM, 
           "\n", "Rand Index:", RI)
 
-#! graficar esos tres vectores en una misma grafica para mostrar como varian con el valor de "k"
+# graficar esos tres vectores en una misma grafica para mostrar como varian con el valor de "k"
 k = np.arange(2, 11)
 plt.figure(figsize=(8, 6))
 plt.plot(k, np.array(db_scores), 'o-', label="Davies-Bouldin")

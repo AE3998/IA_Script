@@ -3,9 +3,9 @@
 # https://www.youtube.com/watch?v=mICySHB0fh4
 
 import numpy as np
-from graficas import iniciarGraficaKM3D, actualizarGraficaKM3D
+from graficas import *
 
-def k_medias(data, k, numMaxIteraciones=100):
+def k_medias(data, k, numMaxIteraciones=100, grafDim=3):
     """
         Funcion que implementa el algoritmo k-means o k-medias.
         Entradas: datos, parametro "k" a utilizar y un numero maximo de iteraciones para
@@ -19,13 +19,17 @@ def k_medias(data, k, numMaxIteraciones=100):
     # indices [:k] y se toman esos "k" datos de "data" como centroides iniciales
     centroides = data[np.random.permutation(data.shape[0])[:k]]
 
-    #* Graficar 3D
-    fig, ax, dataPlot, centPlot = iniciarGraficaKM3D(data, centroides)
-    iteracion = 0
+    #* Inicializacion de la grafica 2D/3D
+    if(k == 2 or k == 3 or k == 4):
+        if (grafDim == 2):
+            fig, ax, dataPlot, centPlot = iniciarGraficaKM2D(data, centroides)
+        # Hacemos las graficas solo con k=2,3,4 para no hacer hasta k=10
+        if (grafDim == 3):
+            fig, ax, dataPlot, centPlot = iniciarGraficaKM3D(data, centroides)
 
     # El _ en los bucles significa que el indice no es relevante, ya que no se utiliza dentro 
     # del bucle, solo queremos iterar una cierta cantidad de veces
-    for _ in range(numMaxIteraciones):
+    for iteracion in range(numMaxIteraciones):
         # Inicializo vectores vacios para almacenar los indices de los puntos en cada cluster
         clusters = []
         for _ in range(k):
@@ -69,11 +73,17 @@ def k_medias(data, k, numMaxIteraciones=100):
         centroides = np.array(new_centroides)
 
         # Actualizar la grafica
-        iteracion += 1
-        title = "K = " + str(k) + " iteracion " + str(iteracion)
-        actualizarGraficaKM3D(ax, title, dataPlot, centPlot, centroides, clusters)
+        if(k == 2 or k == 3 or k == 4):
+        # iteracion += 1
+            title = "K = " + str(k) + " iteracion " + str(iteracion)
+            if (grafDim == 2):
+                actualizarGraficaKM2D(ax, title, dataPlot, centPlot, centroides, clusters)
+            if (grafDim == 3):
+                actualizarGraficaKM3D(ax, title, dataPlot, centPlot, centroides, clusters)
     
     # Devuelvo los centroides y el vector de vectores con los indices de los puntos de datos en cada cluster.
     # return centroides, clusters
-    ax.set_title("K = " + str(k) + " finalizado en iteracion " + str(iteracion))
+    if(k == 2 or k == 3 or k == 4):
+        ax.set_title("K = " + str(k) + " finalizado en iteracion " + str(iteracion))
+
     return np.array(centroides), clusters   # convierte la lista a un array de numpy por si me sirve mas
