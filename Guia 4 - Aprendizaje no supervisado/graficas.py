@@ -14,15 +14,17 @@ def iniciarGraficaSOM(data, neurSom, iris=False):
         ax.set(xlim=(4, 8), ylim=(1, 5))
         ax.set_xlabel("Longitud de sepalo")
         ax.set_ylabel("Ancho de sepalo")
-        ax.set_aspect('equal', 'box')
+    ax.set_aspect('equal', 'box')
     ax.grid(True)
 
     if iris:
         ax.set_aspect('equal', 'box')
         ax.set(xlim=(4, 8), ylim=(1, 5))
 
-    ax.scatter(data[:, 0], data[:, 1], linewidths=1)
+    # Graficar los datos
+    ax.scatter(data[:, 0], data[:, 1],c="#00EEEE", linewidths=1)
     
+    # Graficar las conexiones entre cada neurona
     rectHoriz = []
     rectVert = []
     for i in range(neurSom.shape[0]):

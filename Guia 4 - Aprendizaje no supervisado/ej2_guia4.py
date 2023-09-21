@@ -1,6 +1,7 @@
 from sklearn.datasets import load_iris
 from k_medias import *
-from SOM import *
+from SOM_entrenamiento import *
+# from SOM import *
 import matplotlib.pyplot as plt
 
 #! ----- FALTA TERMINAR -----
@@ -23,7 +24,7 @@ if (desordenarDatos):
 centroides, clusters = k_medias(data, 4, grafDim=3)
 #* Comparacion con SOM 
 
-nombreArchivo = "irisbin_trn.csv"
+# nombreArchivo = "irisbin_trn.csv"
 epocas = [100, 350, 100]
 dimSom = [2, 2]
 tasaAp = [0.4, 0.1]

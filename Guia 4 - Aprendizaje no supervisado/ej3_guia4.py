@@ -16,11 +16,15 @@ X = iris.data
 db_scores = []
 fm_scores = []
 rand_scores = []
+maxGraf = 5
 
 # Itero sobre diferentes valores de k (desde 2 hasta 10)
 for k in range(2, 11):
     # Ejecuto el algoritmo k-medias
-    centroides, clusters = k_medias(X, k, grafDim=3)
+    grafDim = 3
+    if k > maxGraf:
+        grafDim = 0
+    centroides, clusters = k_medias(X, k, grafDim=grafDim)
 
     # Calculo las etiquetas de cluster a partir de los indices
     etiquetas_clusters = np.zeros(X.shape[0])
