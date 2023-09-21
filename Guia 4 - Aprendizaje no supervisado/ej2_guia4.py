@@ -1,5 +1,6 @@
 from sklearn.datasets import load_iris
 from k_medias import *
+from SOM_entrenamiento import *
 import matplotlib.pyplot as plt
 
 #! ----- FALTA TERMINAR -----
@@ -14,13 +15,26 @@ if (desordenarDatos):
     data = data[idx_perm]
     yd = yd[idx_perm]
 
-centroides, clusters = k_medias(data, 3, 100, grafDim=2)
+# datos = load_iris()     # en target las etiquetas de salidas deseadas (vienen ordenadas por categorias)
+# etiquetas = desordenarDatos(datos.target)
+# print(etiquetas)
+
+centroides, clusters = k_medias(data, 4, 100, grafDim=2)
+
+nombreArchivo = "irisbin_trn.csv"
+epocas = [150, 300, 100]
+dimSom = [2, 2]
+tasaAp = [0.5, 0.1]
+radio = [2, 0.1]
+iris = True
+
+SOM_entrenamiento(nombreArchivo, epocas, dimSom, tasaAp, radio, iris)
 plt.show()
 
 # en este problema son "k" centroides que tendran 4 dimensiones porque los datos de iris vienen asi,
 # y en "clusters" tendre un vector con vectores donde estan los indices de los puntos de datos
 # que van dentro de cada cluster.
  
-print(centroides)   
-print("")
-print(clusters)     
+# print(centroides)   
+# print("")
+# print(clusters)     

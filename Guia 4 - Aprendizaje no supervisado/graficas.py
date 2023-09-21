@@ -9,6 +9,9 @@ def iniciarGraficaSOM(data, neurSom, iris=False):
     ax.set_xlabel('X')
     ax.set_ylabel('Y')
     ax.set(xlim=(-1, 1), ylim=(-1, 1))
+    if iris:
+        ax.set_aspect('equal', 'box')
+        ax.set(xlim=(4, 8), ylim=(1, 5))
 
     if iris:
         ax.set_aspect('equal', 'box')
