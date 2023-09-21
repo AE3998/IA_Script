@@ -1,11 +1,11 @@
 from sklearn.datasets import load_iris
 from k_medias import *
-from SOM_entrenamiento import *
+from SOM import *
 import matplotlib.pyplot as plt
-# from desordenarDatos import *
 
 #! ----- FALTA TERMINAR -----
-#! Habria que pensar como se puede mostrar de forma grafica tambien.
+#! Hacer la comparacion con el SOM que pide el ejercicio
+#! y hacer la matriz de contingencia
 
 data, yd = load_iris(return_X_y = True)
 desordenarDatos = True
@@ -20,7 +20,8 @@ if (desordenarDatos):
 # etiquetas = desordenarDatos(datos.target)
 # print(etiquetas)
 
-centroides, clusters = k_medias(data, 4, 100, grafDim=3)
+centroides, clusters = k_medias(data, 4, grafDim=3)
+#* Comparacion con SOM 
 
 nombreArchivo = "irisbin_trn.csv"
 epocas = [100, 350, 100]
@@ -29,7 +30,7 @@ tasaAp = [0.4, 0.1]
 radio = [2, 0.1]
 iris = True
 
-# SOM_entrenamiento(data, epocas, dimSom, tasaAp, radio, iris)
+SOM_entrenamiento(data, epocas, dimSom, tasaAp, radio, iris)
 plt.show()
 
 # en este problema son "k" centroides que tendran 4 dimensiones porque los datos de iris vienen asi,

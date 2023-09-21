@@ -1,8 +1,9 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
+#* ----- Graficas SOM -----
 
-def iniciarGrafica(data, neurSom, iris=False):
+def iniciarGraficaSOM(data, neurSom, iris=False):
     fig, ax = plt.subplots(layout='constrained')
     ax.set_title('Grafica inicial')
     ax.set_xlabel('X')
@@ -11,14 +12,16 @@ def iniciarGrafica(data, neurSom, iris=False):
     if iris:
         ax.set_aspect('equal', 'box')
         ax.set(xlim=(4, 8), ylim=(1, 5))
-        ax.set_xlabel("Sepal Length")
-        ax.set_ylabel("Sepal Width")
+        ax.set_xlabel("Longitud de sepalo")
+        ax.set_ylabel("Ancho de sepalo")
         ax.set_aspect('equal', 'box')
     ax.grid(True)
 
-    # fake_blue, fake_red, blue, red
-    # colores = ["#00EEEE", "#EE4000", "#0000FF", "#FF0000"]
-    ax.scatter(data[:, 0], data[:, 1], linewidths=1, c="#00EEEE")
+    if iris:
+        ax.set_aspect('equal', 'box')
+        ax.set(xlim=(4, 8), ylim=(1, 5))
+
+    ax.scatter(data[:, 0], data[:, 1], linewidths=1)
     
     rectHoriz = []
     rectVert = []
@@ -30,7 +33,7 @@ def iniciarGrafica(data, neurSom, iris=False):
     fig.show()
     return fig, ax, rectHoriz, rectVert
 
-def actualizarGrafica(fig, ax, title, neurSom, rectHoriz, rectVert):
+def actualizarGraficaSOM(fig, ax, title, neurSom, rectHoriz, rectVert):
     ax.set_title(title)
 
     for idx, val in enumerate(rectHoriz):
@@ -43,6 +46,7 @@ def actualizarGrafica(fig, ax, title, neurSom, rectHoriz, rectVert):
     fig.show()
     plt.pause(0.1)
 
+#* ----- Graficas k-medias -----
 
 def iniciarGraficaKM2D(data, centroide):
 
@@ -57,8 +61,8 @@ def iniciarGraficaKM2D(data, centroide):
 
     fig, ax = plt.subplots()
     ax.set_title("Estado inicial")
-    ax.set_xlabel("Sepal Length")
-    ax.set_ylabel("Sepal Width")
+    ax.set_xlabel("Longitud de sepalo")
+    ax.set_ylabel("Ancho de sepalo")
 
     ax.set_aspect('equal', 'box')
     ax.set(xlim=(4, 8), ylim=(1, 5))
@@ -118,9 +122,9 @@ def iniciarGraficaKM3D(data, centroide):
     fig = plt.figure(figsize=(10, 8))
     ax = fig.add_subplot(projection='3d')
     ax.set_title("Estado inicial")
-    ax.set_xlabel("Sepal Length")
-    ax.set_ylabel("Sepal Width")
-    ax.set_zlabel("Petal Length")
+    ax.set_xlabel("Longitud de sepalo")
+    ax.set_ylabel("Ancho de sepalo")
+    ax.set_zlabel("Longitud de sepalo")
     ax.set_aspect('equal')
 
     ax.set_xlim(4, 8)
@@ -137,7 +141,6 @@ def iniciarGraficaKM3D(data, centroide):
     plt.pause(1)
 
     return fig, ax, dataPlot, centPlot
-
 
 def actualizarGraficaKM3D(ax, title, dataPlot, centPlot, centroide, clusters):
     colores = ["#EE0000", "#FF8000", "#FFFF00", "#00C957", 
@@ -167,8 +170,6 @@ def actualizarGraficaKM3D(ax, title, dataPlot, centPlot, centroide, clusters):
     centPlot._offsets3d = (newCentX, newCentY, newCentZ)
 
     plt.pause(0.2)
-
-
 
 #? =======[Test KM]=======
 #* Data 2D
