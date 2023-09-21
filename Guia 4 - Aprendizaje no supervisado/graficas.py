@@ -11,6 +11,10 @@ def iniciarGrafica(data, neurSom, iris=False):
     if iris:
         ax.set_aspect('equal', 'box')
         ax.set(xlim=(4, 8), ylim=(1, 5))
+        ax.set_xlabel("Sepal Length")
+        ax.set_ylabel("Sepal Width")
+        ax.set_aspect('equal', 'box')
+    ax.grid(True)
 
     # fake_blue, fake_red, blue, red
     # colores = ["#00EEEE", "#EE4000", "#0000FF", "#FF0000"]
@@ -53,8 +57,8 @@ def iniciarGraficaKM2D(data, centroide):
 
     fig, ax = plt.subplots()
     ax.set_title("Estado inicial")
-    ax.set_xlabel("1ra categoria")
-    ax.set_ylabel("2da categoria")
+    ax.set_xlabel("Sepal Length")
+    ax.set_ylabel("Sepal Width")
 
     ax.set_aspect('equal', 'box')
     ax.set(xlim=(4, 8), ylim=(1, 5))
@@ -114,9 +118,14 @@ def iniciarGraficaKM3D(data, centroide):
     fig = plt.figure(figsize=(10, 8))
     ax = fig.add_subplot(projection='3d')
     ax.set_title("Estado inicial")
-    ax.set_xlabel("1ra categoria")
-    ax.set_ylabel("2da categoria")
-    ax.set_zlabel("3ra categoria")
+    ax.set_xlabel("Sepal Length")
+    ax.set_ylabel("Sepal Width")
+    ax.set_zlabel("Petal Length")
+    ax.set_aspect('equal')
+
+    ax.set_xlim(4, 8)
+    ax.set_ylim(1, 5)
+    ax.set_zlim(0.5, 7.5)
 
     # Mostrar los datos en gris
     dataPlot = ax.scatter(data[:, 0], data[:, 1], data[:, 2], c="#666666", linewidths=0)

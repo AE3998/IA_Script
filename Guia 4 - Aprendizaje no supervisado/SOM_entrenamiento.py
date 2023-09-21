@@ -41,7 +41,7 @@ def obtenerVecinos(Z, winIdx, radio):
     # dentro del radio
     return (dist <= radio)
 
-def SOM_entrenamiento(nombreArchivo, epocas, dimSom, tasaAp, radio, iris=False):
+def SOM_entrenamiento(data, epocas, dimSom, tasaAp, radio, iris=False):
     """
         Funcion para entrenamiento de un Som.
         Entradas: nombre del archivo csv de datos, vector epocas donde se tenga las epocas para
@@ -58,11 +58,6 @@ def SOM_entrenamiento(nombreArchivo, epocas, dimSom, tasaAp, radio, iris=False):
     Z = np.array(np.meshgrid(jj, ii)) # 3 fila y 4 columna, (x=4, y=3)
     Z = np.array((Z[1], Z[0]))#! Por como esta definido meshgrid, hay que invertir el orden
 
-    # Cargar datos
-    data = cargarDatos(nombreArchivo)
-    if iris:
-        X, yd = data[:, :-3], data[:, -3:]
-        data = X
 
     # Inicializar pesos al azar
     neurSom = np.random.rand(dimSom[0], dimSom[1], data.shape[1]) - 0.5
@@ -70,6 +65,9 @@ def SOM_entrenamiento(nombreArchivo, epocas, dimSom, tasaAp, radio, iris=False):
     fig, ax, rectHoriz, rectVert = iniciarGrafica(data, neurSom, iris)
 
     #todo 1ra etapa: ordenamiento global
+    #! Cambio de tasaAp
+    tasaApEtapa1 = np.linspace(tasaAp[0] + 0.001, tasaAp[0], epocas[0])
+
     for epoca in range(epocas[0]):
 
         #? Por legibilidad no mas
@@ -79,7 +77,6 @@ def SOM_entrenamiento(nombreArchivo, epocas, dimSom, tasaAp, radio, iris=False):
         for i in range(data.shape[0]):
             #? otro print
             # print(f"\n\n index = {i}")
-
             patron = data[i, :]
             neurGanadora = obtenerNeurona(neurSom, patron)
             idxVecBool = obtenerVecinos(Z, neurGanadora, radio[0])
@@ -91,7 +88,8 @@ def SOM_entrenamiento(nombreArchivo, epocas, dimSom, tasaAp, radio, iris=False):
             # print(f"idxVecBool = \n{idxVecBool}")
 
             # Actualiza los pesos de las neuronas incluyendo uno mismo
-            neurSom[idxVecBool] = neurSom[idxVecBool] + tasaAp[0] * (patron - neurSom[idxVecBool])
+            #! neurSom[idxVecBool] += tasaAp[0] * (patron - neurSom[idxVecBool])
+            neurSom[idxVecBool] += tasaApEtapa1[epoca] * (patron - neurSom[idxVecBool])
         
         if(epoca % 4 == 0 or epoca == epocas[0]-1):
             title = "Ordenamiento global ep " + str(epoca)
@@ -119,16 +117,18 @@ def SOM_entrenamiento(nombreArchivo, epocas, dimSom, tasaAp, radio, iris=False):
             actualizarGrafica(fig, ax, title, neurSom, rectHoriz, rectVert)
 
     #todo 3er etapa: ajuste fino
-    for epoca in range(epocas[2]):
+    #! Cambio de tasaAp
+    tasaApEtapa3 = np.linspace(tasaAp[1], tasaAp[1] - 0.01, epocas[2])
 
+    for epoca in range(epocas[2]):
         for i in range(data.shape[0]):
+
             patron = data[i, :]
             neurGanadora = obtenerNeurona(neurSom, patron)
             idxVecBool = obtenerVecinos(Z, neurGanadora, radio[1])
+            #! neurSom[idxVecBool] += tasaAp[1] * (patron - neurSom[idxVecBool])
+            neurSom[idxVecBool] += tasaApEtapa3[epoca] * (patron - neurSom[idxVecBool])
 
-            neurSom[idxVecBool] = neurSom[idxVecBool] + tasaAp[1] * (patron - neurSom[idxVecBool])
-            #? Print para verificar las cosas
-        
         if(epoca % 4 == 0 or epoca == epocas[2]-1):
             title = "Ajuste fino ep " + str(epoca)
             actualizarGrafica(fig, ax, title, neurSom, rectHoriz, rectVert)
