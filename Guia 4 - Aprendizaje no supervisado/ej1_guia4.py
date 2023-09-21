@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from SOM_entrenamiento import *
-# from SOM import *
+# from SOM_entrenamiento import *
+from SOM import *
 
 nombreArchivo = "circulo.csv"
 epocas = [150, 300, 150]
