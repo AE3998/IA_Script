@@ -41,7 +41,7 @@ def obtenerVecinos(Z, winIdx, radio):
     # dentro del radio
     return (dist <= radio)
 
-def SOM_entrenamiento(nombreArchivo, epocas, dimSom, tasaAp, radio):
+def SOM_entrenamiento(nombreArchivo, epocas, dimSom, tasaAp, radio, iris=False, grafDim=3):
     """
         Funcion para entrenamiento de un Som.
         Entradas: nombre del archivo csv de datos, vector epocas donde se tenga las epocas para
@@ -60,6 +60,9 @@ def SOM_entrenamiento(nombreArchivo, epocas, dimSom, tasaAp, radio):
 
     # Cargar datos
     data = cargarDatos(nombreArchivo)
+    if iris:
+        X, yd = data[:, :-3], data[:, -3:]
+        data = X
 
     # Inicializar pesos al azar
     neurSom = np.random.rand(dimSom[0], dimSom[1], data.shape[1]) - 0.5

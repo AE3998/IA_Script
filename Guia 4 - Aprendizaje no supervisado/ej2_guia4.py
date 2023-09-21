@@ -19,13 +19,13 @@ if (desordenarDatos):
 # etiquetas = desordenarDatos(datos.target)
 # print(etiquetas)
 
-centroides, clusters = k_medias(data, 4, 100)
+centroides, clusters = k_medias(data, 4, 100, grafDim=2)
 plt.show()
 
 # en este problema son "k" centroides que tendran 4 dimensiones porque los datos de iris vienen asi,
 # y en "clusters" tendre un vector con vectores donde estan los indices de los puntos de datos
 # que van dentro de cada cluster.
  
-print(centroides)   
-print("")
-print(clusters)     
+# print(centroides)   
+# print("")
+# print(clusters)     

@@ -39,17 +39,63 @@ def actualizarGrafica(fig, ax, title, neurSom, rectHoriz, rectVert):
 
 def iniciarGraficaKM2D(data, centroide):
 
-    # rojo, verde, amarillo
-    colores = ["#EE0000", "#00FA9A", "#FFFF00"]
+    colores = ["#EE0000", "#FF8000", "#FFFF00", "#00C957", 
+               "#1C86EE", "#104E8B", "#9400D3", "#8B008B",
+               "#333333", "#FF82AB"]
 
-    fig, ax = plt.subplots(layout='constrained')
+    # Si tengo 3 centroide, tendre solo 3 colores
+    # idxColor = np.linspace(0, 10, centroide.shape[0]).astype(int)
+    # col = colores[idxColor]
+    col = colores[:centroide.shape[0]]
 
+    fig, ax = plt.subplots()
+    ax.set_title("Estado inicial")
+    ax.set_xlabel("1ra categoria")
+    ax.set_ylabel("2da categoria")
+
+    ax.set_aspect('equal', 'box')
+    ax.set(xlim=(4, 8), ylim=(1, 5))
+    ax.grid(True)
+
+    # Mostrar los datos en gris
     dataPlot = ax.scatter(data[:, 0], data[:, 1], c="#666666", linewidths=0)
 
+    # Mostrar los centroides colorados
     centPlot = ax.scatter(centroide[:, 0], centroide[:, 1], 
-                          c=colores, marker="s", linewidths=5)
+                          c=col, marker="s", linewidths=5)
 
     return fig, ax, dataPlot, centPlot
+
+
+def actualizarGraficaKM2D(ax, title, dataPlot, centPlot, centroide, clusters):
+
+    colores = ["#EE0000", "#FF8000", "#FFFF00", "#00C957", 
+               "#1C86EE", "#104E8B", "#9400D3", "#8B008B",
+               "#333333", "#FF82AB"]
+    
+    ax.set_title(title)
+
+    # Calcular el total de los datos
+    totalData = 0
+    for cluster in clusters:
+        totalData += len(cluster)
+
+    # Inicializar la lista de color
+    color = np.full(shape=(totalData), fill_value=colores[0], dtype='U7')
+
+    for i in range(1, len(clusters)):
+        color[clusters[i]] = colores[i]
+
+    # Actualizar los colores de los patrones
+    dataPlot.set_facecolors(color)
+
+    # Actualizar las posiciones de los centroides
+    newCentX = centroide[:, 0]
+    newCentY = centroide[:, 1]
+    newOffset = np.column_stack((newCentX, newCentY))
+    centPlot.set_offsets(newOffset)
+
+    plt.pause(0.2)
 
 def iniciarGraficaKM3D(data, centroide):
 
