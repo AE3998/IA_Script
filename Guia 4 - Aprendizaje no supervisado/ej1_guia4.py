@@ -22,15 +22,22 @@ data = cargarDatos(nombreArchivo)
 
 neurSom, clusters = SOM_entrenamiento(data, epocas, dimSom, tasaAp, radio)
 colorearClustersSOM(data, neurSom, clusters)
+
 plt.show()
+
 #! FALTA CORREGIR EL ENTRENAMIENTO DEL SOM PARA QUE FUNCIONA CON UN SOM UNIDIMENSIONAL
 #! COMO PIDE AL FINAL DEL EJERCICIO 1
 #* Repetir para un SOM unidimensional con la misma cantidad de neuronas
-# nombreArchivo = "te.csv"
-# epocas = [50, 100, 50]
-# dimSom = [25] # en (i, j)
-# tasaAp = [0.25, 0.1]
-# radio = [2, 0.1]
 
-# SOM_entrenamiento(nombreArchivo, epocas, dimSom, tasaAp, radio)
-# plt.show()
+nombreArchivo = "te.csv"
+epocas = [50, 100, 50]
+dimSom = [1, 25] # en (i, j)
+tasaAp = [0.35, 0.1]
+radio = [2, 0.1]
+
+# Cargar datos
+data = cargarDatos(nombreArchivo)
+
+neurSom, clusters = SOM_entrenamiento(data, epocas, dimSom, tasaAp, radio)
+colorearClustersSOM(data, neurSom, clusters)
+plt.show()

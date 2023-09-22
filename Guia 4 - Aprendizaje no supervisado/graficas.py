@@ -8,7 +8,7 @@ def iniciarGraficaSOM(data, neurSom, iris=False):
     ax.set_title('Grafica inicial')
     ax.set_xlabel('X')
     ax.set_ylabel('Y')
-    ax.set(xlim=(-1, 1), ylim=(-1, 1))
+    ax.set(xlim=(-1.05, 1.05), ylim=(-1.05, 1.05))
     if iris:
         ax.set(xlim=(4, 8), ylim=(1, 5))
         ax.set_xlabel("Longitud de sepalo")
@@ -48,7 +48,7 @@ def colorearClustersSOM(data, neurSom, clusters, iris=False):
     ax.set_title('Colorear Clusters')
     ax.set_xlabel('X')
     ax.set_ylabel('Y')
-    ax.set(xlim=(-1, 1), ylim=(-1, 1))
+    ax.set(xlim=(-1.05, 1.05), ylim=(-1.05, 1.05))
     if iris:
         ax.set(xlim=(4, 8), ylim=(1, 5))
         ax.set_xlabel("Longitud de sepalo")
