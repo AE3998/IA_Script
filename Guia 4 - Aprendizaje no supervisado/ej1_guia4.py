@@ -12,15 +12,16 @@ from SOM_entrenamiento import *
     como las epocas, radio de vecindad y tasa de aprendizaje.
 """
 nombreArchivo = "circulo.csv"
-epocas = [150, 300, 150]
-dimSom = [6, 6] # en (i, j)
-tasaAp = [0.25, 0.1]
+epocas = [80, 200, 80]
+dimSom = [4, 4] # en (i, j)
+tasaAp = [0.45, 0.08]
 radio = [2, 0.1]
 
 # Cargar datos
 data = cargarDatos(nombreArchivo)
 
-SOM_entrenamiento(data, epocas, dimSom, tasaAp, radio)
+neurSom, clusters = SOM_entrenamiento(data, epocas, dimSom, tasaAp, radio)
+colorearClustersSOM(data, neurSom, clusters)
 plt.show()
 #! FALTA CORREGIR EL ENTRENAMIENTO DEL SOM PARA QUE FUNCIONA CON UN SOM UNIDIMENSIONAL
 #! COMO PIDE AL FINAL DEL EJERCICIO 1

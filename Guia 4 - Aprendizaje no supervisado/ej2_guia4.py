@@ -21,17 +21,18 @@ if (desordenarDatos):
 # etiquetas = desordenarDatos(datos.target)
 # print(etiquetas)
 
-centroides, clusters = k_medias(data, 4, grafDim=3)
+centroides, clusters = k_medias(data, 4, grafDim=2)
 #* Comparacion con SOM 
 
 # nombreArchivo = "irisbin_trn.csv"
 epocas = [100, 350, 100]
 dimSom = [2, 2]
-tasaAp = [0.4, 0.1]
+tasaAp = [0.6, 0.1]
 radio = [2, 0.1]
 iris = True
 
-SOM_entrenamiento(data, epocas, dimSom, tasaAp, radio, iris)
+neurSom, clusters = SOM_entrenamiento(data, epocas, dimSom, tasaAp, radio, iris)
+colorearClustersSOM(data, neurSom, clusters,iris=True)
 plt.show()
 
 # en este problema son "k" centroides que tendran 4 dimensiones porque los datos de iris vienen asi,

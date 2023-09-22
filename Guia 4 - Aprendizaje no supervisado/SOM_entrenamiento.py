@@ -139,8 +139,23 @@ def SOM_entrenamiento(data, epocas, dimSom, tasaAp, radio, iris=False):
             # print(f"neurGanadora = \n{neurGanadora}")
             # print(f"idxVecBool = \n{idxVecBool}")
 
+    #todo Obtener el grupo de clusters
+    # Iniciar la lista de clusters
+    clusters = []
+    for _ in range(dimSom[0] * dimSom[1]):
+        clusters.append([])
 
-    return
+    # Dimension de la neurona
+    dim = (dimSom[0], dimSom[1])
+
+    # Recorrer cada patron y asignarle a cluster mas cercano
+    for i in range(data.shape[0]):
+        patron = data[i, :]
+        neurGanadora = obtenerNeurona(neurSom, patron)
+        clustIdx = np.ravel_multi_index(neurGanadora, dims=dim)
+        clusters[clustIdx].append(i)
+
+    return neurSom, clusters
 
 
 # nombreArchivo = "circulo.csv"

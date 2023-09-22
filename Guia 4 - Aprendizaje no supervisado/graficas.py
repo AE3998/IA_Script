@@ -10,16 +10,11 @@ def iniciarGraficaSOM(data, neurSom, iris=False):
     ax.set_ylabel('Y')
     ax.set(xlim=(-1, 1), ylim=(-1, 1))
     if iris:
-        ax.set_aspect('equal', 'box')
         ax.set(xlim=(4, 8), ylim=(1, 5))
         ax.set_xlabel("Longitud de sepalo")
         ax.set_ylabel("Ancho de sepalo")
     ax.set_aspect('equal', 'box')
     ax.grid(True)
-
-    if iris:
-        ax.set_aspect('equal', 'box')
-        ax.set(xlim=(4, 8), ylim=(1, 5))
 
     # Graficar los datos
     ax.scatter(data[:, 0], data[:, 1],c="#00EEEE", linewidths=1)
@@ -47,6 +42,46 @@ def actualizarGraficaSOM(fig, ax, title, neurSom, rectHoriz, rectVert):
 
     fig.show()
     plt.pause(0.1)
+
+def colorearClustersSOM(data, neurSom, clusters, iris=False):
+    fig, ax = plt.subplots(layout='constrained')
+    ax.set_title('Colorear Clusters')
+    ax.set_xlabel('X')
+    ax.set_ylabel('Y')
+    ax.set(xlim=(-1, 1), ylim=(-1, 1))
+    if iris:
+        ax.set(xlim=(4, 8), ylim=(1, 5))
+        ax.set_xlabel("Longitud de sepalo")
+        ax.set_ylabel("Ancho de sepalo")
+    ax.set_aspect('equal', 'box')
+    ax.grid(True)
+
+    cmapColor = 'rainbow'
+
+    totalCluster = len(clusters)
+
+    # Inicializar colores
+    colores = np.random.rand(totalCluster)
+
+    # Generar el array de colores 
+    col = np.full(shape=(data.shape[0]), fill_value=colores[0])
+    for i in range(1, totalCluster):
+        col[clusters[i]] = colores[i]
+    
+    # Graficar los datos
+    ax.scatter(data[:, 0], data[:, 1], c=col, cmap=cmapColor)
+
+    # Graficar cada centroide
+    ax.scatter(neurSom[:, :, 0], neurSom[:, :, 1], c=colores, 
+               marker='s', cmap=cmapColor, linewidths=1.5, 
+               edgecolors="#000000")
+
+    fig.show()
+
+
+
+
+
 
 #* ----- Graficas k-medias -----
 
