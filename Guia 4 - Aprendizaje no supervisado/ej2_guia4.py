@@ -5,8 +5,9 @@ from SOM_entrenamiento import *
 import matplotlib.pyplot as plt
 
 #! ----- FALTA TERMINAR -----
-#! Hacer la comparacion con el SOM que pide el ejercicio
-#! y hacer la matriz de contingencia
+#! Hacer la comparacion con el SOM que pide el ejercicio y hacer la matriz de contingencia
+#! Tomamos cada neurona del SOM como columnas de la matriz de contingencia y cada cluster
+#! del k-medias como filas de la matriz de contingencia.
 
 data, yd = load_iris(return_X_y = True)
 desordenarDatos = True

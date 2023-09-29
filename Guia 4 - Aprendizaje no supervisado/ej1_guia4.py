@@ -2,6 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from SOM_entrenamiento import *
 # from SOM import *
+
 """
     El entrenamiento del SOM se realiza en tres etapas:
     Etapa 1: ordenamiento global (vecindad grande y tasa de aprendizaje grande)
@@ -13,8 +14,8 @@ from SOM_entrenamiento import *
 """
 nombreArchivo = "circulo.csv"
 epocas = [80, 200, 80]
-dimSom = [4, 4] # en (i, j)
-tasaAp = [0.45, 0.08]
+dimSom = [5, 5] # en (i, j)
+tasaAp = [0.5, 0.01]
 radio = [2, 0.1]
 
 # Cargar datos
@@ -25,14 +26,12 @@ colorearClustersSOM(data, neurSom, clusters)
 
 plt.show()
 
-#! FALTA CORREGIR EL ENTRENAMIENTO DEL SOM PARA QUE FUNCIONA CON UN SOM UNIDIMENSIONAL
-#! COMO PIDE AL FINAL DEL EJERCICIO 1
 #* Repetir para un SOM unidimensional con la misma cantidad de neuronas
 
-nombreArchivo = "te.csv"
+nombreArchivo = "circulo.csv"
 epocas = [50, 100, 50]
 dimSom = [1, 25] # en (i, j)
-tasaAp = [0.35, 0.1]
+tasaAp = [0.5, 0.1]
 radio = [2, 0.1]
 
 # Cargar datos

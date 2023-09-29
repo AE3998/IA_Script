@@ -17,7 +17,7 @@ def iniciarGraficaSOM(data, neurSom, iris=False):
     ax.grid(True)
 
     # Graficar los datos
-    ax.scatter(data[:, 0], data[:, 1],c="#00EEEE", linewidths=1)
+    ax.scatter(data[:, 0], data[:, 1], linewidths=1)
     
     # Graficar las conexiones entre cada neurona
     rectHoriz = []
