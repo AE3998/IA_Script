@@ -21,8 +21,8 @@ radio = [2, 0.1]
 # Cargar datos
 data = cargarDatos(nombreArchivo)
 
-neurSom, clusters = SOM_entrenamiento(data, epocas, dimSom, tasaAp, radio)
-colorearClustersSOM(data, neurSom, clusters)
+neuronasSOM, clusters = SOM_entrenamiento(data, epocas, dimSom, tasaAp, radio)
+colorearClustersSOM(data, neuronasSOM, clusters)
 
 plt.show()
 
@@ -37,6 +37,6 @@ radio = [2, 0.1]
 # Cargar datos
 data = cargarDatos(nombreArchivo)
 
-neurSom, clusters = SOM_entrenamiento(data, epocas, dimSom, tasaAp, radio)
-colorearClustersSOM(data, neurSom, clusters)
+neuronasSOM, clusters = SOM_entrenamiento(data, epocas, dimSom, tasaAp, radio)
+colorearClustersSOM(data, neuronasSOM, clusters)
 plt.show()

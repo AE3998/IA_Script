@@ -32,8 +32,8 @@ tasaAp = [0.6, 0.1]
 radio = [2, 0.1]
 iris = True
 
-neurSom, clusters = SOM_entrenamiento(data, epocas, dimSom, tasaAp, radio, iris)
-colorearClustersSOM(data, neurSom, clusters,iris=True)
+neuronasSOM, clusters = SOM_entrenamiento(data, epocas, dimSom, tasaAp, radio, iris)
+colorearClustersSOM(data, neuronasSOM, clusters,iris=True)
 plt.show()
 
 # en este problema son "k" centroides que tendran 4 dimensiones porque los datos de iris vienen asi,

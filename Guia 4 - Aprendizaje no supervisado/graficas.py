@@ -3,7 +3,7 @@ import numpy as np
 
 #* ----- Graficas SOM -----
 
-def iniciarGraficaSOM(data, neurSom, iris=False):
+def iniciarGraficaSOM(data, neuronasSOM, iris=False):
     fig, ax = plt.subplots(layout='constrained')
     ax.set_title('Grafica inicial')
     ax.set_xlabel('X')
@@ -22,28 +22,28 @@ def iniciarGraficaSOM(data, neurSom, iris=False):
     # Graficar las conexiones entre cada neurona
     rectHoriz = []
     rectVert = []
-    for i in range(neurSom.shape[0]):
-        rectVert.append(ax.plot(neurSom[i, :, 0], neurSom[i, :, 1], 'ko-')[0])
-    for i in range(neurSom.shape[1]):
-        rectHoriz.append(ax.plot(neurSom[:, i, 0], neurSom[:, i, 1], 'ko-' )[0])
+    for i in range(neuronasSOM.shape[0]):
+        rectVert.append(ax.plot(neuronasSOM[i, :, 0], neuronasSOM[i, :, 1], 'ko-')[0])
+    for i in range(neuronasSOM.shape[1]):
+        rectHoriz.append(ax.plot(neuronasSOM[:, i, 0], neuronasSOM[:, i, 1], 'ko-' )[0])
 
     fig.show()
     return fig, ax, rectHoriz, rectVert
 
-def actualizarGraficaSOM(fig, ax, title, neurSom, rectHoriz, rectVert):
+def actualizarGraficaSOM(fig, ax, title, neuronasSOM, rectHoriz, rectVert):
     ax.set_title(title)
 
     for idx, val in enumerate(rectHoriz):
-        val.set_xdata(neurSom[:, idx, 0])
-        val.set_ydata(neurSom[:, idx, 1])
+        val.set_xdata(neuronasSOM[:, idx, 0])
+        val.set_ydata(neuronasSOM[:, idx, 1])
     for idx, val in enumerate(rectVert):
-        val.set_xdata(neurSom[idx, :, 0])
-        val.set_ydata(neurSom[idx, :, 1])
+        val.set_xdata(neuronasSOM[idx, :, 0])
+        val.set_ydata(neuronasSOM[idx, :, 1])
 
     fig.show()
     plt.pause(0.1)
 
-def colorearClustersSOM(data, neurSom, clusters, iris=False):
+def colorearClustersSOM(data, neuronasSOM, clusters, iris=False):
     fig, ax = plt.subplots(layout='constrained')
     ax.set_title('Colorear Clusters')
     ax.set_xlabel('X')
@@ -72,7 +72,7 @@ def colorearClustersSOM(data, neurSom, clusters, iris=False):
     ax.scatter(data[:, 0], data[:, 1], c=col, cmap=cmapColor)
 
     # Graficar cada centroide
-    ax.scatter(neurSom[:, :, 0], neurSom[:, :, 1], c=colores, 
+    ax.scatter(neuronasSOM[:, :, 0], neuronasSOM[:, :, 1], c=colores, 
                marker='s', cmap=cmapColor, linewidths=1.5, 
                edgecolors="#000000")
 
@@ -267,7 +267,7 @@ def actualizarGraficaKM3D(ax, title, dataPlot, centPlot, centroide, clusters):
 # data = np.random.rand(20, 2) * 2 - 1 
 # print(data[:, 0], data[:, 1])
 
-# fig, ax, rectHoriz, rectVert = iniciarGrafica(data=data, neurSom=pp)
+# fig, ax, rectHoriz, rectVert = iniciarGrafica(data=data, neuronasSOM=pp)
 # plt.pause(1)
 
 # pp[:, :, 0] = j

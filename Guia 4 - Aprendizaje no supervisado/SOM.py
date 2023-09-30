@@ -15,13 +15,13 @@ def obtenerNeurona(nSom, patron):
 
     return minIdx
 
-def obtenerVecinos(nSom, winIdx, radio):
+def obtenerVecinos(nSom, indNeuGanadora, radio):
     listVec = []
 
     for fila in range(nSom.shape[0]):
         for col in range(nSom.shape[1]):
             # Seria la norma 1
-            dist = np.abs(fila - winIdx[0]) + np.abs(col - winIdx[1])
+            dist = np.abs(fila - indNeuGanadora[0]) + np.abs(col - indNeuGanadora[1])
             if(dist <= radio):
                 listVec.append((fila, col))
 
@@ -50,29 +50,29 @@ def SOM_entrenamiento(nombreArchivo, epocas, dimSom, tasaAp, radio, iris=False):
         data = X
 
     # Inicializar pesos al azar [-0.5, 0.5]
-    neurSom = np.random.rand(dimSom[0], dimSom[1], data.shape[1]) - 0.5
+    neuronasSOM = np.random.rand(dimSom[0], dimSom[1], data.shape[1]) - 0.5
 
-    fig, ax, rectHoriz, rectVert = iniciarGraficaSOM(data, neurSom, iris)
+    fig, ax, rectHoriz, rectVert = iniciarGraficaSOM(data, neuronasSOM, iris)
 
     #todo 1ra etapa: ordenamiento global
     for epoca in range(epocas[0]):
         for i in range(data.shape[0]):
             patron = data[i, :]
-            neurGanadora = obtenerNeurona(neurSom, patron)
-            listVec = obtenerVecinos(neurSom, neurGanadora, radio[0])
+            neurGanadora = obtenerNeurona(neuronasSOM, patron)
+            listVec = obtenerVecinos(neuronasSOM, neurGanadora, radio[0])
             
             # Actualizar cada uno de los vecinos, incluyendo la neurona misma
             for idx in listVec:
-                neurSom[idx] += tasaAp[0] * (patron - neurSom[idx])
+                neuronasSOM[idx] += tasaAp[0] * (patron - neuronasSOM[idx])
         
         # epoca % 4 == 0 es para que grafique cada 4 epocas nomas
         if(epoca % 4 == 0 or epoca == epocas[0]-1):
             title = "Ordenamiento global ep " + str(epoca)
-            actualizarGraficaSOM(fig, ax, title, neurSom, rectHoriz, rectVert)
+            actualizarGraficaSOM(fig, ax, title, neuronasSOM, rectHoriz, rectVert)
 
     # Graficar la ultima epoca
     title = "Ordenamiento global ep " + str(epocas[0])
-    actualizarGraficaSOM(fig, ax, title, neurSom, rectHoriz, rectVert)
+    actualizarGraficaSOM(fig, ax, title, neuronasSOM, rectHoriz, rectVert)
 
     #todo 2da etapa: transicion
     # el radio de la vecindad y la tasa de aprendizaje se reducen de forma lineal
@@ -82,38 +82,38 @@ def SOM_entrenamiento(nombreArchivo, epocas, dimSom, tasaAp, radio, iris=False):
     for epoca in range(epocas[1]):
         for i in range(data.shape[0]):
             patron = data[i, :]
-            neurGanadora = obtenerNeurona(neurSom, patron)
-            listVec = obtenerVecinos(neurSom, neurGanadora, radioEtapa2[epoca])
+            neurGanadora = obtenerNeurona(neuronasSOM, patron)
+            listVec = obtenerVecinos(neuronasSOM, neurGanadora, radioEtapa2[epoca])
             
             # Actualizar cada uno de los vecinos, incluyendo la neurona misma
             for idx in listVec:
-                neurSom[idx] += tasaApEtapa2[epoca] * (patron - neurSom[idx])
+                neuronasSOM[idx] += tasaApEtapa2[epoca] * (patron - neuronasSOM[idx])
         
         if(epoca % 4 == 0 or epoca == epocas[1]-1):
             title = "Etapa transicion ep " + str(epoca)
-            actualizarGraficaSOM(fig, ax, title, neurSom, rectHoriz, rectVert)
+            actualizarGraficaSOM(fig, ax, title, neuronasSOM, rectHoriz, rectVert)
 
     # Graficar la ultima epoca
     title = "Etapa transicion ep " + str(epocas[1])
-    actualizarGraficaSOM(fig, ax, title, neurSom, rectHoriz, rectVert)
+    actualizarGraficaSOM(fig, ax, title, neuronasSOM, rectHoriz, rectVert)
 
     #todo 3er etapa: ajuste fino
     for epoca in range(epocas[2]):
         for i in range(data.shape[0]):
             patron = data[i, :]
-            neurGanadora = obtenerNeurona(neurSom, patron)
-            listVec = obtenerVecinos(neurSom, neurGanadora, radio[1])
+            neurGanadora = obtenerNeurona(neuronasSOM, patron)
+            listVec = obtenerVecinos(neuronasSOM, neurGanadora, radio[1])
             
             # Actualizar cada uno de los vecinos, incluyendo la neurona misma
             for idx in listVec:
-                neurSom[idx] += tasaAp[1] * (patron - neurSom[idx])
+                neuronasSOM[idx] += tasaAp[1] * (patron - neuronasSOM[idx])
         
         if(epoca % 4 == 0 or epoca == epocas[2]-1):
             title = "Ajuste fino ep " + str(epoca)
-            actualizarGraficaSOM(fig, ax, title, neurSom, rectHoriz, rectVert)
+            actualizarGraficaSOM(fig, ax, title, neuronasSOM, rectHoriz, rectVert)
 
     # Graficar la ultima epoca
     title = "Gráfica final ep " + str(epocas[0])
-    actualizarGraficaSOM(fig, ax, title, neurSom, rectHoriz, rectVert)
+    actualizarGraficaSOM(fig, ax, title, neuronasSOM, rectHoriz, rectVert)
 
     return
