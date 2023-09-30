@@ -24,7 +24,7 @@ data = cargarDatos(nombreArchivo)
 neuronasSOM, clusters = SOM_entrenamiento(data, epocas, dimSom, tasaAp, radio)
 colorearClustersSOM(data, neuronasSOM, clusters)
 
-plt.show()
+# plt.show()
 
 #* Repetir para un SOM unidimensional con la misma cantidad de neuronas
 
