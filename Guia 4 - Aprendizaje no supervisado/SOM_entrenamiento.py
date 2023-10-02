@@ -1,9 +1,8 @@
 import numpy as np
 from graficas import *
-# from cargarDatos import *
 
 def cargarDatos(nombreArchivo):
-    #? Hacer un test de tamano reducido, por es o max_rows = 10 
+    # Hacer un test de tamano reducido, por es o max_rows = 10 
     data = np.genfromtxt(nombreArchivo, delimiter=",", max_rows=None)
     return data
 

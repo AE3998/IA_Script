@@ -1,7 +1,3 @@
-# En este video lo hace con sklearn (nosotros lo debemos hacer desde cero), pero 
-# al final lo grafica usando matplotlib y esta muy buena la forma en que lo hace:
-# https://www.youtube.com/watch?v=mICySHB0fh4
-
 import numpy as np
 from graficas import *
 
@@ -60,7 +56,7 @@ def k_medias(data, k, numMaxIteraciones=100, grafDim=3):
             new_centroide = np.mean(data[cluster], axis=0)
             new_centroides.append(new_centroide)
         
-        # Camparo si todos (all) los centroides son iguales a los nuevos centroides calculados
+        # Camparo si todos los centroides son iguales a los nuevos centroides calculados
         # Si no se realizan mas reasignacioens cortamos el bucle
         # if np.all(centroides == new_centroides):
         if np.array_equal(centroides, new_centroides):
@@ -77,9 +73,9 @@ def k_medias(data, k, numMaxIteraciones=100, grafDim=3):
         if (grafDim == 3):
             actualizarGraficaKM3D(ax, title, dataPlot, centPlot, centroides, clusters)
     
-    # Devuelvo los centroides y el vector de vectores con los indices de los puntos de datos en cada cluster.
-    # return centroides, clusters
     if(grafDim == 2 or grafDim == 3):
         ax.set_title("K = " + str(k) + " finalizado en iteracion " + str(iteracion))
 
+    # Devuelvo los centroides y el vector de vectores con los indices de los puntos de datos en cada cluster.
+    # return centroides, clusters
     return np.array(centroides), clusters   # convierte la lista a un array de numpy por si me sirve mas
