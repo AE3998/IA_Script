@@ -5,11 +5,6 @@ from SOM_entrenamiento import *
 import matplotlib.pyplot as plt
 from graficas import ContingencyMatrixDisplay
 
-#! ----- FALTA TERMINAR -----
-#! Hacer la comparacion con el SOM que pide el ejercicio y hacer la matriz de contingencia
-#! Tomamos cada neurona del SOM como columnas de la matriz de contingencia y cada cluster
-#! del k-medias como filas de la matriz de contingencia.
-
 data, yd = load_iris(return_X_y = True)
 desordenarDatos = True
 
@@ -36,13 +31,18 @@ iris = True
 neuronasSOM, clusters_SOM = SOM_entrenamiento(data, epocas, dimSom, tasaAp, radio, iris)
 colorearClustersSOM(data, neuronasSOM, clusters_SOM, iris=True)
 
+# Graficamos la matriz de contingencia para comparar las soluciones de clustering obtenidas
+# con el k-medias y el SOM
 ContingencyMatrixDisplay(data, clusters_KM, clusters_SOM)
 plt.show()
 
 # en este problema son "k" centroides que tendran 4 dimensiones porque los datos de iris vienen asi,
 # y en "clusters" tendre un vector con vectores donde estan los indices de los puntos de datos
-# que van dentro de cada cluster.
- 
-# print(centroides)   
-# print("")
-# print(clusters)     
+# que van dentro de cada cluster. 
+
+# Sobre la matriz de contingencia:
+# Mientras de valores más altos significa que encuentra mas coincidencias en esos clusteres
+# y no necesariamente tienen que ser los valores de la diagonal como en la matriz de confusion, 
+# sino que puede variar porque se arman distintos clusteres.
+# Y si uso la misma cantidad de clusters en cada metodo, por ejemplo 4,  si las soluciones 
+# de clustering obtenidas son similares, tendria que haber 4 valores altos y el resto bajos 
