@@ -1,3 +1,4 @@
+from sklearn.metrics.cluster import contingency_matrix
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -207,6 +208,76 @@ def actualizarGraficaKM3D(ax, title, dataPlot, centPlot, centroide, clusters):
     centPlot._offsets3d = (newCentX, newCentY, newCentZ)
 
     plt.pause(0.2)
+
+#* ----- Graficas matriz contingencia -----
+
+def ContingencyMatrixDisplay(data, clusters_KM, clusters_SOM):
+
+    plt.figure()
+    # Inicializar un vector 1D que tiene tamanio de cantidad de patron,
+    # luego asignar a cada patron su indice de cluster correspondiente.
+    dataSOM = np.empty(shape=(data.shape[0]))
+    for idxCluster, cluster in enumerate(clusters_SOM):
+        dataSOM[cluster] = idxCluster
+
+    # Aplicar la misma idea a los datos de k_media
+    dataKM = np.empty(shape=(data.shape[0]))
+    for idxCluster, cluster in enumerate(clusters_KM):
+        dataKM[cluster] = idxCluster
+
+    # Definir la matriz de contingencia y mostrarlo 
+    M = contingency_matrix(dataSOM, dataKM)
+    print(M)
+
+    # # Crear los labels
+    len_SOM = len(clusters_SOM)
+    len_KM = len(clusters_KM)
+
+    labels_SOM = []
+    labels_KM = []
+
+    for i in range(len_SOM):
+        labels_SOM.append('Clase ' + str(i + 1))
+
+    for i in range(len_KM):
+        labels_KM.append('Clase ' + str(i + 1))
+
+    # Graficar la tabla de contingencia
+    plt.imshow(M, interpolation='nearest', cmap=plt.cm.Blues)
+    plt.title('Matriz de contingencia')
+    plt.colorbar()
+
+    # Redefinir los ejes con sus labels
+    tick_SOM = np.arange(len_SOM)
+    tick_KM = np.arange(len_KM)
+    plt.xticks(tick_KM, labels_KM)
+    plt.yticks(tick_SOM, labels_SOM)
+
+    # Mostrar los valores de cada tabla
+    for i in range(len_SOM):
+        for j in range(len_KM):
+            plt.text(j, i, str(M[i, j]), ha='center', va='center', color='red')
+
+    plt.xlabel('K-mean')
+    plt.ylabel('SOM')
+
+#? =======[Test Contingency matrix display]=======
+# data = np.empty(shape=(10, 2))
+
+# clusters_SOM = [
+#     [0, 1, 2, 3, 4],
+#     [5, 6, 7, 8, 9]
+# ]
+
+# clusters_KM = [
+#     [0, 1, 2], 
+#     [3, 4, 5],
+#     [6, 7, 8, 9]
+# ]
+
+# ContingencyMatrixDisplay(data, clusters_KM, clusters_SOM)
+# plt.show()
+
 
 #? =======[Test KM]=======
 #* Data 2D
