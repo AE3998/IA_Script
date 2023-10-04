@@ -2,7 +2,6 @@ import numpy as np
 from graficas import *
 
 def cargarDatos(nombreArchivo):
-    # Hacer un test de tamano reducido, por es o max_rows = 10 
     data = np.genfromtxt(nombreArchivo, delimiter=",", max_rows=None)
     return data
 
@@ -10,7 +9,7 @@ def obtenerNeuronaGanadora(nSOM, patron):
     """
         Funcion para obtener la neurona ganadora en el SOM.
         Entrada: pesos de las neuronas que forman el SOM y un patron de entrada.
-        Salida: neurona ganadora.
+        Salida: neurona ganadora y los clusters formados (esto no era necesario).
     """
     # Aumentar la dimension
     p_aux = patron[np.newaxis, np.newaxis, :]
@@ -52,11 +51,11 @@ def SOM_entrenamiento(data, epocas, dimSom, tasaAp, radio, iris=False):
     """
 
     # definir los indices de la matriz (i, j)
-    ii = np.arange(dimSom[0]) # quiero 3 fila, 3 en y
-    jj = np.arange(dimSom[1]) # quiero 4 columna, 4 en x
+    i = np.arange(dimSom[0]) # quiero 3 fila, 3 en y
+    j = np.arange(dimSom[1]) # quiero 4 columna, 4 en x
 
     # armamos la grilla
-    Z = np.array(np.meshgrid(jj, ii)) # 3 fila y 4 columna, (x=4, y=3)
+    Z = np.array(np.meshgrid(j, i)) # 3 fila y 4 columna, (x=4, y=3)
     Z = np.array((Z[1], Z[0]))  # por como esta definido meshgrid, hay que invertir el orden
 
     # Inicializar pesos al azar
@@ -68,21 +67,15 @@ def SOM_entrenamiento(data, epocas, dimSom, tasaAp, radio, iris=False):
     tasaApEtapa1 = tasaAp[0]
 
     for epoca in range(epocas[0]):
-        # print(f"\n\nepoca = {epoca}")
-        # neuronasSOM = np.round(neuronasSOM, 2)
 
         for i in range(data.shape[0]):
-            # print(f"\n\n index = {i}")
             patron = data[i, :]
             neurGanadora = obtenerNeuronaGanadora(neuronasSOM, patron)
             idxVecBool = obtenerVecinos(Z, neurGanadora, radio[0])
 
-            # print(f"neuronasSOM = \n{neuronasSOM}")
-            # print(f"patron = \n{patron}")
-            # print(f"neurGanadora = \n{neurGanadora}")
-            # print(f"idxVecBool = \n{idxVecBool}")
-
             # Actualiza los pesos de la neurona ganadora y sus neuronas vecinas
+            # vel. apre. por la diferencia entre el patron de entrada y el vector de pesos de la 
+            # neurona ganadora, que seria el vector de error
             neuronasSOM[idxVecBool] += tasaApEtapa1 * (patron - neuronasSOM[idxVecBool])
         
         # graficamos cada cuatro epocas y al final

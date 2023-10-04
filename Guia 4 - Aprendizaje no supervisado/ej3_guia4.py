@@ -24,6 +24,8 @@ for k in range(2, 11):
     grafDim = 3
     if k > maxGraf:
         grafDim = 0
+
+    # Aplico k-medias con ese valor de "k" y los datos    
     centroides, clusters = k_medias(X, k, grafDim=grafDim)
 
     # Calculo las etiquetas de cluster a partir de los indices
@@ -34,8 +36,8 @@ for k in range(2, 11):
 
     #* Métricas que utilizamos:
     # - Indice Davies-Bouldin (metrica interna):
-    # Es útil para evaluar la compacidad y la separación de los clusters. Un valor mas cercano a
-    # 0 de DB indica una mejor calidad del clustering, indicando que son mas compactos y separados.
+    # Para evaluar que tan compactos son los clusters y la separacion entre ellos. Un valor mas 
+    # cercano a 0 de DB indica una mejor calidad del clustering, indicando que son mas compactos y separados.
     # - Indice Rand e Indice Fowlkes-Mallows (metricas externas):
     # Evaluan la similitud entre los clusters generados y los clusters de referencia 
     # (etiquetas verdaderas), que en el problema de Iris las tenemos. Entonces nos dan  
@@ -44,7 +46,7 @@ for k in range(2, 11):
 
     # Calculo las metricas
     DB = davies_bouldin_score(X, etiquetas_clusters)
-    # las metricas FM y RI reciben las etiquetas verdaderas (iris.target)
+    # las metricas FM y RI reciben las etiquetas verdaderas (iris.target) para comparar
     FM = fowlkes_mallows_score(iris.target, etiquetas_clusters)
     RI = adjusted_rand_score(iris.target, etiquetas_clusters)
 
@@ -75,7 +77,7 @@ plt.show()
 #* Conclusiones obtenidas:
 # k=2 nos da el valor de indice Davies-Doublin mas bajo, lo cual es bueno, pero con k=3 se tiene
 # mejores valores para los indices FM y RI, ya que son valores mas altos, y sigue teniendo un valor
-# de DB razonable.
+# de DB razonable, ya que es el segundo valor mas bajo de DB.
 # Otra cosa que podriamos pensar es que, en el problema de Iris, como sabemos que tenemos tres 
 # categorias, puede ser coherente que k=3 sea el valor optimo, ya que queremos separar en cada 
 # cluster un tipo de flor.
