@@ -63,6 +63,11 @@ def k_medias(data, k, numMaxIteraciones=100, grafDim=3):
             # print("No se realizan mas reasignaciones")
             break
         
+        # En vez de hacer esa comparacion entre reales que por precision quizas podria dar algun 
+        # problema, convendria hacer un vector del tamanio de los datos y solo ir cambiando el 
+        # indice del cluster al que corresponden. Asi con una bandera (flag) vamos diciendo si
+        # hubo una reasignacion o no.
+
         # Actualizo los centroides
         centroides = np.array(new_centroides)
 

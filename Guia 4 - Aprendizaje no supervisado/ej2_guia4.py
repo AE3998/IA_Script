@@ -19,7 +19,7 @@ centroides, clusters_KM = k_medias(data, 4, grafDim=2)
 #* Comparacion con SOM 
 # nombreArchivo = "irisbin_trn.csv"
 epocas = [100, 350, 100]
-dimSom = [2, 2]
+dimSom = [4, 4]
 tasaAp = [0.6, 0.1]
 radio = [2, 0.1]
 iris = True

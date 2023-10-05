@@ -2,6 +2,9 @@ import numpy as np
 from graficas import *
 from cargarDatos import *
 
+#! Era una implementacion no matricial que comenzamos a hacer pero la cambiamos por la otra
+#! implementacion matricial para que funcione mucho mas rapido.
+
 def obtenerNeurona(nSom, patron):
     minIdx = (0, 0)
     minDist = 1000

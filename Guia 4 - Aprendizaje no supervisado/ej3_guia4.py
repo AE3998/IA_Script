@@ -16,7 +16,7 @@ X = iris.data
 db_scores = []
 fm_scores = []
 rand_scores = []
-maxGraf = 5
+maxGraf = 4
 
 # Itero sobre diferentes valores de k (desde 2 hasta 10)
 for k in range(2, 11):
@@ -78,6 +78,17 @@ plt.show()
 # k=2 nos da el valor de indice Davies-Doublin mas bajo, lo cual es bueno, pero con k=3 se tiene
 # mejores valores para los indices FM y RI, ya que son valores mas altos, y sigue teniendo un valor
 # de DB razonable, ya que es el segundo valor mas bajo de DB.
+# Podemos pensar que k=2 es optimo porque si vemos los datos que tenemos (en la grafica), claramente
+# parece que hay dos grupos, entonces están bien compactos y bien separados. En cambio si agregamos
+# otro centroide ya habra un grupo bien separado pero otros dos que esten mas juntos y eso
+# "empeore" la matrica interna.
 # Otra cosa que podriamos pensar es que, en el problema de Iris, como sabemos que tenemos tres 
 # categorias, puede ser coherente que k=3 sea el valor optimo, ya que queremos separar en cada 
 # cluster un tipo de flor.
+
+# Dependiendo de la inicializacion puede que en cada ejecucion nos de distinto, porque puede 
+# empezar con los centroides en distintos lugares y genera clusters mas o menos compactos y con mas 
+# o menos separacion entre ellos.
+
+# Y otro detalle es que las metricas externar aca las podemos usar porque tenemos los datos reales
+# del Iris, pero si fuera un problema que no conoces esa solucion de referencia no las podriamos usar
