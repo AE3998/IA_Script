@@ -49,6 +49,21 @@ def decodificar(cromosoma, codCrom, xmin, xmax):
     
     return cromDecod
 
+def selectVent(ordenFit, cantPadres):
+    # Supongo que la funcion admite repeticion porque 
+    # siempre trata de dejar los mejores
+
+    idxPadres = np.empty(shape=(cantPadres), dtype=int)
+
+    cantInd = ordenFit.shape[0]
+    paso =  cantInd // cantPadres
+    for i in range(cantPadres):
+        idxPadres[i] = np.random.choice(ordenFit[:cantInd - (paso*i)])
+        # print(ordenFit[:cantInd - (paso*i)])
+
+    return idxPadres
+        
+
 
 def evaluar(func, poblacion, codCrom, xmin, xmax):
 
@@ -117,3 +132,8 @@ def algGenetico(func, xmin, xmax, cantInd, codCrom, probMutacion, probCruza):
 
 # res = decodificar(cromosoma, codCrom, xmin, xmax)
 # print(res)
+
+#? test selectVent(ordenFit, cantPadres)
+ordenFit = np.random.permutation(10)
+cantPadres = 4
+print(selectVent(ordenFit, cantPadres))
