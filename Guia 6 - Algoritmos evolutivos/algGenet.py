@@ -1,11 +1,17 @@
 import numpy as np 
 import matplotlib.pyplot as plt
 
+#* Convertir binario (en formato array) a int
 def bin2int(cromosoma):
-    exp = np.arange(cromosoma.shape[0]-1, -1, -1) 
-    res = np.sum(2**exp[cromosoma]) 
+    # exp = np.arange(cromosoma.shape[0]-1, -1, -1) 
+    # res = np.sum(2**exp[cromosoma]) 
+    # return res
+    res = 0
+    for i in range(len(cromosoma)):
+        if(cromosoma[i] == 1):
+            exp = len(cromosoma)-1-i 
+            res += np.sum(2**exp) 
     return res
-
 
 def decodificar(cromosoma, codCrom, xmin, xmax):
     """
