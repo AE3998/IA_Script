@@ -1,0 +1,1 @@
+# Para implementar operadores de seleccion que utilicemos, ya sea ruleta, ventana, competencia.

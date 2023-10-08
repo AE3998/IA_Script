@@ -32,14 +32,19 @@ def obtenerVecinos(Z, indNeuGanadora, radio):
     # idx_aux = np.array((indNeuGanadora[1], indNeuGanadora[0]))[:, np.newaxis, np.newaxis]
     idx_aux = np.array(indNeuGanadora)[:, np.newaxis, np.newaxis]
 
-    # Determinar las distancias de cada vecino de manera vectorial
+    # Determinar las distancias de cada vecino de manera vectorial. Va a devolver una matriz con
+    # un 0 en la posicion de la ganadora y luego aumentando la distancia hacia las demas.
+    # Una mejora seria que en vez de calcular la distanci a todas las neuronas, nos paremos en 
+    # la ganadora y solo nos movamos la cantidad que indica el radio hacia todos los lados, cuidando
+    # de no salir de rango.
     dist = np.linalg.norm(Z - idx_aux, axis=0, ord=1)
 
     # print(f"Z = \n{Z}") 
     # print(f"idx_aux = \n{idx_aux}")
     # print(f"dist = \n{dist}")
 
-    # Retornar la matriz booleano, sera True para aquellos que estan dentro del radio de vecindad
+    # Retornar la matriz booleano, sera True para aquellos que estan dentro del radio de vecindad.
+    # Seria una matriz que tendra "True" solo en la posicion de la ganadora y de las vecinas.
     return (dist <= radio)
 
 def SOM_entrenamiento(data, epocas, dimSom, tasaAp, radio, iris=False):
@@ -59,6 +64,7 @@ def SOM_entrenamiento(data, epocas, dimSom, tasaAp, radio, iris=False):
     Z = np.array((Z[1], Z[0]))  # por como esta definido meshgrid, hay que invertir el orden
 
     # Inicializar pesos al azar
+    # Tiene dimensiones "i", "j" segun la dimension del SOM y en "k" esta el vector de pesos
     neuronasSOM = np.random.rand(dimSom[0], dimSom[1], data.shape[1]) - 0.5
 
     fig, ax, rectHoriz, rectVert = iniciarGraficaSOM(data, neuronasSOM, iris)
