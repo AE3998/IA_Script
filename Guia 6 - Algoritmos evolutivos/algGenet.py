@@ -55,19 +55,7 @@ def decodificar(cromosoma, codCrom, xmin, xmax):
     
     return cromDecod
 
-def selectVent(ordenFit, cantPadres):
-    # Supongo que la funcion admite repeticion porque 
-    # siempre trata de dejar los mejores
 
-    idxPadres = np.empty(shape=(cantPadres), dtype=int)
-
-    cantInd = ordenFit.shape[0]
-    paso =  cantInd // cantPadres
-    for i in range(cantPadres):
-        idxPadres[i] = np.random.choice(ordenFit[:cantInd - (paso*i)])
-        # print(ordenFit[:cantInd - (paso*i)])
-
-    return idxPadres
         
 
 
@@ -85,9 +73,9 @@ def evaluar(func, poblacion, codCrom, xmin, xmax):
         valDecod[i, :] = val
         fitness[i] = func(val)
     
-    # Retornar el maximo fitness, los indices de fitness 
-    # que ordena de mayor a menor y vector de los valores
-    return np.max(fitness), np.argsort(-fitness), valDecod
+    # Retornar el maximo fitness, los valores de fitness 
+    # y vector de los valores de cromosomas decodificados
+    return np.max(fitness), fitness, valDecod
 
 
 
@@ -106,14 +94,18 @@ def algGenetico(func, xmin, xmax, cantInd, codCrom, probMutacion, probCruza):
     poblacion = poblacion.astype(bool)
 
     # Evaluar el fitness de la poblacion
-    maxFit, ordenFit, valDecod = evaluar(func, poblacion, codCrom, xmin, xmax)
+    maxFit, fitness, valDecod = evaluar(func, poblacion, codCrom, xmin, xmax)
+    #! Guarda que los fitness son propiamente los valores de la funcion en ese
+    #! punto que puede ser muy grande, habria que buscar una forma de normalizarla
+    #! De hecho buscamos minimizar el error, mientras que fitness se hace grande 
+    #! cuando la funcion evaluado en ese punto es grande.
 
 
 
 #todo =======================[Test]=======================
 #? test bin2int
-# cromosoma = np.array([True, True, True, False, True])
-# print(bin2int(cromosoma)) 
+cromosoma = np.array([True, True, True, False, True])
+print(bin2int(cromosoma)) 
 
 #? test decodificar
 #* 1D [10 bits para x]
@@ -140,6 +132,6 @@ def algGenetico(func, xmin, xmax, cantInd, codCrom, probMutacion, probCruza):
 # print(res)
 
 #? test selectVent(ordenFit, cantPadres)
-ordenFit = np.random.permutation(10)
-cantPadres = 4
-print(selectVent(ordenFit, cantPadres))
+# ordenFit = np.random.permutation(10)
+# cantPadres = 4
+# print(selectVent(ordenFit, cantPadres))
