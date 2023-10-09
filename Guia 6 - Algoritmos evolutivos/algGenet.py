@@ -1,17 +1,30 @@
 import numpy as np 
 import matplotlib.pyplot as plt
 
+#? Pseudo codigo de algoritmos geneticos:
+#? Inicializar poblacion
+#? Evaluar poblacion
+#? Mientras(mejor_fitness < fitness_buscado) hacer
+#?      Seleccion de progenitores (padres)
+#?      Reproduccion (cruza y mutacion)
+#?      Reemplazo poblacional
+#?      Evaluar poblacion
+#? Fin
+
 #* Convertir binario (en formato array) a int
 def bin2int(cromosoma):
-    # exp = np.arange(cromosoma.shape[0]-1, -1, -1) 
-    # res = np.sum(2**exp[cromosoma]) 
-    # return res
-    res = 0
-    for i in range(len(cromosoma)):
-        if(cromosoma[i] == 1):
-            exp = len(cromosoma)-1-i 
-            res += np.sum(2**exp) 
+    # Trabajando con indexado de tipo bool para no usar un bucle y ahorrar calculos
+    exp = np.arange(cromosoma.shape[0]-1, -1, -1) 
+    res = np.sum(2**exp[cromosoma]) 
     return res
+
+    # Otra forma trabajando con bucle
+    # res = 0
+    # for i in range(len(cromosoma)):
+    #     if(cromosoma[i] == 1):
+    #         exp = len(cromosoma)-1-i 
+    #         res += np.sum(2**exp) 
+    # return res
 
 def decodificar(cromosoma, codCrom, xmin, xmax):
     """
@@ -55,10 +68,6 @@ def decodificar(cromosoma, codCrom, xmin, xmax):
     
     return cromDecod
 
-
-        
-
-
 def evaluar(func, poblacion, codCrom, xmin, xmax):
 
     # Cantidad de individuos
@@ -76,8 +85,6 @@ def evaluar(func, poblacion, codCrom, xmin, xmax):
     # Retornar el maximo fitness, los valores de fitness 
     # y vector de los valores de cromosomas decodificados
     return np.max(fitness), fitness, valDecod
-
-
 
 def algGenetico(func, xmin, xmax, cantInd, codCrom, probMutacion, probCruza):
 

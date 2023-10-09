@@ -9,3 +9,7 @@ for i in range(len(cromosoma)):
         exp = len(cromosoma)-1-i 
         res += np.sum(2**exp) 
 print(res)
+
+# -----------------------------------------------
+
+

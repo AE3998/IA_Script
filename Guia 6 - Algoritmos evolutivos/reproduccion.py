@@ -25,7 +25,10 @@ def cruza(poblacion, idxPadres, codCrom, probCruza):
         padre1 = poblacion[idxs[0], :]
         padre2 = poblacion[idxs[1], :]
 
-        if(np.random.rand() < probCruza):
+        #! Aviso: lo cambie a ">" porque explicaron que si el numero es mayor a la probabilidad 
+        #! ahi cruzamos. En la mutacion si decia si es menor a la probabilidad 
+        # tiro un numero al azar y si es mayor a la probabilidad hace la cruza
+        if(np.random.rand() > probCruza):    
             # Elijo un punto de corte y concateno la cruza de esos padres
             corte = np.random.choice(lenCrom)
             hijos[i] = np.concatenate((padre1[:corte], padre2[corte:]))
@@ -33,6 +36,7 @@ def cruza(poblacion, idxPadres, codCrom, probCruza):
             hijos[i] = np.concatenate((padre2[:corte], padre1[corte:]))
             i += 1
 
+        # si no es mayor a la probabilidad, pasan como estaban
         else:
             hijos[i] = padre1
             hijos[i+1] = padre2
@@ -43,7 +47,7 @@ def cruza(poblacion, idxPadres, codCrom, probCruza):
 
     return poblacion[:cantIdv]
 
-#* Algoritmo para la mutacion
+#* Algoritmo para la mutacion de cada hijo
 def mutacion(poblacion, probMutacion, codCrom):
     lenCrom = np.sum(codCrom)
 
