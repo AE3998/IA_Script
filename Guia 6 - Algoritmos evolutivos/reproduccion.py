@@ -3,7 +3,7 @@ import numpy as np
 # Algoritmos para realizar la reproduccion (operadores de variacion) y generar descendencia (hijos)
 
 #* Algoritmo para la cruza
-def cruza(poblacion, idxPadres, codCrom, probCruza):
+def repCruza(poblacion, idxPadres, codCrom, probCruza):
 
     cantPadres = idxPadres.shape[0]
     cantIdv = poblacion.shape[0]
@@ -25,12 +25,16 @@ def cruza(poblacion, idxPadres, codCrom, probCruza):
         padre1 = poblacion[idxs[0], :]
         padre2 = poblacion[idxs[1], :]
 
-        #! Aviso: lo cambie a ">" porque explicaron que si el numero es mayor a la probabilidad 
-        #! ahi cruzamos. En la mutacion si decia si es menor a la probabilidad 
+        #? Aviso: lo cambie a ">" porque explicaron que si el numero es mayor a la probabilidad 
+        #? ahi cruzamos. En la mutacion si decia si es menor a la probabilidad 
+        #! Guarda que si pongo probCruza = 0.8, si tiro un numnero al azar entre 0 y 1 me quedaria
+        #! un 20% de ser mayor que 0.8. De toda manera seria > (1 - 0.8), osea mayor que 0.2, asi 
+        #! tengo realmente 80% de hacer la cruza. Por eso puse < que en este caso seria igual de 80%.
+
         # tiro un numero al azar y si es mayor a la probabilidad hace la cruza
-        if(np.random.rand() > probCruza):    
-            # Elijo un punto de corte y concateno la cruza de esos padres
-            corte = np.random.choice(lenCrom)
+        if(np.random.rand() > (1 - probCruza)):    
+            # Elijo un punto de corte entre [1, end-1] y concateno la cruza de esos padres
+            corte = np.random.choice(lenCrom-2) + 1
             hijos[i] = np.concatenate((padre1[:corte], padre2[corte:]))
             i += 1
             hijos[i] = np.concatenate((padre2[:corte], padre1[corte:]))
@@ -48,8 +52,15 @@ def cruza(poblacion, idxPadres, codCrom, probCruza):
     return poblacion[:cantIdv]
 
 #* Algoritmo para la mutacion de cada hijo
-def mutacion(poblacion, probMutacion, codCrom):
+def repMutacion(poblacion, probMutacion, codCrom):
     lenCrom = np.sum(codCrom)
+
+    #? Ver el tema de np.copy, porque como trabajan de referencia los datos
+    #? no se va a notar la diferencia si quiero comparar los datos luego de 
+    #? aplicar esta funcion. 
+    #? No es necesario esta linea, principalmente para notar que realmente 
+    #? genera cambios.
+    poblacion = np.copy(poblacion)
 
     for i in range(poblacion.shape[0]):
         if(np.random.rand() < probMutacion):
@@ -57,3 +68,25 @@ def mutacion(poblacion, probMutacion, codCrom):
             poblacion[i, idxMut] = np.logical_not(poblacion[i, idxMut])
 
     return poblacion
+
+
+
+#? Test de los metodos
+np.random.seed(0)
+
+poblacion = np.random.randint(0, 2, size=(10, 6))
+poblacion = poblacion.astype(bool)
+
+idxPadres = np.array([2, 3])
+codCrom = np.array([3, 3])
+
+probCruza = 0.8
+probMutacion = 0.1
+
+cruza = repCruza(poblacion, idxPadres, codCrom, probCruza)
+mutacion = repMutacion(cruza, probMutacion, codCrom)
+
+print(f"Poblacion: \n{poblacion.astype(int)}")
+print(f"\nPadres: \n{idxPadres}")
+print(f"\nCruza: \n{cruza.astype(int)}")
+print(f"\nMutacion: \n{mutacion.astype(int)}")
