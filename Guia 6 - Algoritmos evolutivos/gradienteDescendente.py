@@ -4,8 +4,11 @@ def gradienteDescendente(grad_func, xmin, xmax):
     """
         Metodo de gradiente descendente para buscar el minimo global de una funcion.
         Entradas: derivada de la funcion (grad_func) y limites del rango [xmin, xmax]
-        Salida: minimo global (x)
+        Salida: minimo global (x). Recordar que dependiendo de la inicializacion al azar  
+        va a converger al minimo local mas cercano.
     """
+
+    #! Falta modificar para que funcione con una funcion f(x, y) como la del inciso ii)
 
     # Parametros del algoritmo
     alpha = 0.01  # tasa de aprendizaje
@@ -18,7 +21,7 @@ def gradienteDescendente(grad_func, xmin, xmax):
 
     # Iniciamos con un punto al azar en el rango dado (queda en el rango [xmin, xmax))
     x = np.random.uniform(xmin, xmax)
-    # x = 400     # para probar que la funcion f1 llegue al minimo global cerca de x = 420
+    # x = 400     # para probar que la funcion f1 llegue al minimo global cerca de x = 420 de la f1
 
     # Gradiente descendente
     for _ in range(maxIteraciones):
