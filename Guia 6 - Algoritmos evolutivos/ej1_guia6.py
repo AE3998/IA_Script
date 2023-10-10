@@ -23,7 +23,9 @@ def df1(x):
 #  de x, con esto alcanza para representar un individuo
 
 cantIndividuo = 100
-cromosoma = [10]
+cromosoma = [10]    # es como se codifica el cromosoma
+cantMaxGeneracion = 1000      # recordar poner un valor alto porque no sabemos cuando va a converger
+fitnessBuscado = 0     #! VER QUE VALOR PODEMOS USAR
 probMutacion = 0.1
 probCruza = 0.8
 

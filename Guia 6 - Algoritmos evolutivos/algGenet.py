@@ -1,5 +1,7 @@
 import numpy as np 
 import matplotlib.pyplot as plt
+from seleccion import *
+from reproduccion import *
 
 #? Pseudo codigo de algoritmos geneticos:
 #? Inicializar poblacion
@@ -76,39 +78,70 @@ def evaluar(func, poblacion, codCrom, xmin, xmax):
     fitness = np.empty(shape=(cantInd))
     valDecod = np.empty(shape=(cantInd, len(codCrom)))
 
+    # Recorremos los individuos (cromosomas) y los decodificamos para evaluar la funcion de fitness dada
     for i in range(cantInd):
         cromosoma = poblacion[i, :]
         val = decodificar(cromosoma, codCrom, xmin, xmax)
         valDecod[i, :] = val
-        fitness[i] = func(val)
+        fitness[i] = func(val)      # evaluo con la funcion de fitness
     
     # Retornar el maximo fitness, los valores de fitness 
     # y vector de los valores de cromosomas decodificados
     return np.max(fitness), fitness, valDecod
 
-def algGenetico(func, xmin, xmax, cantInd, codCrom, probMutacion, probCruza):
-
+def algGenetico(func, xmin, xmax, cantIndividuos, codCrom, fitnessBuscado, cantMaxGeneracion, probMutacion, probCruza):
+    """
+        Funcion que implementa el algoritmo genetico.
+    """
+    
     # Convertir las listas en arreglos
     codCrom = np.array(codCrom)
     xmin = np.array(xmin)
     xmax = np.array(xmax)
 
-    # Inicializar la poblacion de cromosomas
+    #* Inicializar de forma aleatoria la poblacion 
+    # Cada individuo es un cromosoma (una cadena binaria)
     lenCromosoma = np.sum(codCrom)
-    poblacion = np.random.randint(0, 2, size=(cantInd, lenCromosoma))
+    # Formo un arreglo de arreglos, con 0s y 1s con cantIndividuos filas y lenCromosoma columnas
+    poblacion = np.random.randint(0, 2, size=(cantIndividuos, lenCromosoma))
 
-    # Pasar a boolean para agilizar los calculos posteriores
+    # Pasar a boolean para agilizar los calculos posteriores (arreglo con booleanos)
     poblacion = poblacion.astype(bool)
 
-    # Evaluar el fitness de la poblacion
+    #* Evaluar la poblacion con la funcion de fitness dada por el problema
+    # Dentro de evaluar tambien se decodifica cada cromosoma para evaluar la funcion de fitness
     maxFit, fitness, valDecod = evaluar(func, poblacion, codCrom, xmin, xmax)
     #! Guarda que los fitness son propiamente los valores de la funcion en ese
     #! punto que puede ser muy grande, habria que buscar una forma de normalizarla
     #! De hecho buscamos minimizar el error, mientras que fitness se hace grande 
     #! cuando la funcion evaluado en ese punto es grande.
 
+    #* Bucle hasta cumplir criterio de corte
+    cantGeneraciones = 0
+    n = 0
+    while(maxFit < fitnessBuscado and cantGeneraciones < cantMaxGeneracion):
+        
+        # hacer que si el mejor fitness no mejora durante "n" generaciones, se corta
+        # el algoritmo porque suponemos que convergió asi no continua generando
+        # if():
+        #     n += 1
 
+        #* Aplicar metodo de seleccion
+        idxPadres = selectVentana(fitness, cantPadres)
+        # idxPadres = selectCompetencia(fitness, cantPadres)
+        # idxPadres = selectRuleta(fitness, cantPadres)
 
+        #* Aplicar operadores de cruza y mutacion
+        #! ¿Con nuestra cruza y mutacion ya estamos haciendo el reemplazao poblacional o se hace aparte?
+        poblacionCruza = repCruza(poblacion, idxPadres, codCrom, probCruza)
+        newPoblacion = repMutacion(poblacionCruza, probMutacion, codCrom)
+
+        #* Volver a evaluar la nueva poblacion
+        maxFit, fitness, valDecod = evaluar(func, newPoblacion, codCrom, xmin, xmax)
+
+        cantGeneraciones += 1
+        n += 1
+        
 #todo =======================[Test]=======================
 #? test bin2int
 cromosoma = np.array([True, True, True, False, True])
@@ -126,7 +159,6 @@ print(bin2int(cromosoma))
 
 # res = decodificar(cromosoma, codCrom, xmin, xmax)
 # print(res)
-
 
 #* 2D [4 bits para x, 4 bits para y]
 # cromosoma = np.array([1,1,1,0 ,0,1,0,1]) #= [14, 5]
