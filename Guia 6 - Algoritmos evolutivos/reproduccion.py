@@ -25,14 +25,8 @@ def repCruza(poblacion, idxPadres, codCrom, probCruza):
         padre1 = poblacion[idxs[0], :]
         padre2 = poblacion[idxs[1], :]
 
-        #? Aviso: lo cambie a ">" porque explicaron que si el numero es mayor a la probabilidad 
-        #? ahi cruzamos. En la mutacion si decia si es menor a la probabilidad 
-        #! Guarda que si pongo probCruza = 0.8, si tiro un numnero al azar entre 0 y 1 me quedaria
-        #! un 20% de ser mayor que 0.8. De toda manera seria > (1 - 0.8), osea mayor que 0.2, asi 
-        #! tengo realmente 80% de hacer la cruza. Por eso puse < que en este caso seria igual de 80%.
-
-        # tiro un numero al azar y si es mayor a la probabilidad hace la cruza
-        if(np.random.rand() > (1 - probCruza)):    
+        # tiro un numero al azar y si es menor a la probabilidad hace la cruza
+        if(np.random.rand() < (1 - probCruza)):    
             # Elijo un punto de corte entre [1, end-1] y concateno la cruza de esos padres
             corte = np.random.choice(lenCrom-2) + 1
             hijos[i] = np.concatenate((padre1[:corte], padre2[corte:]))

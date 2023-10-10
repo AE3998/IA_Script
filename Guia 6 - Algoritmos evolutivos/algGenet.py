@@ -53,7 +53,7 @@ def decodificar(cromosoma, codCrom, xmin, xmax):
 
     right = 0
     for i in range(codCrom.shape[0]):
-        # Definir el rango de la cromosoma a convertir en entero
+        # Definir el rango del cromosoma a convertir en entero
         left = right
         right += codCrom[i]
         val = bin2int(cromosoma[left:right])
@@ -93,11 +93,11 @@ def algGenetico(func, xmin, xmax, cantInd, codCrom, probMutacion, probCruza):
     xmin = np.array(xmin)
     xmax = np.array(xmax)
 
-    # inisicalizar la poblacion de  cromosomas
+    # Inicializar la poblacion de cromosomas
     lenCromosoma = np.sum(codCrom)
     poblacion = np.random.randint(0, 2, size=(cantInd, lenCromosoma))
 
-    # Pasar en boolean para agilizar los calculos posteriores
+    # Pasar a boolean para agilizar los calculos posteriores
     poblacion = poblacion.astype(bool)
 
     # Evaluar el fitness de la poblacion
