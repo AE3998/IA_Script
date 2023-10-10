@@ -1,5 +1,4 @@
 import numpy as np 
-import matplotlib.pyplot as plt
 from gradienteDescendente import *
 from graficas import *
 
@@ -45,6 +44,9 @@ def f2(val):
     res = square**0.25 * (np.sin(50 * square**0.1)**2 + 1)
     return res
 
+# Grafica de la funcion
+# grafica_f2()
+
 # Derivadas parciales de f2 con respecto a x e y
 def df2_dx(val):
     x, y = val[0], val[1]
@@ -61,5 +63,11 @@ def df2_dy(val):
     return 0.25 * factor1 * factor2
 
 #! ¿Ahora podriamos usar df2_dx y df2_dy en el metodo del gradiente descendente?
+#! FALTA MODIFICAR EL ALGORITMO gradienteDescendiente.py PARA QUE FUNCIONE PASANDO [-100, 100]
+#? Resultado con metodo de gradiente descendente 
+x_min_f2 = gradienteDescendente(df2_dx, [-100, 100])
+print("Minimo global de f1 respecto a x:", x_min_f2)
+y_min_f2 = gradienteDescendente(df2_dy, [-100, 100])
+print("Minimo global de f1 respecto a y:", y_min_f2)
 
-#! Controlar si eso esta bien asi o si hay otra forma de hacerlo
+#! Controlar si todo eso de las derivadas esta bien asi o si hay otra forma de hacerlo
