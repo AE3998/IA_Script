@@ -8,8 +8,8 @@ def gradienteDescendente(grad_func, xmin, xmax):
     """
 
     # Parametros del algoritmo
-    alpha = 0.1  # tasa de aprendizaje
-    maxIteraciones = 1000  # numero maximo de iteraciones
+    alpha = 0.01  # tasa de aprendizaje
+    maxIteraciones = 5000  # numero maximo de iteraciones
     tolerancia = 1e-6  # tolerancia para la convergencia
 
     # Limites del rango [xmin, xmax]
@@ -18,6 +18,7 @@ def gradienteDescendente(grad_func, xmin, xmax):
 
     # Iniciamos con un punto al azar en el rango dado (queda en el rango [xmin, xmax))
     x = np.random.uniform(xmin, xmax)
+    # x = 400     # para probar que la funcion f1 llegue al minimo global cerca de x = 420
 
     # Gradiente descendente
     for _ in range(maxIteraciones):
@@ -33,6 +34,4 @@ def gradienteDescendente(grad_func, xmin, xmax):
         
         x = x_new  # actualizar x para la siguiente iteracion
 
-    # print("El minimo global de la funcion se encuentra en x =", x)
-    # print("El valor minimo de la funcion es f(x) =", f(x))
     return x    # devuelve el minimo global obtenido
