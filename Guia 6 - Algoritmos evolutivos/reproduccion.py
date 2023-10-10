@@ -54,7 +54,7 @@ def repMutacion(poblacion, probMutacion, codCrom):
     #? aplicar esta funcion. 
     #? No es necesario esta linea, principalmente para notar que realmente 
     #? genera cambios.
-    poblacion = np.copy(poblacion)
+    # poblacion = np.copy(poblacion)
 
     for i in range(poblacion.shape[0]):
         if(np.random.rand() < probMutacion):

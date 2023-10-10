@@ -2,6 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from seleccion import *
 from reproduccion import *
+from graficas import *
 
 #? Pseudo codigo de algoritmos geneticos:
 #? Inicializar poblacion
@@ -76,18 +77,22 @@ def evaluar(func, poblacion, codCrom, xmin, xmax):
     cantInd = poblacion.shape[0]
 
     fitness = np.empty(shape=(cantInd))
-    valDecod = np.empty(shape=(cantInd, len(codCrom)))
+    pobDecod = np.empty(shape=(cantInd, len(codCrom)))
 
     # Recorremos los individuos (cromosomas) y los decodificamos para evaluar la funcion de fitness dada
     for i in range(cantInd):
         cromosoma = poblacion[i, :]
         val = decodificar(cromosoma, codCrom, xmin, xmax)
-        valDecod[i, :] = val
+        pobDecod[i, :] = val
         fitness[i] = func(val)      # evaluo con la funcion de fitness
     
     # Retornar el maximo fitness, los valores de fitness 
     # y vector de los valores de cromosomas decodificados
-    return np.max(fitness), fitness, valDecod
+    #! Agregue la funcion de fitness que proponemos, cuanto mas chico es el valor
+    #! de la funcion, mayor sera el valor de finess. fintess => [0, 1]
+    fitness = 1/(1 - fitness)
+
+    return np.max(fitness), fitness, pobDecod
 
 def algGenetico(func, xmin, xmax, cantIndividuos, codCrom, fitnessBuscado, cantMaxGeneracion, probMutacion, probCruza):
     """
@@ -110,11 +115,11 @@ def algGenetico(func, xmin, xmax, cantIndividuos, codCrom, fitnessBuscado, cantM
 
     #* Evaluar la poblacion con la funcion de fitness dada por el problema
     # Dentro de evaluar tambien se decodifica cada cromosoma para evaluar la funcion de fitness
-    maxFit, fitness, valDecod = evaluar(func, poblacion, codCrom, xmin, xmax)
-    #! Guarda que los fitness son propiamente los valores de la funcion en ese
-    #! punto que puede ser muy grande, habria que buscar una forma de normalizarla
-    #! De hecho buscamos minimizar el error, mientras que fitness se hace grande 
-    #! cuando la funcion evaluado en ese punto es grande.
+    maxFit, fitness, pobDecod = evaluar(func, poblacion, codCrom, xmin, xmax)
+
+    #* Graficas
+    ax = grafica_f2()
+    puntos = agregar_puntos_graf_f2(ax, pobDecod)
 
     #* Bucle hasta cumplir criterio de corte
     cantGeneraciones = 0
@@ -137,15 +142,18 @@ def algGenetico(func, xmin, xmax, cantIndividuos, codCrom, fitnessBuscado, cantM
         newPoblacion = repMutacion(poblacionCruza, probMutacion, codCrom)
 
         #* Volver a evaluar la nueva poblacion
-        maxFit, fitness, valDecod = evaluar(func, newPoblacion, codCrom, xmin, xmax)
+        maxFit, fitness, pobDecod = evaluar(func, newPoblacion, codCrom, xmin, xmax)
 
         cantGeneraciones += 1
         n += 1
+
+        if(cantGeneraciones % 4 == 0):
+            actualizar_graf_f2(puntos, pobDecod)
         
 #todo =======================[Test]=======================
 #? test bin2int
-cromosoma = np.array([True, True, True, False, True])
-print(bin2int(cromosoma)) 
+# cromosoma = np.array([True, True, True, False, True])
+# print(bin2int(cromosoma)) 
 
 #? test decodificar
 #* 1D [10 bits para x]
