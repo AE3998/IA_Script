@@ -29,21 +29,21 @@ poblacion = algGenetico(f1, xmin, xmax, cantIndividuos, cantPadres,
 
 #* ---------- Funcion inciso ii) ----------
 
-# cantIndividuos = 100
-# cantPadres = 0.20
+cantIndividuos = 100
+cantPadres = 0.20
 
-# codCrom = [8, 8]    # es como se codifica el cromosoma
-# cantMaxGeneracion = 1000      # recordar poner un valor alto porque no sabemos cuando va a converger
+codCrom = [8, 8]    # es como se codifica el cromosoma
+cantMaxGeneracion = 1000      # recordar poner un valor alto porque no sabemos cuando va a converger
 
-# fitnessBuscado = -4     #! VER QUE VALOR PODEMOS USAR
-# probMutacion = 0.05
-# probCruza = 0.6
-# xmin = [-100, -100]
-# xmax = [100, 100]
-# graf = 2
+fitnessBuscado = -4     #! VER QUE VALOR PODEMOS USAR
+probMutacion = 0.05
+probCruza = 0.6
+xmin = [-100, -100]
+xmax = [100, 100]
+graf = 2
 
-# poblacion = algGenetico(f2, xmin, xmax, cantIndividuos, cantPadres,
-#                         codCrom, fitnessBuscado, cantMaxGeneracion, 
-#                         probMutacion, probCruza, graf, df2)
+poblacion = algGenetico(f2, xmin, xmax, cantIndividuos, cantPadres,
+                        codCrom, fitnessBuscado, cantMaxGeneracion, 
+                        probMutacion, probCruza, graf, df2)
 
 plt.show()
