@@ -9,7 +9,7 @@ def gradienteDescendente(grad_func, xmin, xmax, xInit):
     """
 
     # Parametros del algoritmo
-    alpha = 0.01  # tasa de aprendizaje
+    alpha = 0.1  # tasa de aprendizaje
     maxIteraciones = 5000  # numero maximo de iteraciones
     tolerancia = 1e-5  # tolerancia para la convergencia
 
@@ -25,7 +25,6 @@ def gradienteDescendente(grad_func, xmin, xmax, xInit):
     x = xInit
     if not(isinstance(x, np.ndarray)):
         x = np.array([x])
-
     # Gradiente descendente
     for _ in range(maxIteraciones):
         grad = grad_func(x)  # calcular el gradiente en x

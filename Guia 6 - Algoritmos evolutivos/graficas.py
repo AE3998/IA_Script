@@ -63,6 +63,8 @@ def actualizar_graf_f1(puntos, pobDecod):
     puntos.set_offsets(offset)
     plt.pause(0.2)
 
+    return Y
+
 
 
 
@@ -131,6 +133,8 @@ def actualizar_graf_f2(puntos, pobDecod):
 
     puntos._offsets3d = (X, Y, Z)
     plt.pause(0.2)
+
+    return Z
 
 #? test
 # grafica_f1()

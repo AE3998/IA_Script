@@ -72,6 +72,8 @@ def decodificar(cromosoma, codCrom, xmin, xmax):
     
     return cromDecod
 
+
+
 def evaluar(func, poblacion, codCrom, xmin, xmax):
 
     # Cantidad de individuos
@@ -90,8 +92,8 @@ def evaluar(func, poblacion, codCrom, xmin, xmax):
     #! Agregue la funcion de fitness que proponemos, cuanto mas chico es el valor
     #! de la funcion, mayor sera el valor de finess. fintess => [0, 1]
     # Convertirmos a un problema de maximizacion del fitness, ya que en realidad es minimizacion:
-    fitness = 1/fitness
-    # fitness = 1 - (fitness/max(fitness))
+    # fitness = 1/fitness
+    fitness = 1 - (fitness/np.max(fitness))
     # fitness = 1/(1 - fitness)
     # fitness = -fitness
 
@@ -113,6 +115,7 @@ def algGenetico(func, xmin, xmax, cantIndividuos, cantPadres,
     #* Inicializar de forma aleatoria la poblacion 
     # Cada individuo es un cromosoma (una cadena binaria)
     lenCromosoma = np.sum(codCrom)
+
     # Formo un arreglo de arreglos, con 0s y 1s con cantIndividuos filas y lenCromosoma columnas
     poblacion = np.random.randint(0, 2, size=(cantIndividuos, lenCromosoma))
 
@@ -126,7 +129,17 @@ def algGenetico(func, xmin, xmax, cantIndividuos, cantPadres,
     #? hacer una copia del punto para usarlo luego en el gradiente descendente como punto inicial
     xInit = np.copy(pobDecod)
 
-    #* Graficas (0 = No graficar, 1 = f1, 2 = f2)
+    # Cuando la entrada es entre [0, 1] (porcentaje de la poblacion total)
+    if(isinstance(cantPadres, float)):
+        cantPadres = int(cantIndividuos * cantPadres)
+
+    #* Bucle hasta cumplir criterio de corte
+    actualMaxFitness = maxFit
+    cantGeneraciones = 0
+    n = 0
+    idxElite = 0 
+
+    # Graficas (0 = No graficar, 1 = f1, 2 = f2)
     if (graf == 1):
         ax = grafica_f1()
         puntos = agregar_puntos_graf_f1(ax, pobDecod)
@@ -135,14 +148,6 @@ def algGenetico(func, xmin, xmax, cantIndividuos, cantPadres,
         ax = grafica_f2()
         puntos = agregar_puntos_graf_f2(ax, pobDecod)
 
-    # Cuando la entrada es entre [0, 1] (porcentaje de la poblacion total)
-    if(isinstance(cantPadres, float)):
-        cantPadres = int(cantIndividuos * cantPadres)
-
-    #* Bucle hasta cumplir criterio de corte
-    cantGeneraciones = 0
-    n = 0
-    actualMaxFitness = 0
     while(maxFit < fitnessBuscado):
 
         #* Aplicar metodo de seleccion
@@ -156,59 +161,85 @@ def algGenetico(func, xmin, xmax, cantIndividuos, cantPadres,
         poblacionCruza = repCruza(poblacion, idxPadres, codCrom, probCruza)
         newPoblacion = repMutacion(poblacionCruza, probMutacion, codCrom)
 
-        #* Volver a evaluar la nueva poblacion
+        # Elitismo (pisar el ultimo hijo)
+        idxElite = np.argsort(-fitness)[0]
+        newPoblacion[-1] = poblacion[idxElite]
+
+        # Volver a evaluar la nueva poblacion
         maxFit, fitness, pobDecod = evaluar(func, newPoblacion, codCrom, xmin, xmax)
 
-        cantGeneraciones += 1
-        if(cantGeneraciones == cantMaxGeneracion):
-            break
+        # Actualizar la poblacion
+        poblacion = newPoblacion
+
 
         # Si el mejor fitness no mejora durante "n" generaciones, se corta
         # el algoritmo porque suponemos que convergio
-        if(actualMaxFitness == maxFit):
+        if(actualMaxFitness >= maxFit):
             n += 1
         else:
-            actualMaxFitness == maxFit
-        if(n == 10):    # si durante 10 generaciones no hay mejoras, cortamos
+            actualMaxFitness = maxFit
+            n = 0
+
+        cantGeneraciones += 1
+        # Criterio de corte, maxima generacion o 10 generaciones sin mejora
+        if(cantGeneraciones >= cantMaxGeneracion or n >= 10):
+            print(f"Finalizado por criterio de corte.")
+            if(n >= 10):
+                print(f"n >= {n}")
+            else:
+                print(f"Cantidad de generacion >= {cantGeneraciones}")
             break
 
-        if(cantGeneraciones % 1 == 0):
+        
+        # Actualizar graficas
+        if(cantGeneraciones % 4 == 0):
             if(graf == 1):
                 actualizar_graf_f1(puntos, pobDecod)
             if(graf == 2):
                 actualizar_graf_f2(puntos, pobDecod)
 
     # Cuando sale del bucle
-    if(cantGeneraciones % 1 == 0):
-        if(graf == 1):
-            actualizar_graf_f1(puntos, pobDecod)
+    if(graf == 1):
+        actualizar_graf_f1(puntos, pobDecod)
+    if(graf == 2):
+        actualizar_graf_f2(puntos, pobDecod)
 
-            # Graficar la parte de gradiente descendiente
-            ax2 = grafica_f1()
-            puntos = agregar_puntos_graf_f1(ax2, xInit, 0)
+    mejorIndiv = decodificar(poblacion[idxElite], codCrom, xmin, xmax)
+    
+    return mejorIndiv, xInit 
 
-            min_f1 = np.empty_like(xInit)
-            for idx, val in enumerate(xInit):
-                min_f1[idx, :] = gradienteDescendente(df, xmin, xmax, val)
+def algGradient(xInit, df, xmin, xmax, graf):
 
-            plt.pause(1.5)
-            actualizar_graf_f1(puntos, min_f1)
-            
-        if(graf == 2):
-            actualizar_graf_f2(puntos, pobDecod)
+    valPuntos = -1000
+    min_f = np.empty_like(xInit)
 
-            # Graficar la parte de gradiente descendiente
-            ax2 = grafica_f2()
-            puntos = agregar_puntos_graf_f2(ax2, xInit, 0)
+    if(graf == 1):
+        # Graficar la parte de gradiente descendiente
+        ax2 = grafica_f1()
+        puntos = agregar_puntos_graf_f1(ax2, xInit, 0)
 
-            min_f2 = np.empty_like(xInit)
-            for idx, val in enumerate(xInit):
-                min_f2[idx, :] = gradienteDescendente(df, xmin, xmax, val)
+        for idx, val in enumerate(xInit):
+            min_f[idx, :] = gradienteDescendente(df, xmin, xmax, val)
 
-            plt.pause(1.5)
-            actualizar_graf_f2(puntos, min_f2)
+        plt.pause(1.5)
+        valPuntos = actualizar_graf_f1(puntos, min_f)
+        
+    if(graf == 2):
+        # Graficar la parte de gradiente descendiente
+        ax2 = grafica_f2()
+        puntos = agregar_puntos_graf_f2(ax2, xInit, 0)
 
-    return poblacion
+        for idx, val in enumerate(xInit):
+            min_f[idx, :] = gradienteDescendente(df, xmin, xmax, val)
+
+        plt.pause(1.5)
+        valPuntos = actualizar_graf_f2(puntos, min_f)
+
+    # Mejor individuo despejado por gradiente descendiente
+    idxMinValPuntos = np.argmin(valPuntos)
+    mejorIndivGrad = min_f[idxMinValPuntos]
+    
+    return mejorIndivGrad
         
 #todo =======================[Test]=======================
 #? test bin2int
