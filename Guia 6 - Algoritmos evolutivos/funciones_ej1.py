@@ -8,12 +8,20 @@ def f1(x):
 
 # Derivada de la funcion f1 (gradiente)
 def df1(x):
-    if x > 0:
-        return -np.sin(np.sqrt(x)) - (x / (2 * np.sqrt(x))) * np.cos(np.sqrt(x))
-    elif x < 0:
-        return -np.sin(np.sqrt(-x)) + (x / (2 * np.sqrt(-x))) * np.cos(np.sqrt(-x))
-    else:
-        return 0  # la derivada en x=0 es 0
+    if(x == 0):
+        return 0
+    if x < 0:
+        x = -x
+    raiz = np.sqrt(x)
+    return -np.sin(raiz) - (x / (2 * raiz)) * np.cos(raiz)
+
+# def df1(x):
+#     if x > 0:
+#         return -np.sin(np.sqrt(x)) - (x / (2 * np.sqrt(x))) * np.cos(np.sqrt(x))
+#     elif x < 0:
+#         return -np.sin(np.sqrt(-x)) + (x / (2 * np.sqrt(-x))) * np.cos(np.sqrt(-x))
+#     else:
+#         return 0  # la derivada en x=0 es 0
 
 # Grafica de la funcion
 # grafica_f1()
