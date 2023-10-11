@@ -87,14 +87,15 @@ def evaluar(func, poblacion, codCrom, xmin, xmax):
         pobDecod[i, :] = val
         fitness[i] = func(val)      # evaluo con la funcion de fitness
     
-    # Retornar el maximo fitness, los valores de fitness 
-    # y vector de los valores de cromosomas decodificados
     #! Agregue la funcion de fitness que proponemos, cuanto mas chico es el valor
     #! de la funcion, mayor sera el valor de finess. fintess => [0, 1]
+    # Convertirmos a un problema de maximizacion del fitness, ya que en realidad es minimizacion:
+    fitness = 1/fitness
+    # fitness = 1 - (fitness/max(fitness))
     # fitness = 1/(1 - fitness)
-    fitness = -fitness
+    # fitness = -fitness
 
-
+    # Retornar el maximo fitness, valores de fitness y vector con valores de cromosomas decodificados
     return np.max(fitness), fitness, pobDecod
 
 def algGenetico(func, xmin, xmax, cantIndividuos, cantPadres,
@@ -104,7 +105,7 @@ def algGenetico(func, xmin, xmax, cantIndividuos, cantPadres,
         Funcion que implementa el algoritmo genetico.
     """
     
-    # Convertir las listas en arreglos
+    # Convertir las listas en arreglos de Numpy
     codCrom = np.array(codCrom)
     xmin = np.array(xmin)
     xmax = np.array(xmax)
@@ -122,7 +123,7 @@ def algGenetico(func, xmin, xmax, cantIndividuos, cantPadres,
     # Dentro de evaluar tambien se decodifica cada cromosoma para evaluar la funcion de fitness
     maxFit, fitness, pobDecod = evaluar(func, poblacion, codCrom, xmin, xmax)
     
-    #todo hacer una copia 
+    #? hacer una copia del punto para usarlo luego en el gradiente descendente como punto inicial
     xInit = np.copy(pobDecod)
 
     #* Graficas (0 = No graficar, 1 = f1, 2 = f2)
@@ -141,12 +142,8 @@ def algGenetico(func, xmin, xmax, cantIndividuos, cantPadres,
     #* Bucle hasta cumplir criterio de corte
     cantGeneraciones = 0
     n = 0
-    while(maxFit < fitnessBuscado and cantGeneraciones < cantMaxGeneracion):
-        
-        # hacer que si el mejor fitness no mejora durante "n" generaciones, se corta
-        # el algoritmo porque suponemos que convergió asi no continua generando
-        # if():
-        #     n += 1
+    actualMaxFitness = 0
+    while(maxFit < fitnessBuscado):
 
         #* Aplicar metodo de seleccion
         idxPadres = selectVentana(fitness, cantPadres)
@@ -154,7 +151,8 @@ def algGenetico(func, xmin, xmax, cantIndividuos, cantPadres,
         # idxPadres = selectRuleta(fitness, cantPadres)
 
         #* Aplicar operadores de cruza y mutacion
-        #! ¿Con nuestra cruza y mutacion ya estamos haciendo el reemplazao poblacional o se hace aparte?
+        #! Entiendo que con nuestra cruza ya hacemos el reemplazo poblacional al final
+        #! podríamos hacer elitismo o brecha generacional si queremos despues
         poblacionCruza = repCruza(poblacion, idxPadres, codCrom, probCruza)
         newPoblacion = repMutacion(poblacionCruza, probMutacion, codCrom)
 
@@ -162,7 +160,17 @@ def algGenetico(func, xmin, xmax, cantIndividuos, cantPadres,
         maxFit, fitness, pobDecod = evaluar(func, newPoblacion, codCrom, xmin, xmax)
 
         cantGeneraciones += 1
-        n += 1
+        if(cantGeneraciones == cantMaxGeneracion):
+            break
+
+        # Si el mejor fitness no mejora durante "n" generaciones, se corta
+        # el algoritmo porque suponemos que convergio
+        if(actualMaxFitness == maxFit):
+            n += 1
+        else:
+            actualMaxFitness == maxFit
+        if(n == 10):    # si durante 10 generaciones no hay mejoras, cortamos
+            break
 
         if(cantGeneraciones % 1 == 0):
             if(graf == 1):

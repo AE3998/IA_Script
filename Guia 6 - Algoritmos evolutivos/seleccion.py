@@ -8,8 +8,7 @@ def selectRuleta(fitness, cantPadres):
     normFit = fitness/sum
     
     idxFit = np.arange(fitness.shape[0])
-    # p es el parametro de probabilidad, debe ser un vector 1D que 
-    # sus componentes sumen 1
+    # p es el parametro de probabilidad, debe ser un vector 1D que sus componentes sumen 1
     idxPadres = np.random.choice(idxFit, size=cantPadres, p=normFit)
     return idxPadres
 
@@ -34,9 +33,6 @@ def selectCompetencia(fitness, cantPadres):
     idxFit = np.arange(fitness.shape[0])
     idxBool = np.full(shape=(fitness.shape[0]), fill_value=True)
 
-    #? Cuando tengo 100 individuos y pido solo 3 padres, se compiten 
-    #? 33 individuos. De toda manera comentamos esto y dejamos como
-    #? parametro de entrada.
     cantCompetencia = fitness.shape[0] // cantPadres
 
     idxPadres = []

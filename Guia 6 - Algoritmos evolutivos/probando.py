@@ -1,4 +1,7 @@
 import numpy as np 
+import matplotlib.pyplot as plt
+
+# -----------------------------------------------
 
 #* Convertir binario (en formato array) a int
 res = 0
@@ -12,4 +15,14 @@ print(res)
 
 # -----------------------------------------------
 
+# Inicializar de forma aleatoria la poblacion
+cantIndividuos = 10
+codCrom = [5, 5]
+lenCromosoma = np.sum(codCrom)
+poblacion = np.random.randint(0, 2, size=(cantIndividuos, lenCromosoma))
+print(poblacion)
+# Pasar a boolean para agilizar los calculos posteriores (arreglo con booleanos)
+poblacion = poblacion.astype(bool)
+print(poblacion)
 
+# -----------------------------------------------

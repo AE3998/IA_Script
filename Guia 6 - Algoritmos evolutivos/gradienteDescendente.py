@@ -8,8 +8,6 @@ def gradienteDescendente(grad_func, xmin, xmax, xInit):
         va a converger al minimo local mas cercano.
     """
 
-    #! Falta modificar para que funcione con una funcion f(x, y) como la del inciso ii)
-
     # Parametros del algoritmo
     alpha = 0.01  # tasa de aprendizaje
     maxIteraciones = 5000  # numero maximo de iteraciones
