@@ -4,6 +4,11 @@ from graficas import *
 from funciones_ej1 import *
 from algGenet import *
 
+# Si uso por ejemplo cantIndividuos = 100, en la grafica del algoritmo genetico (punto azules) voy
+# a ver que al comienzo se ubican los 100 individuos (soluciones, que serian puntos), y al ir 
+# calculando la cruza, mutacion, evaluar, etc. se van ubicando en los minimos a los que llegan.
+# Mientras que en la grafica del gradiente descendente aparecen los 100 individuos (puntos) y 
+# luego se actualiza quedan los puntos en los minimos que alcanzaron cada uno.
 
 #* ---------- Funcion inciso i) ----------
 #* i) f(x) = -x*sin(sqrt(abs(x))) 
