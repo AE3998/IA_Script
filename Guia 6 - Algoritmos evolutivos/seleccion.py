@@ -13,32 +13,31 @@ def selectRuleta(fitness, cantPadres):
     return idxPadres
 
 def selectVentana(fitness, cantPadres):
-    # Supongo que la funcion admite repeticion porque 
-    # siempre trata de dejar los mejores
+    # La funcion admite repeticion porque al achicar la ventana van quedando los mejores
     
-    ordenFit = np.argsort(-fitness)
+    ordenFit = np.argsort(-fitness)     # indices ordenados de mayor a menor fitness
     idxPadres = np.empty(shape=(cantPadres), dtype=int)
 
     cantInd = ordenFit.shape[0]
-    paso =  cantInd // cantPadres
+    paso =  cantInd // cantPadres   # con el paso va reduciendo la ventana dentro del for
     for i in range(cantPadres):
         idxPadres[i] = np.random.choice(ordenFit[:cantInd - (paso*i)])
         # print(ordenFit[:cantInd - (paso*i)])
 
     return idxPadres
-
-# Se eligen “n” individuos al azar y luego de esos “n” nos quedamos con el de mejor fitness.
-# Mientras mas grande sea ese parametro, mas chances tendremos de elegir los individuos mas altos. 
+ 
 def selectCompetencia(fitness, cantPadres):
+    # Se eligen “n” individuos al azar y luego de esos “n” nos quedamos con el de mejor fitness.
+    # Mientras mas grande sea ese parametro, mas chances de elegir a los mejores individuos.
     idxFit = np.arange(fitness.shape[0])
-    idxBool = np.full(shape=(fitness.shape[0]), fill_value=True)
+    idxBool = np.full(shape=(fitness.shape[0]), fill_value=True)    # matriz con la forma dada en shape y valores fill_value
 
     cantCompetencia = fitness.shape[0] // cantPadres
 
     idxPadres = []
 
     for i in range(cantPadres):
-        #? Asumo que no admiete repeticion
+        # Asumo que no admiete repeticion
         idxSelec = np.random.choice(idxFit[idxBool], size=cantCompetencia, replace=False)
         idxBool[idxSelec] = False
         

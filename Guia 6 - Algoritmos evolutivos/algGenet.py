@@ -112,7 +112,8 @@ def algGenetico(func, xmin, xmax, cantIndividuos, cantPadres,
     # Cada individuo es un cromosoma (una cadena binaria)
     lenCromosoma = np.sum(codCrom)
 
-    # Formo un arreglo de arreglos, con 0s y 1s con cantIndividuos filas y lenCromosoma columnas
+    # Formo un arreglo de arreglos, con 0s y 1s con cantIndividuos filas y lenCromosoma columnas,
+    # asi tendremos un arreglo de 0s y 1s para cada invididuo de la poblacion (cromosomas)
     poblacion = np.random.randint(0, 2, size=(cantIndividuos, lenCromosoma))
 
     # Pasar a boolean para agilizar los calculos posteriores (arreglo con booleanos)
@@ -122,7 +123,8 @@ def algGenetico(func, xmin, xmax, cantIndividuos, cantPadres,
     # Dentro de evaluar tambien se decodifica cada cromosoma para evaluar la funcion de fitness
     maxFit, fitness, pobDecod = evaluar(func, poblacion, codCrom, xmin, xmax)
     
-    #? hacer una copia del punto para usarlo luego en el gradiente descendente como punto inicial
+    # copia de los puntos decodificados para usarlos luego en el gradiente descendente 
+    # como puntos iniciales
     xInit = np.copy(pobDecod)
 
     # Cuando la entrada es entre [0, 1] (porcentaje de la poblacion total)

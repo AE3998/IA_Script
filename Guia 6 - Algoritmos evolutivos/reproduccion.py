@@ -45,25 +45,25 @@ def repCruza(poblacion, idxPadres, codCrom, probCruza):
 
     return poblacion[:cantIdv]
 
-#* Algoritmo para la mutacion de cada hijo
+#* Algoritmo para la mutacion para cada hijo
 def repMutacion(poblacion, probMutacion, codCrom):
     lenCrom = np.sum(codCrom)
 
-    #? Ver el tema de np.copy, porque como trabajan de referencia los datos
-    #? no se va a notar la diferencia si quiero comparar los datos luego de 
-    #? aplicar esta funcion. 
-    #? No es necesario esta linea, principalmente para notar que realmente 
-    #? genera cambios.
+    # Ver el tema de np.copy, porque como trabajan de referencia los datos
+    # no se va a notar la diferencia si quiero comparar los datos luego de 
+    # aplicar esta funcion. 
+    # No es necesario esta linea, principalmente para notar que realmente 
+    # genera cambios.
     # poblacion = np.copy(poblacion)
 
-    for i in range(poblacion.shape[0]):
+    # Tiramos un numero al azar y si es menor a la probabilidad de mutacion se elige un gen (bit)
+    # al azar y se cambia su valor (como lo estamos trabajando con valores bool usamos "not")
+    for i in range(poblacion.shape[0]):     # para cada hijo
         if(np.random.rand() < probMutacion):
             idxMut = np.random.choice(lenCrom)
             poblacion[i, idxMut] = np.logical_not(poblacion[i, idxMut])
 
     return poblacion
-
-
 
 #? Test de los metodos
 # np.random.seed(0)
