@@ -30,16 +30,19 @@ def grafica_f1():
     ax.axvline(0, color='black', linestyle='--', linewidth=0.5)
     ax.grid(True, linestyle='--', alpha=0.7)
     ax.legend()
-    fig.show()
+    # fig.show()
 
     # plt.show()
     return ax
 
 def agregar_puntos_graf_f1(ax, pobDecod):
-    if(pobDecod.shape[0] > 1):
-        X = pobDecod[:, 0]
+    if(isinstance(pobDecod, np.ndarray)):
+        if(pobDecod.shape[0] > 1):
+            X = pobDecod[:, 0]
+        else:
+            X = pobDecod[0]
     else:
-        X = pobDecod[0]
+        X = pobDecod
     Y = grafF1(X)
 
     puntos = ax.scatter(X, Y, c='k', linewidth = 2)
@@ -48,16 +51,13 @@ def agregar_puntos_graf_f1(ax, pobDecod):
     return puntos
 
 def actualizar_graf_f1(puntos, pobDecod):
-    if(pobDecod.shape[0] == 1):
-        X = pobDecod[0]
-        Y = grafF1(X)
+    X = pobDecod
+    if(not(isinstance(pobDecod, np.ndarray))):
         X = np.array([X])
-        Y = np.array([Y])
-    else:
-        X = pobDecod
-        Y = grafF1(X)
+    Y = grafF1(X)
 
-    puntos.set_offsets(X, Y)
+    offset = np.column_stack((X, Y))
+    puntos.set_offsets(offset)
     plt.pause(0.2)
 
 
@@ -126,6 +126,6 @@ def actualizar_graf_f2(puntos, pobDecod):
     plt.pause(0.2)
 
 #? test
-grafica_f1()
+# grafica_f1()
 # grafica_f2()
-plt.show()
+# plt.show()

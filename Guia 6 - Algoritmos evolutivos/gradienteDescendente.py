@@ -42,4 +42,4 @@ def gradienteDescendente(grad_func, xmin, xmax, xInit):
         
         x = x_new  # actualizar x para la siguiente iteracion
 
-    return x, xInit    # devuelve el minimo global obtenido y el punto inicial
+    return x  # devuelve el minimo global obtenido 

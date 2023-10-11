@@ -77,18 +77,51 @@ def df2_dy(val):
 # y_min_f2 = gradienteDescendente(df2_dy, [-100, 100])
 # print("Minimo global de f1 respecto a y:", y_min_f2)
 
-xmin = [-100, -100]
-xmax = [100, 100]
 
-min_f2, xInit = gradienteDescendente(df2, xmin, xmax)
+#? Test f1 y sus graficas
+
+xmin = np.array([-512])
+xmax = np.array([512])
+
+fila = 10
+
+xInit = np.random.uniform(low=xmin, high=xmax, size=(fila, 1))
+min_f1 = np.empty_like(xInit)
+
+for i, val in enumerate(xInit):
+    min_f1[i, :] = gradienteDescendente(df1, xmin, xmax, val)
+
 print(f"Inicializado en: {xInit}")
-print("Minimo global de f2:", min_f2)
+print("Minimo global de f1:", min_f1)
 
-ax = grafica_f2()
-puntos = agregar_puntos_graf_f2(ax, xInit)
+ax = grafica_f1()
+puntos = agregar_puntos_graf_f1(ax, xInit)
 plt.pause(2)
 # agregar_puntos_graf_f2(ax, min_f2)
-actualizar_graf_f2(puntos, min_f2)
-
+actualizar_graf_f1(puntos, min_f1)
 plt.show()
-#! Controlar si todo eso de las derivadas esta bien asi o si hay otra forma de hacerlo
+
+# #? Test f2 y sus graficas
+
+# xmin = np.array([-100, -100])
+# xmax = np.array([100, 100])
+
+# fila = 1
+
+# xInit = np.random.uniform(low=xmin, high=xmax, size=(fila, 2))
+# min_f2 = np.empty_like(xInit)
+
+# for i, val in enumerate(xInit):
+#     min_f2[i, :] = gradienteDescendente(df2, xmin, xmax, val)
+
+# print(f"Inicializado en: {xInit}")
+# print("Minimo global de f2:", min_f2)
+
+# ax = grafica_f2()
+# puntos = agregar_puntos_graf_f2(ax, xInit)
+# plt.pause(2)
+# # agregar_puntos_graf_f2(ax, min_f2)
+# actualizar_graf_f2(puntos, min_f2)
+
+# plt.show()
+# #! Controlar si todo eso de las derivadas esta bien asi o si hay otra forma de hacerlo
