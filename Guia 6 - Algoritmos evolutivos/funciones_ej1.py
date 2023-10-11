@@ -79,8 +79,7 @@ def df2_dy(val):
 
 xmin = [-100, -100]
 xmax = [100, 100]
-# print(xmin)
-# print(xmax)
+
 min_f2, xInit = gradienteDescendente(df2, xmin, xmax)
 print(f"Inicializado en: {xInit}")
 print("Minimo global de f2:", min_f2)

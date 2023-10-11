@@ -35,6 +35,33 @@ def grafica_f1():
     # plt.show()
     return ax
 
+def agregar_puntos_graf_f1(ax, pobDecod):
+    if(pobDecod.shape[0] > 1):
+        X = pobDecod[:, 0]
+    else:
+        X = pobDecod[0]
+    Y = grafF1(X)
+
+    puntos = ax.scatter(X, Y, c='k', linewidth = 2)
+    plt.pause(0.2)
+
+    return puntos
+
+def actualizar_graf_f1(puntos, pobDecod):
+    if(pobDecod.shape[0] == 1):
+        X = pobDecod[0]
+        Y = grafF1(X)
+        X = np.array([X])
+        Y = np.array([Y])
+    else:
+        X = pobDecod
+        Y = grafF1(X)
+
+    puntos.set_offsets(X, Y)
+    plt.pause(0.2)
+
+
+
 
 #* ----- Funcion f2 y su grafica para ver el minimo global -----
 def grafica_f2():
@@ -99,6 +126,6 @@ def actualizar_graf_f2(puntos, pobDecod):
     plt.pause(0.2)
 
 #? test
-# grafica_f1()
+grafica_f1()
 # grafica_f2()
-# plt.show()
+plt.show()

@@ -94,7 +94,7 @@ def evaluar(func, poblacion, codCrom, xmin, xmax):
 
     return np.max(fitness), fitness, pobDecod
 
-def algGenetico(func, xmin, xmax, cantIndividuos, codCrom, fitnessBuscado, cantMaxGeneracion, probMutacion, probCruza):
+def algGenetico(func, xmin, xmax, cantIndividuos, codCrom, fitnessBuscado, cantMaxGeneracion, probMutacion, probCruza, graf=0):
     """
         Funcion que implementa el algoritmo genetico.
     """
@@ -117,9 +117,15 @@ def algGenetico(func, xmin, xmax, cantIndividuos, codCrom, fitnessBuscado, cantM
     # Dentro de evaluar tambien se decodifica cada cromosoma para evaluar la funcion de fitness
     maxFit, fitness, pobDecod = evaluar(func, poblacion, codCrom, xmin, xmax)
 
-    #* Graficas
-    ax = grafica_f2()
-    puntos = agregar_puntos_graf_f2(ax, pobDecod)
+    #* Graficas (0 = No graficar, 1 = f1, 2 = f2)
+
+    if (graf == 1):
+        ax = grafica_f1()
+        puntos = agregar_puntos_graf_f1(ax, pobDecod)
+        
+    if (graf == 2):
+        ax = grafica_f2()
+        puntos = agregar_puntos_graf_f2(ax, pobDecod)
 
     #* Bucle hasta cumplir criterio de corte
     cantGeneraciones = 0
@@ -148,7 +154,10 @@ def algGenetico(func, xmin, xmax, cantIndividuos, codCrom, fitnessBuscado, cantM
         n += 1
 
         if(cantGeneraciones % 4 == 0):
-            actualizar_graf_f2(puntos, pobDecod)
+            if(graf == 1):
+                actualizar_graf_f1(puntos, pobDecod)
+            if(graf == 2):
+                actualizar_graf_f2(puntos, pobDecod)
         
 #todo =======================[Test]=======================
 #? test bin2int
