@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 from seleccion import *
 from reproduccion import *
 from graficas import *
+from gradienteDescendente import *
 
 #? Pseudo codigo de algoritmos geneticos:
 #? Inicializar poblacion
@@ -77,7 +78,7 @@ def evaluar(func, poblacion, codCrom, xmin, xmax):
     cantInd = poblacion.shape[0]
 
     fitness = np.empty(shape=(cantInd))
-    pobDecod = np.empty(shape=(cantInd, len(codCrom)))
+    pobDecod = np.empty(shape=(cantInd, codCrom.shape[0]))
 
     # Recorremos los individuos (cromosomas) y los decodificamos para evaluar la funcion de fitness dada
     for i in range(cantInd):
@@ -90,11 +91,15 @@ def evaluar(func, poblacion, codCrom, xmin, xmax):
     # y vector de los valores de cromosomas decodificados
     #! Agregue la funcion de fitness que proponemos, cuanto mas chico es el valor
     #! de la funcion, mayor sera el valor de finess. fintess => [0, 1]
-    fitness = 1/(1 - fitness)
+    # fitness = 1/(1 - fitness)
+    fitness = -fitness
+
 
     return np.max(fitness), fitness, pobDecod
 
-def algGenetico(func, xmin, xmax, cantIndividuos, codCrom, fitnessBuscado, cantMaxGeneracion, probMutacion, probCruza):
+def algGenetico(func, xmin, xmax, cantIndividuos, cantPadres,
+                codCrom, fitnessBuscado, cantMaxGeneracion, 
+                probMutacion, probCruza, graf=0, df=None):
     """
         Funcion que implementa el algoritmo genetico.
     """
@@ -116,10 +121,22 @@ def algGenetico(func, xmin, xmax, cantIndividuos, codCrom, fitnessBuscado, cantM
     #* Evaluar la poblacion con la funcion de fitness dada por el problema
     # Dentro de evaluar tambien se decodifica cada cromosoma para evaluar la funcion de fitness
     maxFit, fitness, pobDecod = evaluar(func, poblacion, codCrom, xmin, xmax)
+    
+    #todo hacer una copia 
+    xInit = np.copy(pobDecod)
 
-    #* Graficas
-    ax = grafica_f2()
-    puntos = agregar_puntos_graf_f2(ax, pobDecod)
+    #* Graficas (0 = No graficar, 1 = f1, 2 = f2)
+    if (graf == 1):
+        ax = grafica_f1()
+        puntos = agregar_puntos_graf_f1(ax, pobDecod)
+        
+    if (graf == 2):
+        ax = grafica_f2()
+        puntos = agregar_puntos_graf_f2(ax, pobDecod)
+
+    # Cuando la entrada es entre [0, 1] (porcentaje de la poblacion total)
+    if(isinstance(cantPadres, float)):
+        cantPadres = int(cantIndividuos * cantPadres)
 
     #* Bucle hasta cumplir criterio de corte
     cantGeneraciones = 0
@@ -147,8 +164,43 @@ def algGenetico(func, xmin, xmax, cantIndividuos, codCrom, fitnessBuscado, cantM
         cantGeneraciones += 1
         n += 1
 
-        if(cantGeneraciones % 4 == 0):
+        if(cantGeneraciones % 1 == 0):
+            if(graf == 1):
+                actualizar_graf_f1(puntos, pobDecod)
+            if(graf == 2):
+                actualizar_graf_f2(puntos, pobDecod)
+
+    # Cuando sale del bucle
+    if(cantGeneraciones % 1 == 0):
+        if(graf == 1):
+            actualizar_graf_f1(puntos, pobDecod)
+
+            # Graficar la parte de gradiente descendiente
+            ax2 = grafica_f1()
+            puntos = agregar_puntos_graf_f1(ax2, xInit, 0)
+
+            min_f1 = np.empty_like(xInit)
+            for idx, val in enumerate(xInit):
+                min_f1[idx, :] = gradienteDescendente(df, xmin, xmax, val)
+
+            plt.pause(1.5)
+            actualizar_graf_f1(puntos, min_f1)
+            
+        if(graf == 2):
             actualizar_graf_f2(puntos, pobDecod)
+
+            # Graficar la parte de gradiente descendiente
+            ax2 = grafica_f2()
+            puntos = agregar_puntos_graf_f2(ax2, xInit, 0)
+
+            min_f2 = np.empty_like(xInit)
+            for idx, val in enumerate(xInit):
+                min_f2[idx, :] = gradienteDescendente(df, xmin, xmax, val)
+
+            plt.pause(1.5)
+            actualizar_graf_f2(puntos, min_f2)
+
+    return poblacion
         
 #todo =======================[Test]=======================
 #? test bin2int
