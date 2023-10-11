@@ -198,7 +198,8 @@ def algGenetico(func, xmin, xmax, cantIndividuos, cantPadres,
         actualizar_graf_f2(puntos, pobDecod)
 
     # Decodificamos el mejor individuo (solucion) para devolverlo
-    mejorIndiv = decodificar(poblacion[idxElite], codCrom, xmin, xmax)
+    idxMejor = np.argmax(fitness)
+    mejorIndiv = decodificar(poblacion[idxMejor], codCrom, xmin, xmax)
     
     return mejorIndiv, xInit    
 
