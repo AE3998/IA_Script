@@ -112,6 +112,8 @@ def algGenetico(archivo_train, archivo_test, cantIndividuos, cantPadres,cantMaxG
             break
 
     # Retornar el individuo con mejor fitness
+
+    print(f"Seleccion finalizado en {cantGeneraciones} generaciones.")
     idxMejor = np.argmax(fitness)
 
     return poblacion[idxMejor], fitness[idxMejor]
