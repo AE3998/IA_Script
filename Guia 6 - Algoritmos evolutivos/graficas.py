@@ -35,7 +35,10 @@ def grafica_f1():
     # plt.show()
     return ax
 
-def agregar_puntos_graf_f1(ax, pobDecod):
+def agregar_puntos_graf_f1(ax, pobDecod, color=8):
+    colores = ["#EE0000", "#FF8000", "#FFFF00", "#00C957", 
+            "#1C86EE", "#104E8B", "#9400D3", "#8B008B",
+            "#333333", "#FF82AB"]
     if(isinstance(pobDecod, np.ndarray)):
         if(pobDecod.shape[0] > 1):
             X = pobDecod[:, 0]
@@ -45,7 +48,7 @@ def agregar_puntos_graf_f1(ax, pobDecod):
         X = pobDecod
     Y = grafF1(X)
 
-    puntos = ax.scatter(X, Y, c='k', linewidth = 2)
+    puntos = ax.scatter(X, Y, c=colores[color], linewidth = 2)
     plt.pause(0.2)
 
     return puntos
@@ -93,7 +96,11 @@ def grafica_f2():
     ax.set_title('Gráfica 3D de f2(x, y)')
     return ax
 
-def agregar_puntos_graf_f2(ax, pobDecod):
+def agregar_puntos_graf_f2(ax, pobDecod, color=8):
+    colores = ["#EE0000", "#FF8000", "#FFFF00", "#00C957", 
+            "#1C86EE", "#104E8B", "#9400D3", "#8B008B",
+            "#333333", "#FF82AB"]
+
     if(len(pobDecod.shape) > 1):
         X = pobDecod[:, 0]
         Y = pobDecod[:, 1]
@@ -102,7 +109,7 @@ def agregar_puntos_graf_f2(ax, pobDecod):
         Y = pobDecod[1]
 
     Z = grafF2((X, Y))
-    puntos = ax.scatter(X, Y, Z, c='k', linewidth = 2)
+    puntos = ax.scatter(X, Y, Z, c=colores[color], linewidth = 2)
 
     plt.pause(0.2)
 

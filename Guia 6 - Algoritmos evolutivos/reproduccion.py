@@ -66,21 +66,21 @@ def repMutacion(poblacion, probMutacion, codCrom):
 
 
 #? Test de los metodos
-np.random.seed(0)
+# np.random.seed(0)
 
-poblacion = np.random.randint(0, 2, size=(10, 6))
-poblacion = poblacion.astype(bool)
+# poblacion = np.random.randint(0, 2, size=(10, 6))
+# poblacion = poblacion.astype(bool)
 
-idxPadres = np.array([2, 3])
-codCrom = np.array([3, 3])
+# idxPadres = np.array([2, 3])
+# codCrom = np.array([3, 3])
 
-probCruza = 0.8
-probMutacion = 0.1
+# probCruza = 0.8
+# probMutacion = 0.1
 
-cruza = repCruza(poblacion, idxPadres, codCrom, probCruza)
-mutacion = repMutacion(cruza, probMutacion, codCrom)
+# cruza = repCruza(poblacion, idxPadres, codCrom, probCruza)
+# mutacion = repMutacion(cruza, probMutacion, codCrom)
 
-print(f"Poblacion: \n{poblacion.astype(int)}")
-print(f"\nPadres: \n{idxPadres}")
-print(f"\nCruza: \n{cruza.astype(int)}")
-print(f"\nMutacion: \n{mutacion.astype(int)}")
+# print(f"Poblacion: \n{poblacion.astype(int)}")
+# print(f"\nPadres: \n{idxPadres}")
+# print(f"\nCruza: \n{cruza.astype(int)}")
+# print(f"\nMutacion: \n{mutacion.astype(int)}")

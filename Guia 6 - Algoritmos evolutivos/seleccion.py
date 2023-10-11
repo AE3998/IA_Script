@@ -54,21 +54,21 @@ def selectCompetencia(fitness, cantPadres):
 # -------------------------------------------------------
 
 #? test seleccion
-fitness = np.random.randint(0, 7, size=(25))
-cantPadres = 8
-print(fitness)
+# fitness = np.random.randint(0, 7, size=(25))
+# cantPadres = 8
+# print(fitness)
 
-idxPadres = selectRuleta(fitness, cantPadres)
-print("\nRuleta: ")
-print(f"Los indices seleccionados son: {idxPadres}")
-print(f"Los valores de fitness son: {fitness[idxPadres]}")
+# idxPadres = selectRuleta(fitness, cantPadres)
+# print("\nRuleta: ")
+# print(f"Los indices seleccionados son: {idxPadres}")
+# print(f"Los valores de fitness son: {fitness[idxPadres]}")
 
-idxPadres = selectVentana(fitness, cantPadres)
-print("\nVentana: ")
-print(f"Los indices seleccionados son: {idxPadres}")
-print(f"Los valores de fitness son: {fitness[idxPadres]}")
+# idxPadres = selectVentana(fitness, cantPadres)
+# print("\nVentana: ")
+# print(f"Los indices seleccionados son: {idxPadres}")
+# print(f"Los valores de fitness son: {fitness[idxPadres]}")
 
-idxPadres = selectCompetencia(fitness, cantPadres)
-print("\nCompentencia: ")
-print(f"Los indices seleccionados son: {idxPadres}")
-print(f"Los valores de fitness son: {fitness[idxPadres]}")
+# idxPadres = selectCompetencia(fitness, cantPadres)
+# print("\nCompentencia: ")
+# print(f"Los indices seleccionados son: {idxPadres}")
+# print(f"Los valores de fitness son: {fitness[idxPadres]}")

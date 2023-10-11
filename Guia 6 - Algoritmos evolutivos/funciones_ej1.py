@@ -80,26 +80,26 @@ def df2_dy(val):
 
 #? Test f1 y sus graficas
 
-xmin = np.array([-512])
-xmax = np.array([512])
+# xmin = np.array([-512])
+# xmax = np.array([512])
 
-fila = 10
+# fila = 10
 
-xInit = np.random.uniform(low=xmin, high=xmax, size=(fila, 1))
-min_f1 = np.empty_like(xInit)
+# xInit = np.random.uniform(low=xmin, high=xmax, size=(fila, 1))
+# min_f1 = np.empty_like(xInit)
 
-for i, val in enumerate(xInit):
-    min_f1[i, :] = gradienteDescendente(df1, xmin, xmax, val)
+# for i, val in enumerate(xInit):
+#     min_f1[i, :] = gradienteDescendente(df1, xmin, xmax, val)
 
-print(f"Inicializado en: {xInit}")
-print("Minimo global de f1:", min_f1)
+# print(f"Inicializado en: {xInit}")
+# print("Minimo global de f1:", min_f1)
 
-ax = grafica_f1()
-puntos = agregar_puntos_graf_f1(ax, xInit)
-plt.pause(2)
-# agregar_puntos_graf_f2(ax, min_f2)
-actualizar_graf_f1(puntos, min_f1)
-plt.show()
+# ax = grafica_f1()
+# puntos = agregar_puntos_graf_f1(ax, xInit)
+# plt.pause(2)
+# # agregar_puntos_graf_f2(ax, min_f2)
+# actualizar_graf_f1(puntos, min_f1)
+# plt.show()
 
 # #? Test f2 y sus graficas
 
