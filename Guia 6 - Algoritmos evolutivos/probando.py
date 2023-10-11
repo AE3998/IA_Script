@@ -1,5 +1,6 @@
 import numpy as np 
 import matplotlib.pyplot as plt
+from seleccion import *
 
 # -----------------------------------------------
 
@@ -26,3 +27,18 @@ poblacion = poblacion.astype(bool)
 print(poblacion)
 
 # -----------------------------------------------
+
+fitness = np.array([3, 2, 5, 1, 4, 6, 0, 2])
+ordenFit = np.argsort(-fitness)
+print("OrdenFit:", ordenFit)
+
+cantPadres = 4
+cantInd = ordenFit.shape[0]
+paso =  cantInd // cantPadres
+print("Paso:", paso)
+
+idxBool = np.full(shape=(fitness.shape[0]), fill_value=True)
+print(idxBool)
+
+cantCompetencia = fitness.shape[0] // cantPadres
+print(cantCompetencia)

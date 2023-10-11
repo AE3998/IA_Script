@@ -26,8 +26,8 @@ def df1(x):
 # Grafica de la funcion
 # grafica_f1()
 
-#? Resultado con metodo de gradiente descendente 
-#? (se puede jugar con los parametros del metodo de gradiente descentende)
+# Resultado con metodo de gradiente descendente 
+# (se puede jugar con los parametros del metodo de gradiente descendente)
 # Hay veces que llega o se acerca al minimo global viendo la grafica, pero debido a la inicializacion
 # al azar otras veces cae en minimos locales. Si en la inicializacion del gradienteDescendente
 # se le pone x = 400 por ejemplo, ahi si siempre llega al minimo global cerca de x = 420
@@ -76,15 +76,11 @@ def df2_dy(val):
     factor2 = (50/10) * (square**(-0.9)) * (2*x*y) * np.cos(50 * (square**0.1))
     return 0.25 * factor1 * factor2
 
-#! ¿Ahora podriamos usar df2_dx y df2_dy en el metodo del gradiente descendente?
-#! FALTA MODIFICAR EL ALGORITMO gradienteDescendiente.py PARA QUE FUNCIONE PASANDO [-100, 100]
-#? Resultado con metodo de gradiente descendente 
-
+# Resultado con metodo de gradiente descendente 
 # x_min_f2 = gradienteDescendente(df2_dx, [-100, 100])
 # print("Minimo global de f1 respecto a x:", x_min_f2)
 # y_min_f2 = gradienteDescendente(df2_dy, [-100, 100])
 # print("Minimo global de f1 respecto a y:", y_min_f2)
-
 
 #? Test f1 y sus graficas
 
@@ -132,4 +128,3 @@ def df2_dy(val):
 # actualizar_graf_f2(puntos, min_f2)
 
 # plt.show()
-# #! Controlar si todo eso de las derivadas esta bien asi o si hay otra forma de hacerlo
