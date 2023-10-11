@@ -65,9 +65,6 @@ def actualizar_graf_f1(puntos, pobDecod):
 
     return Y
 
-
-
-
 #* ----- Funcion f2 y su grafica para ver el minimo global -----
 def grafica_f2():
 
@@ -79,14 +76,14 @@ def grafica_f2():
     val = (X, Y)
     Z = grafF2(val)
 
-    # Crear la grafica
-    plt.figure()
-    contour = plt.contourf(X, Y, Z, levels=100, cmap='rainbow')
-    plt.colorbar(contour, label='f2(x, y)')
-    plt.xlabel('x')
-    plt.ylabel('y')
-    plt.title('Gráfica de f2(x, y)')
-    plt.grid(True, linestyle='--', alpha=0.7)
+    # Crear la grafica circular
+    # plt.figure()
+    # contour = plt.contourf(X, Y, Z, levels=100, cmap='rainbow')
+    # plt.colorbar(contour, label='f2(x, y)')
+    # plt.xlabel('x')
+    # plt.ylabel('y')
+    # plt.title('Gráfica de f2(x, y)')
+    # plt.grid(True, linestyle='--', alpha=0.7)
 
     # Crear la grafica 3D
     fig = plt.figure()

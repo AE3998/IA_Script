@@ -15,8 +15,7 @@ cantPadres = 0.4
 codCrom = [10]    # es como se codifica el cromosoma
 cantMaxGeneracion = 1000      # recordar poner un valor alto porque no sabemos cuando va a converger
 
-#! Ver como mejorar la funcion fitness!
-fitnessBuscado = 355     #! VER QUE VALOR PODEMOS USAR
+fitnessBuscado = 355
 probMutacion = 0.1
 probCruza = 0.8
 xmin = [-512]
@@ -45,7 +44,7 @@ cantPadres = 0.50
 codCrom = [8, 8]    # es como se codifica el cromosoma
 cantMaxGeneracion = 1000      # recordar poner un valor alto porque no sabemos cuando va a converger
 
-fitnessBuscado = 4     #! VER QUE VALOR PODEMOS USAR
+fitnessBuscado = 4
 probMutacion = 0.05
 probCruza = 0.6
 xmin = [-100, -100]

@@ -72,8 +72,6 @@ def decodificar(cromosoma, codCrom, xmin, xmax):
     
     return cromDecod
 
-
-
 def evaluar(func, poblacion, codCrom, xmin, xmax):
 
     # Cantidad de individuos
@@ -89,11 +87,9 @@ def evaluar(func, poblacion, codCrom, xmin, xmax):
         pobDecod[i, :] = val
         fitness[i] = func(val)      # evaluo con la funcion de fitness
     
-    #! Agregue la funcion de fitness que proponemos, cuanto mas chico es el valor
-    #! de la funcion, mayor sera el valor de finess. fintess => [0, 1]
     # Convertirmos a un problema de maximizacion del fitness, ya que en realidad es minimizacion:
-    # fitness = 1/fitness
     fitness = 1 - (fitness/np.max(fitness))
+    # fitness = 1/fitness
     # fitness = 1/(1 - fitness)
     # fitness = -fitness
 
@@ -156,12 +152,11 @@ def algGenetico(func, xmin, xmax, cantIndividuos, cantPadres,
         # idxPadres = selectRuleta(fitness, cantPadres)
 
         #* Aplicar operadores de cruza y mutacion
-        #! Entiendo que con nuestra cruza ya hacemos el reemplazo poblacional al final
-        #! podríamos hacer elitismo o brecha generacional si queremos despues
         poblacionCruza = repCruza(poblacion, idxPadres, codCrom, probCruza)
         newPoblacion = repMutacion(poblacionCruza, probMutacion, codCrom)
 
-        # Elitismo (pisar el ultimo hijo)
+        #* Elitismo 
+        # (pisar el ultimo hijo)
         idxElite = np.argsort(-fitness)[0]
         newPoblacion[-1] = poblacion[idxElite]
 
@@ -171,8 +166,7 @@ def algGenetico(func, xmin, xmax, cantIndividuos, cantPadres,
         # Actualizar la poblacion
         poblacion = newPoblacion
 
-
-        # Si el mejor fitness no mejora durante "n" generaciones, se corta
+        # Si el mejor fitness no mejora durante "n" generaciones seguidas, se corta
         # el algoritmo porque suponemos que convergio
         if(actualMaxFitness >= maxFit):
             n += 1
@@ -181,7 +175,7 @@ def algGenetico(func, xmin, xmax, cantIndividuos, cantPadres,
             n = 0
 
         cantGeneraciones += 1
-        # Criterio de corte, maxima generacion o 10 generaciones sin mejora
+        # Criterio de corte, maxima generacion o 10 generaciones seguidas sin mejora
         if(cantGeneraciones >= cantMaxGeneracion or n >= 10):
             print(f"Finalizado por criterio de corte.")
             if(n >= 10):
@@ -190,7 +184,6 @@ def algGenetico(func, xmin, xmax, cantIndividuos, cantPadres,
                 print(f"Cantidad de generacion >= {cantGeneraciones}")
             break
 
-        
         # Actualizar graficas
         if(cantGeneraciones % 4 == 0):
             if(graf == 1):
@@ -204,9 +197,10 @@ def algGenetico(func, xmin, xmax, cantIndividuos, cantPadres,
     if(graf == 2):
         actualizar_graf_f2(puntos, pobDecod)
 
+    # Decodificamos el mejor individuo (solucion) para devolverlo
     mejorIndiv = decodificar(poblacion[idxElite], codCrom, xmin, xmax)
     
-    return mejorIndiv, xInit 
+    return mejorIndiv, xInit    
 
 def algGradient(xInit, df, xmin, xmax, graf):
 
