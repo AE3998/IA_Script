@@ -1,10 +1,17 @@
 import numpy as np 
-import matplotlib.pyplot as plt
 from seleccion import *
 from reproduccion import *
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.svm import SVC
 from sklearn.metrics import accuracy_score
+
+# Tenemos dos objetivos: por un lado se quiere que el clasificador funcione muy bien 
+# (maximizar el accuracy), y por otro que use la menor cantidad de caracteristicas posibles 
+# (minimizar la cantidad de características). 
+# alpha y beta son parametros que controlan que tanta importancia se le da a esos dos 
+# objetivos: si alfa es mas grande, el algoritmo tratara de maximizar el accuracy sin 
+# importarle tanto usar mas cantidad de caracteristicas, si beta es mas alto tratara de 
+# reducir la cantidad de caracteristicas sacrificando un poco de accuracy.
 
 def evaluar(poblacion, x_train, y_train, x_test, y_test, alpha, beta):
 
@@ -12,7 +19,6 @@ def evaluar(poblacion, x_train, y_train, x_test, y_test, alpha, beta):
     cantInd = poblacion.shape[0]
     totalFeature = poblacion.shape[1]
     fitness = np.empty(shape=(cantInd))
-
 
     # Recorremos los individuos (cromosomas) y evaluar su fitness
     for i in range(cantInd):
@@ -41,17 +47,15 @@ def cargarDatos(nomArchivo):
     y = data[:, -1]
     return x, y
 
-
-def algGenetico(archivo_train, archivo_test, cantIndividuos, cantPadres,cantMaxGeneracion, 
+def algGenetico(archivo_train, archivo_test, cantIndividuos, cantPadres, cantMaxGeneracion, 
                 probMutacion, probCruza, alpha, beta, fitnessBuscado):
 
+    # Cargar los datos de entrenamiento y prueba
     x_train, y_train = cargarDatos(archivo_train)
     x_test, y_test = cargarDatos(archivo_test)
 
-    # Inicializar de forma aleatoria la poblacion 
+    # Inicializar de forma aleatoria la poblacion de cromosomas con True y False
     lenCromosoma = x_train.shape[1]
-
-    # Inicializar la poblacion de cromosomas con True y False
     poblacion = np.random.choice([True, False], size=(cantIndividuos, lenCromosoma))
 
     # Evaluar la poblacion con la funcion de fitness dada por el problema
