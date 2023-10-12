@@ -42,3 +42,10 @@ print(idxBool)
 
 cantCompetencia = fitness.shape[0] // cantPadres
 print(cantCompetencia)
+
+# ----------------------------------------------------------------
+
+cantIndividuos = 2
+lenCromosoma = 4
+poblacion = np.random.choice([True, False], size=(cantIndividuos, lenCromosoma))
+print(poblacion)
