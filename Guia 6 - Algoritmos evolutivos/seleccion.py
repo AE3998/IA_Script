@@ -52,6 +52,7 @@ def selectCompetencia(fitness, cantPadres):
     idxBool = np.full(shape=(fitness.shape[0]), fill_value=True)    
 
     # calculamos la cantidad de competidores para cada iteracion
+    # en vez de hacer eso, podriamos hacer que reciba como entrada la cantidad de competidores
     cantCompetencia = fitness.shape[0] // cantPadres
 
     idxPadres = []  # lista vacia para ir guardando los indices de los individuos seleccionados como padres

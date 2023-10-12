@@ -20,7 +20,7 @@ cantPadres = 0.4
 codCrom = [10]    # es como se codifica el cromosoma
 cantMaxGeneracion = 1000      # recordar poner un valor alto porque no sabemos cuando va a converger
 
-fitnessBuscado = 355
+fitnessBuscado = 390
 probMutacion = 0.1
 probCruza = 0.8
 xmin = [-512]

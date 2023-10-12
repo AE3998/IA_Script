@@ -35,7 +35,7 @@ def repCruza(poblacion, idxPadres, codCrom, probCruza):
             hijos[i] = np.concatenate((padre2[:corte], padre1[corte:]))
             i += 1
 
-        # si no es mayor a la probabilidad, pasan como estaban
+        # si no es menor a la probabilidad, pasan como estaban
         else:
             hijos[i] = padre1
             hijos[i+1] = padre2
@@ -46,7 +46,6 @@ def repCruza(poblacion, idxPadres, codCrom, probCruza):
 
     return poblacion[:cantIdv]
 
-#* Algoritmo para la mutacion para cada hijo
 def repMutacion(poblacion, probMutacion, codCrom):
     """
         Algoritmo de mutacion para cada hijo.

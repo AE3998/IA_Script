@@ -12,6 +12,9 @@ from sklearn.metrics import accuracy_score
 # objetivos: si alfa es mas grande, el algoritmo tratara de maximizar el accuracy sin 
 # importarle tanto usar mas cantidad de caracteristicas, si beta es mas alto tratara de 
 # reducir la cantidad de caracteristicas sacrificando un poco de accuracy.
+# Hay que tener cuidado con los alpha y beta porque puede ser los terminos que multiplican 
+# tengan escalas muy diferentes, entonces habria que multiplicar por algo mas grande o chico.
+# No es necesario que alpha + beta sumen 1, puede ser cualquier cosa.
 
 def evaluar(poblacion, x_train, y_train, x_test, y_test, alpha, beta):
 
@@ -56,7 +59,9 @@ def algGenetico(archivo_train, archivo_test, cantIndividuos, cantPadres, cantMax
 
     # Inicializar de forma aleatoria la poblacion de cromosomas con True y False
     lenCromosoma = x_train.shape[1]
-    poblacion = np.random.choice([True, False], size=(cantIndividuos, lenCromosoma))
+    # el "p" es un parametro para indicar la probabilidad de True y de False que queremos que inicialice,
+    # (no es obligatorio pero lo hicimos para probar que no inicie con 50% aprox de cada uno)
+    poblacion = np.random.choice([True, False], size=(cantIndividuos, lenCromosoma), p=[0.15, 0.85])
 
     # Evaluar la poblacion con la funcion de fitness dada por el problema
     fitness = evaluar(poblacion, x_train, y_train, x_test, y_test, alpha, beta)

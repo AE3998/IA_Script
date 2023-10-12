@@ -23,8 +23,9 @@ def gradienteDescendente(grad_func, xmin, xmax, xInit):
     # # x = 400     # para probar que la funcion f1 llegue al minimo global cerca de x = 420 de la f1
 
     x = xInit
-    if not(isinstance(x, np.ndarray)):
-        x = np.array([x])
+    if not(isinstance(x, np.ndarray)):  
+        x = np.array([x])   # para convertirlo en un array de Numpy si no lo es
+
     # Gradiente descendente
     for _ in range(maxIteraciones):
         grad = grad_func(x)  # calcular el gradiente en x

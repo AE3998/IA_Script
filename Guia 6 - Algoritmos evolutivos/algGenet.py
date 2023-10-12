@@ -59,7 +59,7 @@ def decodificar(cromosoma, codCrom, xmin, xmax):
     cromDecod[1] = [-100 + 200*(5/15) = -33.3]
     """
 
-    # arraglo vacio con la misma forma que codCrom para guardar los valores decodificados
+    # arreglo vacio con la misma forma que codCrom para guardar los valores decodificados
     cromDecod = np.empty_like(codCrom, dtype=float) 
 
     # right y left son para llevar un seguimiento de la posicion actual dentro del cromosoma
@@ -77,7 +77,7 @@ def decodificar(cromosoma, codCrom, xmin, xmax):
         den = (2**codCrom[i] - 1)
         cromDecod[i] = minVal + val*rango/den
     
-    return cromDecod    # devuelve el arreglo con los valores decodificados
+    return cromDecod    # devuelve el cromosoma decodificado
 
 def evaluar(func, poblacion, codCrom, xmin, xmax):
 
@@ -99,7 +99,7 @@ def evaluar(func, poblacion, codCrom, xmin, xmax):
     fitness = 1 - (fitness/np.max(fitness))
     # fitness = 1/fitness
     # fitness = 1/(1 - fitness)
-    # fitness = -fitness
+    # fitness = -fitness  # en la funcion f2 funciona pero en f1 no
 
     # Retornar el maximo fitness, valores de fitness y vector con valores de cromosomas decodificados
     return np.max(fitness), fitness, pobDecod
@@ -169,7 +169,7 @@ def algGenetico(func, xmin, xmax, cantIndividuos, cantPadres,
 
         #* Elitismo 
         # (pisar el ultimo hijo)
-        idxElite = np.argsort(-fitness)[0]
+        idxElite = np.argmax(fitness)
         newPoblacion[-1] = poblacion[idxElite]
 
         # Volver a evaluar la nueva poblacion
