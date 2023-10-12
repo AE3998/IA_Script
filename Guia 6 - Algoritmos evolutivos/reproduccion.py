@@ -7,27 +7,28 @@ def repCruza(poblacion, idxPadres, codCrom, probCruza):
 
     cantPadres = idxPadres.shape[0]
     cantIdv = poblacion.shape[0]
-    lenCrom = np.sum(codCrom)
+    lenCrom = np.sum(codCrom)   
 
     cantHijos = cantIdv - cantPadres
 
-    # Chequeo de por si tengo numero impar de hijos, le paso a 
-    # ser par y despues lo elimino el que esta demas
+    # Chequeo de por si tengo numero impar de hijos, sumo uno para que sea par (porque 
+    # la cruza se hace entre pares de padres), y despues lo elimino el que esta demas
     if(cantHijos % 2):
         cantHijos += 1
 
+    # matriz de hijos vacia (cada fila es un hijo o individuo y cada columna un gen o bit)
     hijos = np.empty(shape=(cantHijos, lenCrom), dtype=bool)
 
     i = 0
-    while(i < cantHijos):
-        # Elijo 2 padres 
+    while(i < cantHijos):   
+        # elijo 2 padres al azar para usarlos en la cruza
         idxs = np.random.choice(idxPadres, size=2, replace=False)
         padre1 = poblacion[idxs[0], :]
         padre2 = poblacion[idxs[1], :]
 
-        # tiro un numero al azar y si es menor a la probabilidad hace la cruza
+        # tiro un numero al azar y si es menor a la probabilidad de cruza aplico la cruza
         if(np.random.rand() < (1 - probCruza)):    
-            # Elijo un punto de corte entre [1, end-1] y concateno la cruza de esos padres
+            # elijo un punto de corte al azar entre [1, end-1] y concateno la cruza de esos padres
             corte = np.random.choice(lenCrom-2) + 1
             hijos[i] = np.concatenate((padre1[:corte], padre2[corte:]))
             i += 1
@@ -40,14 +41,22 @@ def repCruza(poblacion, idxPadres, codCrom, probCruza):
             hijos[i+1] = padre2
             i += 2
 
-    # Actualizo la poblacion
+    # Actualizo la poblacion combinando los padres originales con los hijos creados
     poblacion = np.concatenate((poblacion[idxPadres], hijos))
 
     return poblacion[:cantIdv]
 
 #* Algoritmo para la mutacion para cada hijo
 def repMutacion(poblacion, probMutacion, codCrom):
-    lenCrom = np.sum(codCrom)
+    """
+        Algoritmo de mutacion para cada hijo.
+        Entradas: matriz de poblacion de cromosomas (cada fila es un individuo y cada columna un 
+        gen o bit del cromosoma), la probabilidad de mutacion y un arreglo con el numero de bits 
+        para codificar cada gen del cromosoma (para determinar la longitud del cromosoma).
+        Salida: poblacion luego de haber aplicado la mutacion.
+    """
+
+    lenCrom = np.sum(codCrom)   # longitud total del cromosoma
 
     # Ver el tema de np.copy, porque como trabajan de referencia los datos
     # no se va a notar la diferencia si quiero comparar los datos luego de 
@@ -56,11 +65,12 @@ def repMutacion(poblacion, probMutacion, codCrom):
     # genera cambios.
     # poblacion = np.copy(poblacion)
 
-    # Tiramos un numero al azar y si es menor a la probabilidad de mutacion se elige un gen (bit)
-    # al azar y se cambia su valor (como lo estamos trabajando con valores bool usamos "not")
-    for i in range(poblacion.shape[0]):     # para cada hijo
+    # Iteramos sobre cada fila de la matriz de poblacion, es decir, sobre cada individuo o cromosoma.
+    # Luego tiramos un numero al azar y si es menor a la probabilidad de mutacion se elige un gen (bit)
+    # al azar y se invierte su valor (como lo estamos trabajando con valores bool usamos "not")
+    for i in range(poblacion.shape[0]):    
         if(np.random.rand() < probMutacion):
-            idxMut = np.random.choice(lenCrom)
+            idxMut = np.random.choice(lenCrom)      # 
             poblacion[i, idxMut] = np.logical_not(poblacion[i, idxMut])
 
     return poblacion

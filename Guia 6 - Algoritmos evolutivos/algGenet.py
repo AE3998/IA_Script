@@ -34,9 +34,14 @@ def decodificar(cromosoma, codCrom, xmin, xmax):
     """
     Entrada:
     cromosoma =  [1,1,1,0 ,0,1,0,1] (bit (+) <-Significativo-> (-))
+    codCrom es una lista de enteros que representa el numero de bits que se deben usar para codificar 
+    cada parte del cromosoma. Por ejemplo, [4, 4] indica que los primeros 4 bits del cromosoma se 
+    utilizan para codificar la primera variable y los siguientes 4 bits se utilizan para codificar la segunda variable.
     codCrom = [4 (bits), 4 (bits)]
     val = bin2int(cromosoma) = [14, 5]
 
+    xmin y xmax son listas que representan los valores mínimos y máximos del rango en el que se 
+    deben decodificar las variables.
     xmin = [-100, -100]
     xmax = [100, 100]
 
@@ -53,30 +58,33 @@ def decodificar(cromosoma, codCrom, xmin, xmax):
     cromDecod[0] = [-100 + 200*(14/15) = 86.6]
     cromDecod[1] = [-100 + 200*(5/15) = -33.3]
     """
-    cromDecod = np.empty_like(codCrom, dtype=float)
 
+    # arraglo vacio con la misma forma que codCrom para guardar los valores decodificados
+    cromDecod = np.empty_like(codCrom, dtype=float) 
+
+    # right y left son para llevar un seguimiento de la posicion actual dentro del cromosoma
     right = 0
-    for i in range(codCrom.shape[0]):
-        # Definir el rango del cromosoma a convertir en entero
+    for i in range(codCrom.shape[0]):   # iteramos sobre los elementos de codCrom
+        # Definir el rango de bits del cromosoma a convertir en entero (rango a decodificar)
         left = right
         right += codCrom[i]
-        val = bin2int(cromosoma[left:right])
+        val = bin2int(cromosoma[left:right])    # convertimos la secuencia de bits desde left hasta right en un valor entero
 
-        # Ajustar el numero entero en el rango de [xmin, xmax]
+        # Ajustamos el numero entero en el rango de [xmin, xmax] (formula de la teoria)
         minVal = xmin[i]
         maxVal = xmax[i]
-
         rango = (maxVal - minVal)
         den = (2**codCrom[i] - 1)
         cromDecod[i] = minVal + val*rango/den
     
-    return cromDecod
+    return cromDecod    # devuelve el arreglo con los valores decodificados
 
 def evaluar(func, poblacion, codCrom, xmin, xmax):
 
     # Cantidad de individuos
     cantInd = poblacion.shape[0]
 
+    # Reservar espacio para un vector de fitness y matriz de cromosomas decodificados
     fitness = np.empty(shape=(cantInd))
     pobDecod = np.empty(shape=(cantInd, codCrom.shape[0]))
 
@@ -128,7 +136,9 @@ def algGenetico(func, xmin, xmax, cantIndividuos, cantPadres,
     xInit = np.copy(pobDecod)
 
     # Cuando la entrada es entre [0, 1] (porcentaje de la poblacion total)
-    if(isinstance(cantPadres, float)):
+    # si es float (numero decimal) convertimos la cantPadres a un entero, porque 
+    # viene como un porcentaje o proporcion de padres
+    if(isinstance(cantPadres, float)):  
         cantPadres = int(cantIndividuos * cantPadres)
 
     #* Bucle hasta cumplir criterio de corte
