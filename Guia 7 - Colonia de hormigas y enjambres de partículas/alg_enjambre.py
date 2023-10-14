@@ -8,6 +8,7 @@ def enjambre_mejor_global(func, cantParticulas, dim, maxIter, c1, c2, rango):
     # Variables a utilizar
     posActualParticula = np.zeros((cantParticulas, dim))
     velActualParticula = np.zeros((cantParticulas, dim))
+    rango = np.array(rango)     # convierto la lista "rango" en un array de numpy
 
     # Inicializacion de particulas en el espacio
     for i in range(cantParticulas):
@@ -89,12 +90,10 @@ def enjambre_mejor_global(func, cantParticulas, dim, maxIter, c1, c2, rango):
                 # Actualizar posicion actual
                 posActualParticula[i][j] = posActualParticula[i][j] + velActualParticula[i][j]
 
-                # Nos aseguramos de que la posicion este en el rango
-                #! Ver como habiamos hecho esto en la otra guia para mejorarlo si se puede
-                if posActualParticula[i][j]<rango[j][0]:
-                    posActualParticula[i][j]=rango[j][0]
-                if posActualParticula[i][j]>rango[j][1]:
-                    posActualParticula[i][j]=rango[j][1]
+                # Nos aseguramos de que la posicion este en el rango utilizando la funcion "clip" de Numpy.
+                # Si la pos esta fuera del rango, le asigna el valor del limite inferior o superior 
+                # del rango, segun el mas cercano
+                posActualParticula = np.clip(posActualParticula, rango[j, 0], rango[j, 1])
 
     #! HAY QUE COMPARAR LA VELOCIDAD CON EL DEL EJERCICIO 1 GUIA 6 PORQUE SE PIDE EN EL ENUNCIADO
     print("Cantidad de iteraciones:", contIter)
