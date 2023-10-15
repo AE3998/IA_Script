@@ -22,23 +22,30 @@ def obtenerProximoNodo(idx_i, sigmaPorEta, idxBool, idxCamino):
 def depositarFermona(metodo, matrizFermona, matrizCaminos, todoCaminoRecorrido, distRecorridas):
     
     Q = 1
-    dim0 = todoCaminoRecorrido.shape[0]
+    cantCaminos = todoCaminoRecorrido.shape[0]
+    longCaminos = todoCaminoRecorrido.shape[1]
 
     # Inicializar el denominador como 1 Uniforme
     denominador = 1
-    if(metodo == 0):
-        # Global
-        denominador = distRecorridas
 
-    for i in range(dim0 - 1):
-        idx_i = todoCaminoRecorrido[:, i]
-        idx_j = todoCaminoRecorrido[:, i + 1]
+    # Recorrer cada camino de hormiga k
+    for k in range(cantCaminos):
 
-        if(metodo == 2):
-            # Local
-            denominador = matrizCaminos[idx_i, idx_j]
+        if(metodo == 0):
+            # Global
+            denominador = distRecorridas[k]
 
-        matrizFermona[idx_i, idx_j] += Q/denominador
+        # Recorrer cada nodo recorrido por hormiga k
+        for i in range(longCaminos - 1):
+            # Extraer el par de indices
+            idx_i = todoCaminoRecorrido[k, i]
+            idx_j = todoCaminoRecorrido[k, i + 1]
+
+            if(metodo == 2):
+                # Local
+                denominador = matrizCaminos[idx_i, idx_j]
+
+            matrizFermona[idx_i, idx_j] += Q/denominador
 
     return matrizFermona
 
