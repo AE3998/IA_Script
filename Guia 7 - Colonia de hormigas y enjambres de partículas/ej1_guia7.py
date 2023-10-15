@@ -17,28 +17,28 @@ def f2(val):    # f(x, y) con x, y = [-100, 100]
 
 # (func, cantIdv, maxIter, c1, c2, xmin, xmax)
 
-
-# * Funcion f1(x)
+#* Funcion f1(x)
 func = f1
-cantIdv = 30
+cantIdv = 20
 maxIter = 100
-c1 = 1.2
-c2 = 0.5
+c1 = 0.8
+c2 = 0.2
 xmin = -512
 xmax = 512
 
+print("\nFunción f1(x):")
 mejorPosEnjambre = enjambre_mejor_global(func, cantIdv, maxIter, c1, c2, xmin, xmax)
 
-#* Funcion f2(x)
+#* Funcion f2(x,y)
 func = f2
-cantIdv = 30
+cantIdv = 20
 maxIter = 100
-c1 = 0.7
-c2 = 0.3
+c1 = 0.8
+c2 = 0.2
 xmin = [-100, -100]
 xmax = [100, 100]
 
-# * Funcion f2(x, y)
+print("\nFunción f2(x, y):")
 mejorPosEnjambre = enjambre_mejor_global(func, cantIdv, maxIter, c1, c2, xmin, xmax)
 plt.show()
 

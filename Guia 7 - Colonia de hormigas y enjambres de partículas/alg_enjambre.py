@@ -17,14 +17,14 @@ def enjambre_mejor_global(func, cantIdv, maxIter, c1, c2, xmin, xmax):
         xmax = np.array(xmax)
 
     # Variables a utilizar
-    dim = xmin.shape[0]
+    dim = xmin.shape[0]     # dimension
     posActualIdv = np.random.uniform(low=xmin, high=xmax, size=(cantIdv, dim))
     velActualIdv = np.zeros(shape=(cantIdv, dim))
 
     mejorPosIdv = posActualIdv.copy()    # inicialmente la mejor posicion es la actual
     fitness = func(mejorPosIdv)
 
-    #todo Queremos encontrar el minimo global, asi que usamos min o argmin
+    #* queremos encontrar el minimo global, asi que usamos min o argmin
     idxMaxFit = np.argmin(fitness)
     actualMaxFit = fitness[idxMaxFit]
     mejorPosEnjambre = mejorPosIdv[idxMaxFit]
@@ -50,7 +50,6 @@ def enjambre_mejor_global(func, cantIdv, maxIter, c1, c2, xmin, xmax):
         # Actualizar la lista de fitness
         fitness = func(mejorPosIdv)
         idxMejor = np.argmin(fitness)
-
 
         # Actualizar el mejor individuo
         if(actualMaxFit > fitness[idxMejor]):
@@ -83,7 +82,6 @@ def enjambre_mejor_global(func, cantIdv, maxIter, c1, c2, xmin, xmax):
         # Si la pos esta fuera del rango, le asigna el valor del limite inferior o superior 
         # del rango, segun el mas cercano
         posActualIdv = np.clip(posActualIdv, a_min=xmin, a_max=xmax)
-
 
         cambios = np.sum(idxBool)
         # print(f"Cambios: {cambios}")
