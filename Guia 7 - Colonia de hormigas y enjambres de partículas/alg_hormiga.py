@@ -74,9 +74,11 @@ def camino_optimo(nombArch, cantHorm, itMax, tasaEvap, metodoActFermona, nodoIni
     idxCamino = np.arange(dim0)
 
     cantCaminoIgual = 0
-    caminoIgual = True
     it = 0
     while(it < itMax and cantCaminoIgual < 4):
+
+        # Inicializar con True por cada iteracion
+        caminoIgual = True
 
         # Las distancias y el camino recorrido por las k hormigas
         distRecorridas = np.zeros(shape=(cantHorm))
@@ -105,6 +107,7 @@ def camino_optimo(nombArch, cantHorm, itMax, tasaEvap, metodoActFermona, nodoIni
                 idx_i = caminoRecorrida[i]
                 idx_j = obtenerProximoNodo(idx_i, sigmaPorEta, idxBool, idxCamino)
 
+                # Registrar el nodo, descartarlo de la lista y sumar en la distancia
                 caminoRecorrida[i+1] = idx_j
                 idxBool[idx_j] = False
                 distRecorridas[k] += matrizCaminos[idx_i, idx_j]
