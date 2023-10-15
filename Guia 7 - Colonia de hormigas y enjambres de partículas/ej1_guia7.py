@@ -26,7 +26,7 @@ c2 = 0.2
 xmin = -512
 xmax = 512
 
-print("\nFunción f1(x):")
+print("\nFuncion f1(x):")
 mejorPosEnjambre = enjambre_mejor_global(func, cantIdv, maxIter, c1, c2, xmin, xmax)
 
 #* Funcion f2(x,y)
@@ -38,7 +38,7 @@ c2 = 0.2
 xmin = [-100, -100]
 xmax = [100, 100]
 
-print("\nFunción f2(x, y):")
+print("\nFuncion f2(x, y):")
 mejorPosEnjambre = enjambre_mejor_global(func, cantIdv, maxIter, c1, c2, xmin, xmax)
 plt.show()
 

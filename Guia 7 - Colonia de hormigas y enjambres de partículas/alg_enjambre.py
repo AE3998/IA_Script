@@ -22,10 +22,11 @@ def enjambre_mejor_global(func, cantIdv, maxIter, c1, c2, xmin, xmax):
     velActualIdv = np.zeros(shape=(cantIdv, dim))
 
     mejorPosIdv = posActualIdv.copy()    # inicialmente la mejor posicion es la actual
-    fitness = func(mejorPosIdv)
+    fitness = -func(mejorPosIdv)
 
-    #* queremos encontrar el minimo global, asi que usamos min o argmin
-    idxMaxFit = np.argmin(fitness)
+    #* Queremos encontrar el minimo global, asi que invertimos el signo
+    #* y usamos max o argmax
+    idxMaxFit = np.argmax(fitness)
     actualMaxFit = fitness[idxMaxFit]
     mejorPosEnjambre = mejorPosIdv[idxMaxFit]
 
@@ -44,15 +45,15 @@ def enjambre_mejor_global(func, cantIdv, maxIter, c1, c2, xmin, xmax):
 
         # Recorrer todas las particulas y actualizar aquellos 
         # que logran obtener mejor posicion
-        idxBool = func(posActualIdv) < fitness
+        idxBool = -func(posActualIdv) > fitness
         mejorPosIdv[idxBool] = posActualIdv[idxBool]
 
         # Actualizar la lista de fitness
-        fitness = func(mejorPosIdv)
-        idxMejor = np.argmin(fitness)
+        fitness = -func(mejorPosIdv)
+        idxMejor = np.argmax(fitness)
 
         # Actualizar el mejor individuo
-        if(actualMaxFit > fitness[idxMejor]):
+        if(actualMaxFit < fitness[idxMejor]):
             mejorPosEnjambre = mejorPosIdv[idxMejor]
             actualMaxFit = fitness[idxMejor]
             n = 0
@@ -90,6 +91,6 @@ def enjambre_mejor_global(func, cantIdv, maxIter, c1, c2, xmin, xmax):
 
     print("Cantidad de iteraciones:", contIter)
     print("Minimo encontrado:", mejorPosEnjambre)
-    print(f"fitness: {actualMaxFit}")
+    print(f"fitness: {-actualMaxFit}")
 
     return mejorPosEnjambre
