@@ -72,8 +72,10 @@ with console.capture() as capture:
             
     console.print(table)
 
-#* Mostrar los datos
+# Extraer la tabla en string
 table_str = capture.get()
+
+#* Mostrar los datos
 print("\nMi tabla!!\n", table_str)
 print(f"\nMi ndarray!!\n", datosNum)
 
