@@ -1,4 +1,6 @@
 import numpy as np
+import matplotlib.pyplot as plt
+from graficas import graficarFermona, graficarCamino
 
 def cargarDatos(nombArch):
     data = np.genfromtxt(nombArch, delimiter=",", max_rows=None)
@@ -15,7 +17,7 @@ def obtenerProximoNodo(idx_i, sigmaPorEta, idxBool, idxCamino):
     probabilidad = numerador/denominador
 
     # Elejir un camino "disponible" (definido por idxBool) segun las probabilidades
-    idx_j = np.random.choice(idxCamino[idxBool], size=1, p=probabilidad)
+    idx_j = np.random.choice(idxCamino[idxBool], p=probabilidad)
 
     return idx_j
 
@@ -75,14 +77,22 @@ def camino_optimo(nombArch, cantHorm, itMax, tasaEvap, metodoActFermona, nodoIni
 
     cantCaminoIgual = 0
     it = 0
+    
+    # Grafica
+    producto = 100 # Para que los numeros sean mas visible
+    _, ax = plt.subplots(figsize=(6, 6))
+    title = "Inicio de fermonas"
+    ax = graficarFermona(ax, matrizFermona, title, producto)
+
     while(it < itMax and cantCaminoIgual < 4):
+        it += 1
 
         # Inicializar con True por cada iteracion
         caminoIgual = True
 
         # Las distancias y el camino recorrido por las k hormigas
         distRecorridas = np.zeros(shape=(cantHorm))
-        todoCaminoRecorrido = np.empty(shape=(cantHorm, dim0 + 1))
+        todoCaminoRecorrido = np.empty(shape=(cantHorm, dim0 + 1), dtype=int)
 
         # (Sigma ij)^alpha * (Eta ij)^beta
         sigmaPorEta = matrizFermona * matrizEta
@@ -91,7 +101,7 @@ def camino_optimo(nombArch, cantHorm, itMax, tasaEvap, metodoActFermona, nodoIni
         for k in range(cantHorm):
 
             # Registrar el camino recorrido por la hormiga k
-            caminoRecorrida = np.empty(shape=(dim0 + 1))
+            caminoRecorrida = np.empty(shape=(dim0 + 1), dtype=int)
             caminoRecorrida[0] = nodoInit
             caminoRecorrida[-1] = nodoInit
 
@@ -132,5 +142,29 @@ def camino_optimo(nombArch, cantHorm, itMax, tasaEvap, metodoActFermona, nodoIni
         matrizFermona = (1 - tasaEvap) * matrizFermona
 
         matrizFermona = depositarFermona(metodoActFermona, matrizFermona, matrizCaminos, todoCaminoRecorrido, distRecorridas)
+
+
+        # Actualizar grafica de fermonas cada n iteraciones
+        if(it % 25 == 0):
+            title = f"Matriz fermona {producto}x, {it} iteraciones"
+            ax = graficarFermona(ax, matrizFermona, title, producto)
+    
+    # Cuando sale del bucle while
+    if(itMax <= it):
+        print("Proceso finalizado por llegar iteracion maxima!")
+    else:
+        print(f"Se logro alinear las ormigas por {cantCaminoIgual} veces.")
+        print(f"En total {it} iteraciones.")
+
+    # Retornar el camino con menor distancia recorrida
+    idxMejor = np.argmin(distRecorridas)
+    mejorCamino = todoCaminoRecorrido[idxMejor]
+
+    title = f"Finalizado en {it} iteraciones.\n Camino: {str(mejorCamino)} \n" 
+    graficarCamino(ax, mejorCamino, title)
+
+    return mejorCamino, distRecorridas[idxMejor]
+
+
 
 

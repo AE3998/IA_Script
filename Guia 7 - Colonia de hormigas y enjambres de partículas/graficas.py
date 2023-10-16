@@ -79,3 +79,60 @@ def actualizarGrafica(func, dim, puntosEntrada, ax, puntos, title="Funcion"):
     plt.pause(0.2)
     return puntos
 
+def graficarFermona(ax, matrizFermona, title, producto):
+    
+    ax.clear()
+
+    dim0 = matrizFermona.shape[0]
+    dim1 = matrizFermona.shape[1]
+
+    tick = np.arange(dim0)
+
+    im = ax.imshow(matrizFermona, interpolation='nearest', cmap='rainbow')
+
+    # if hasattr(ax, 'colorbar'):
+    #     ax.get_figure().colorbar.remove()
+
+    # ax.figure.colorbar(im)
+    ax.set_xticks(tick)
+    ax.set_yticks(tick)
+    ax.set_title(title)
+
+    temp = matrizFermona.copy()
+    temp = np.round(temp * producto, 1)
+
+    for i in range(dim0):
+        for j in range(dim1):
+            ax.text(j, i, str(np.round(temp[i, j], 1)),
+                     ha='center', va='center', color='black', size=5)
+
+    plt.pause(0.1)
+
+    return ax
+
+def graficarCamino(ax, mejorCamino, title):
+    init = mejorCamino[0]
+    x = np.hstack((init, mejorCamino[1:], init))
+    y = np.hstack((init, mejorCamino[:-1], init))
+
+    ax.plot(x, y, 'ko-', linewidth=1)
+    ax.scatter(init, init, linewidth=5, c='red')
+    ax.set_title(title)
+
+    for i in range(mejorCamino.shape[0]):
+        ax.text(x[i], y[i], str(i), ha='center', va='bottom', color='#C0FF3E', size=18)
+
+#? test
+# mejorCamino = np.array([0, 1, 2, 0])
+# fig, ax = plt.subplots()
+# graficarCamino(ax, mejorCamino)
+# plt.show()
+
+
+
+
+
+
+
+
+
