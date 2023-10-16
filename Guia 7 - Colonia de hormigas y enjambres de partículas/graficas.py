@@ -77,16 +77,16 @@ def actualizarGrafica(func, dim, puntosEntrada, ax, puntos, title="Funcion"):
     plt.pause(0.2)
     return puntos
 
-def graficarFeromona(ax, matrizFermona, title, producto):
+def graficarFeromona(ax, matrizFeromona, title, producto):
     
     ax.clear()
 
-    dim0 = matrizFermona.shape[0]
-    dim1 = matrizFermona.shape[1]
+    dim0 = matrizFeromona.shape[0]
+    dim1 = matrizFeromona.shape[1]
 
     tick = np.arange(dim0)
 
-    im = ax.imshow(matrizFermona, interpolation='nearest', cmap='rainbow')
+    im = ax.imshow(matrizFeromona, interpolation='nearest', cmap='rainbow')
 
     # if hasattr(ax, 'colorbar'):
     #     ax.get_figure().colorbar.remove()
@@ -96,7 +96,7 @@ def graficarFeromona(ax, matrizFermona, title, producto):
     ax.set_yticks(tick)
     ax.set_title(title)
 
-    temp = matrizFermona.copy()
+    temp = matrizFeromona.copy()
     temp = np.round(temp * producto, 1)
 
     for i in range(dim0):

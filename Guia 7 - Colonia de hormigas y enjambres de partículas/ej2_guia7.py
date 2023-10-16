@@ -1,7 +1,7 @@
 import numpy as np
 from alg_hormiga import *
 
-# camino_optimo(nombArch, cantHorm, itMax, tasaEvap, metodoActFermona, nodoInit)
+# camino_optimo(nombArch, cantHorm, itMax, tasaEvap, metodoActFeromona, nodoInit)
 
 # Dijimos que eligiendo un valor para la tasa de evaporacion "p" (0.1, 0.90) hay que probar con 
 # distintos valores para la cantidad de feromonas "τ" (0.1, 1 y 10) y armar una tabla con esos
@@ -16,14 +16,14 @@ from alg_hormiga import *
 
 nombArch = "gr17.csv"
 cantHorm = 30
-itMax = 2000
+itMax = 1000
 tasaEvap = 0.1     
 # (0 = Global, 1 = Uniforme, 2 = Local)
-metodoActFermona = 0
+metodoActFeromona = 0       # el metodo local es el que mas iteraciones usa
 # [0 ... 17]
-nodoInit = 15
+nodoInit = 15   # nodo inicial donde se ubican las hormigas
 
-mejorCamino, dist = camino_optimo(nombArch, cantHorm, itMax, tasaEvap, metodoActFermona, nodoInit)
+mejorCamino, dist = camino_optimo(nombArch, cantHorm, itMax, tasaEvap, metodoActFeromona, nodoInit)
 
 print(f"Mejor camino encontrado: {mejorCamino}")
 print(f"Distancia recorrida: {dist}")
