@@ -22,9 +22,8 @@ def obtenerProximoNodo(idx_i, sigmaPorEta, idxBool, idxCamino):
 
     return idx_j
 
-def depositarFeromona(metodo, matrizFeromona, matrizCaminos, todoCaminoRecorrido, distRecorridas):
+def depositarFeromona(metodo, matrizFeromona, matrizCaminos, todoCaminoRecorrido, distRecorridas, Q):
     
-    Q = 1
     cantCaminos = todoCaminoRecorrido.shape[0]
     longCaminos = todoCaminoRecorrido.shape[1]
 
@@ -52,7 +51,7 @@ def depositarFeromona(metodo, matrizFeromona, matrizCaminos, todoCaminoRecorrido
 
     return matrizFeromona
 
-def camino_optimo(nombArch, cantHorm, itMax, tasaEvap, metodoActFeromona, nodoInit):
+def camino_optimo(nombArch, cantHorm, itMax, tasaEvap, metodoActFeromona, nodoInit, Q, graf=False):
 
     matrizCaminos = cargarDatos(nombArch)
 
@@ -82,10 +81,11 @@ def camino_optimo(nombArch, cantHorm, itMax, tasaEvap, metodoActFeromona, nodoIn
     it = 0
     
     # Grafica
-    producto = 100  # para que los numeros sean mas visible
-    _, ax = plt.subplots(figsize=(6, 6))
-    title = "Inicio de feromonas"
-    ax = graficarFeromona(ax, matrizFeromona, title, producto)
+    if(graf):
+        producto = 100  # para que los numeros sean mas visible
+        _, ax = plt.subplots(figsize=(6, 6))
+        title = "Inicio de feromonas"
+        ax = graficarFeromona(ax, matrizFeromona, title, producto)
 
     # Bucle mientras no se llege a un max de iteraciones y hasta que todas las hormigas se alinean 
     # durante "n" iteraciones consecutivas (explicado en las anotaciones) 
@@ -96,7 +96,7 @@ def camino_optimo(nombArch, cantHorm, itMax, tasaEvap, metodoActFeromona, nodoIn
         caminoIgual = True
 
         # Las distancias y el camino recorrido por las k hormigas
-        distRecorridas = np.zeros(shape=(cantHorm))
+        distRecorridas = np.zeros(shape=(cantHorm), dtype=int)
         todoCaminoRecorrido = np.empty(shape=(cantHorm, dim0 + 1), dtype=int)
 
         # (Sigma ij)^alpha * (Eta ij)^beta
@@ -146,16 +146,17 @@ def camino_optimo(nombArch, cantHorm, itMax, tasaEvap, metodoActFeromona, nodoIn
         # Actualizar la Feromona segun la tasa de evaporacion
         matrizFeromona = (1 - tasaEvap) * matrizFeromona
 
-        matrizFeromona = depositarFeromona(metodoActFeromona, matrizFeromona, matrizCaminos, todoCaminoRecorrido, distRecorridas)
+        matrizFeromona = depositarFeromona(metodoActFeromona, matrizFeromona, 
+                                           matrizCaminos, todoCaminoRecorrido, distRecorridas, Q)
 
         # Actualizar grafica de feromonas cada n iteraciones
-        if(it % 25 == 0):
+        if(graf and it % 25 == 0):
             title = f"Matriz Feromona {producto}x, {it} iteraciones"
             ax = graficarFeromona(ax, matrizFeromona, title, producto)
     
     # Cuando sale del bucle while
     if(itMax <= it):
-        print("Finalizó por llegar al numero máximo de iteraciones.")
+        print("Finalizo por llegar al numero maximo de iteraciones.")
     else:
         print(f"Se logro alinear las hormigas por {cantCaminoIgual} veces.")
         print(f"En total {it} iteraciones.")
@@ -164,8 +165,9 @@ def camino_optimo(nombArch, cantHorm, itMax, tasaEvap, metodoActFeromona, nodoIn
     idxMejor = np.argmin(distRecorridas)
     mejorCamino = todoCaminoRecorrido[idxMejor]
 
-    title = f"Finalizado en {it} iteraciones.\n Camino: {str(mejorCamino)} \n" 
-    graficarCamino(ax, mejorCamino, title)
+    if(graf):
+        title = f"Finalizado en {it} iteraciones.\n Camino: {str(mejorCamino)} \n" 
+        graficarCamino(ax, mejorCamino, title)
 
     # Retornar el camino con menor distancia recorrida
-    return mejorCamino, distRecorridas[idxMejor]
+    return mejorCamino, distRecorridas[idxMejor], it

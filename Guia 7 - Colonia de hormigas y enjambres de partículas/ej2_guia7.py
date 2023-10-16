@@ -1,5 +1,11 @@
 import numpy as np
 from alg_hormiga import *
+from rich.table import Table
+from rich.console import Console
+from rich.live import Live
+import time
+
+#! Hay que instalar el paquete rich usando 'pip install rich'
 
 # camino_optimo(nombArch, cantHorm, itMax, tasaEvap, metodoActFeromona, nodoInit)
 
@@ -14,17 +20,76 @@ from alg_hormiga import *
 # de esos parametros sobre la calidad de las soluciones encontradas.
 # Esta explicado y con una tabla de ejemplo al final del word de anotaciones
 
+#* =======[Parametro de entrada]=======
 nombArch = "gr17.csv"
 cantHorm = 30
-itMax = 1000
+itMax = 1500
 tasaEvap = 0.1     
 # (0 = Global, 1 = Uniforme, 2 = Local)
-metodoActFeromona = 0       # el metodo local es el que mas iteraciones usa
-# [0 ... 17]
-nodoInit = 15   # nodo inicial donde se ubican las hormigas
+metodoActFeromona = [0, 1, 2]       # el metodo local es el que mas iteraciones usa
+nombreMetodo = ['Global', 'Uniforme', 'Local']
+nodoInit = 0   # [0 ... 17] nodo inicial donde se ubican las hormigas
+cantFermona = [0.1, 1, 10]      # [0.1, 1, 10]
+graf = False
 
-mejorCamino, dist = camino_optimo(nombArch, cantHorm, itMax, tasaEvap, metodoActFeromona, nodoInit)
 
-print(f"Mejor camino encontrado: {mejorCamino}")
-print(f"Distancia recorrida: {dist}")
-plt.show()
+#* =======[Inicializacion de los parametros del ciclo]=======
+tiempo = 0
+table = Table()
+console = Console()
+datos = ["metodo", "tasaEvap", "Q", "seg.", "dist", "iter"]
+# metodo, rho, tau, tiempo, distancia, iteracion
+# rho = \u03C1", tau = "\u03C4"
+for dato in datos:
+    table.add_column(dato, style='bold')
+
+# Manipular los resultados en forma numerica
+np.set_printoptions(precision=2, suppress=True)
+totalDatos = len(metodoActFeromona) * len(cantFermona)
+datosNum = np.zeros(shape=(totalDatos, len(datos)), dtype=float)
+idxDatos = 0
+
+#* =======[Ciclo de entrenamiento]=======
+with console.capture() as capture:
+    for idxMet, metodo in enumerate(metodoActFeromona):
+        for Q in cantFermona:
+            timeInit = time.time()
+
+            #* Entrenamiento
+            mejorCamino, dist, it = camino_optimo(nombArch, cantHorm, itMax, tasaEvap, metodo, nodoInit, Q, graf)
+            tiempo = round(time.time() - timeInit, 2)
+            
+            #? Agregar los resultados en las tablas 
+            table.add_row(nombreMetodo[idxMet], 
+                        str(tasaEvap),
+                        str(Q),
+                        str(tiempo),
+                        str(dist), 
+                        str(it))  
+
+            datosNum[idxDatos] = np.round(np.array([idxMet, tasaEvap, Q, tiempo, dist, it]), 2)
+            idxDatos += 1
+            
+    console.print(table)
+
+#* Mostrar los datos
+table_str = capture.get()
+print("\nMi tabla!!\n", table_str)
+print(f"\nMi ndarray!!\n", datosNum)
+
+
+#* =======[Guardar los datos en un archivo]=======
+#! Escribir en el archivo txt las tablas
+with open('tablas.txt', 'a') as file:
+    file.write(table_str)
+#! Escribir los datos numericos en un csv
+with open('tablas.csv', 'a') as file:
+    np.savetxt(file, datosNum, delimiter=',')
+
+
+# print(f"Mejor camino encontrado: {mejorCamino}")
+# print(f"Distancia recorrida: {dist}")
+# print(f"Tiempo de ejecucion: {round(tiempo, 2)} seg.")
+
+if(graf):
+    plt.show()
