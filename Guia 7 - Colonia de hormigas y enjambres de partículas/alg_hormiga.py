@@ -1,6 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from graficas import graficarFermona, graficarCamino
+from graficas import graficarFeromona, graficarCamino
 
 def cargarDatos(nombArch):
     data = np.genfromtxt(nombArch, delimiter=",", max_rows=None)
@@ -51,12 +51,12 @@ def depositarFermona(metodo, matrizFermona, matrizCaminos, todoCaminoRecorrido, 
 
     return matrizFermona
 
-
-
 def camino_optimo(nombArch, cantHorm, itMax, tasaEvap, metodoActFermona, nodoInit):
 
     matrizCaminos = cargarDatos(nombArch)
 
+    # Con el archivo gr17.csv vamos a tener una matriz de 17x17,
+    # asi que la matriz de caminos y la matriz de feromonas seran de 17x17
     dim0 = matrizCaminos.shape[0]
     dim1 = matrizCaminos.shape[1]
 
@@ -71,7 +71,6 @@ def camino_optimo(nombArch, cantHorm, itMax, tasaEvap, metodoActFermona, nodoIni
     matrizEta = 1/matrizEta
     matrizEta[diag] = 0
 
-
     # Los indices de camino 
     idxCamino = np.arange(dim0)
 
@@ -81,9 +80,11 @@ def camino_optimo(nombArch, cantHorm, itMax, tasaEvap, metodoActFermona, nodoIni
     # Grafica
     producto = 100 # Para que los numeros sean mas visible
     _, ax = plt.subplots(figsize=(6, 6))
-    title = "Inicio de fermonas"
-    ax = graficarFermona(ax, matrizFermona, title, producto)
+    title = "Inicio de feromonas"
+    ax = graficarFeromona(ax, matrizFermona, title, producto)
 
+    # Bucle mientras no se llege a un max de iteraciones y hasta que todas las hormigas se alinean 
+    # durante "n" iteraciones consecutivas (explicado en las anotaciones) 
     while(it < itMax and cantCaminoIgual < 4):
         it += 1
 
@@ -143,28 +144,24 @@ def camino_optimo(nombArch, cantHorm, itMax, tasaEvap, metodoActFermona, nodoIni
 
         matrizFermona = depositarFermona(metodoActFermona, matrizFermona, matrizCaminos, todoCaminoRecorrido, distRecorridas)
 
-
         # Actualizar grafica de fermonas cada n iteraciones
         if(it % 25 == 0):
             title = f"Matriz fermona {producto}x, {it} iteraciones"
-            ax = graficarFermona(ax, matrizFermona, title, producto)
+            ax = graficarFeromona(ax, matrizFermona, title, producto)
     
     # Cuando sale del bucle while
     if(itMax <= it):
-        print("Proceso finalizado por llegar iteracion maxima!")
+        print("Finalizó por llegar al numero máximo de iteraciones.")
     else:
-        print(f"Se logro alinear las ormigas por {cantCaminoIgual} veces.")
+        print(f"Se logro alinear las hormigas por {cantCaminoIgual} veces.")
         print(f"En total {it} iteraciones.")
 
-    # Retornar el camino con menor distancia recorrida
+    # Buscamos la menor distancia recorrida y el mejor camino
     idxMejor = np.argmin(distRecorridas)
     mejorCamino = todoCaminoRecorrido[idxMejor]
 
     title = f"Finalizado en {it} iteraciones.\n Camino: {str(mejorCamino)} \n" 
     graficarCamino(ax, mejorCamino, title)
 
+    # Retornar el camino con menor distancia recorrida
     return mejorCamino, distRecorridas[idxMejor]
-
-
-
-

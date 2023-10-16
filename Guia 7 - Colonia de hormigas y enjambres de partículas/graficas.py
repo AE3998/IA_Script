@@ -1,7 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-
 def iniciarGrafica(func, xmin, xmax, puntosEntrada):
 
     if(xmin.shape[0] == 1):
@@ -59,7 +58,6 @@ def iniciarGrafica(func, xmin, xmax, puntosEntrada):
 
     return ax, puntos
 
-
 def actualizarGrafica(func, dim, puntosEntrada, ax, puntos, title="Funcion"):
 
     ax.set_title(title)
@@ -79,7 +77,7 @@ def actualizarGrafica(func, dim, puntosEntrada, ax, puntos, title="Funcion"):
     plt.pause(0.2)
     return puntos
 
-def graficarFermona(ax, matrizFermona, title, producto):
+def graficarFeromona(ax, matrizFermona, title, producto):
     
     ax.clear()
 
@@ -127,12 +125,3 @@ def graficarCamino(ax, mejorCamino, title):
 # fig, ax = plt.subplots()
 # graficarCamino(ax, mejorCamino)
 # plt.show()
-
-
-
-
-
-
-
-
-
