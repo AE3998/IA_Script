@@ -49,54 +49,30 @@ idxDatos = 0
 #* =======[Ciclo de entrenamiento]=======
 minDistActual = 9999999
 mejorCaminoActual = 0
-tiempoMejorCamino = 0
-totalTiempo = 0
-totalDist = 0
-totalIt = 0
-parametros = ""
-
-# numero de repeticiones con cada combinacion de parametros para calcular un promedio
-# si se quiere probar una sola, usar n = 1
-n = 2   #* recordar que con tasaEvap = 0.9 anda rapido pero con 0.1 demora mas
-
 with console.capture() as capture:
     # Aplicamos el algoritmo para cada metodo (global, uniforme y local) y para cada cant de feromonas
     for idxMet, metodo in enumerate(metodoActFeromona):
         for Q in cantFeromona:
-            for i in range(n):  # se ejecuta "n" veces con esa combinacion de parametros calcular sacar un promedio
-                timeInit = time.time()
+            timeInit = time.time()
 
-                #* Entrenamiento
-                mejorCamino, dist, it = camino_optimo(nombArch, cantHorm, itMax, tasaEvap, metodo, nodoInit, Q, graf)
-                tiempo = round(time.time() - timeInit, 2)
-                
-                # Vamos almacenando para el promedio
-                totalTiempo += tiempo
-                totalDist += dist
-                totalIt += it
-
-                if(dist < minDistActual):
-                    minDistActual = dist
-                    mejorCaminoActual = mejorCamino
-                    tiempoMejorCamino = tiempo
-                    parametros = "TasaEvap:", tasaEvap, "metodo:", metodo, "cantFeromona:", Q
+            #* Entrenamiento
+            mejorCamino, dist, it = camino_optimo(nombArch, cantHorm, itMax, tasaEvap, metodo, nodoInit, Q, graf)
+            tiempo = round(time.time() - timeInit, 2)
+            
+            if(dist < minDistActual):
+                minDistActual = dist
+                mejorCaminoActual = mejorCamino
 
             #? Agregar los resultados en las tablas 
             table.add_row(nombreMetodo[idxMet], 
                         str(tasaEvap),
                         str(Q),
-                        str(round(totalTiempo/n, 2)),
-                        str(round(totalDist/n, 2)), 
-                        str(int(totalIt/n))
-                        )
+                        str(tiempo),
+                        str(dist), 
+                        str(it))  
 
-            datosNum[idxDatos] = np.round(np.array([idxMet, tasaEvap, Q, totalTiempo/n, totalDist/n, totalIt/n]), 2)
+            datosNum[idxDatos] = np.round(np.array([idxMet, tasaEvap, Q, tiempo, dist, it]), 2)
             idxDatos += 1
-
-            # Reinicio los contadores para la proxima combinacion de parametros
-            totalTiempo = 0
-            totalDist = 0
-            totalIt = 0
             
     console.print(table)
 
@@ -105,11 +81,10 @@ table_str = capture.get()
 
 print("\nMejor camino encontrado:", mejorCaminoActual)
 print("Distancia recorrida:", minDistActual)
-print("Tiempo de ejecucion:", round(tiempoMejorCamino, 2), "seg.")
-print("Parametros utilizados:", parametros)
+# print(f"Tiempo de ejecucion: {round(tiempo, 2)} seg.")
 
 #* Mostrar los datos
-print("\nTabla comparativa promedio de", n, "ejecuciones:\n", table_str)
+print("\nTabla comparativa:\n", table_str)
 print(f"\nMi ndarray!!\n", datosNum)
 
 #* =======[Guardar los datos en un archivo]=======
