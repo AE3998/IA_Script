@@ -5,8 +5,6 @@ from rich.console import Console
 from rich.live import Live
 import time
 
-#! Hay que instalar el paquete rich usando 'pip install rich'
-
 # camino_optimo(nombArch, cantHorm, itMax, tasaEvap, metodoActFeromona, nodoInit)
 
 # Dijimos que eligiendo un valor para la tasa de evaporacion "p" (0.1, 0.90) hay que probar con 
@@ -24,14 +22,13 @@ import time
 nombArch = "gr17.csv"
 cantHorm = 30
 itMax = 1500
-tasaEvap = 0.1     
+tasaEvap = 0.9     
 # (0 = Global, 1 = Uniforme, 2 = Local)
-metodoActFeromona = [0, 1, 2]       # el metodo local es el que mas iteraciones usa
+metodoActFeromona = [0, 1, 2]       
 nombreMetodo = ['Global', 'Uniforme', 'Local']
 nodoInit = 0   # [0 ... 17] nodo inicial donde se ubican las hormigas
-cantFermona = [0.1, 1, 10]      # [0.1, 1, 10]
+cantFermona = [0.1, 1, 10]      # [0.1, 1, 10]  le ponemos nombre "Q" en la tabla
 graf = False
-
 
 #* =======[Inicializacion de los parametros del ciclo]=======
 tiempo = 0
@@ -50,7 +47,10 @@ datosNum = np.zeros(shape=(totalDatos, len(datos)), dtype=float)
 idxDatos = 0
 
 #* =======[Ciclo de entrenamiento]=======
+minDistActual = 9999999
+mejorCaminoActual = 0
 with console.capture() as capture:
+    # Aplicamos el algoritmo para cada metodo (global, uniforme y local) y para cada cant de feromonas
     for idxMet, metodo in enumerate(metodoActFeromona):
         for Q in cantFermona:
             timeInit = time.time()
@@ -59,6 +59,10 @@ with console.capture() as capture:
             mejorCamino, dist, it = camino_optimo(nombArch, cantHorm, itMax, tasaEvap, metodo, nodoInit, Q, graf)
             tiempo = round(time.time() - timeInit, 2)
             
+            if(dist < minDistActual):
+                minDistActual = dist
+                mejorCaminoActual = mejorCamino
+
             #? Agregar los resultados en las tablas 
             table.add_row(nombreMetodo[idxMet], 
                         str(tasaEvap),
@@ -75,23 +79,22 @@ with console.capture() as capture:
 # Extraer la tabla en string
 table_str = capture.get()
 
-#* Mostrar los datos
-print("\nMi tabla!!\n", table_str)
-print(f"\nMi ndarray!!\n", datosNum)
+print("\nMejor camino encontrado:", mejorCaminoActual)
+print("Distancia recorrida:", minDistActual)
+# print(f"Tiempo de ejecucion: {round(tiempo, 2)} seg.")
 
+#* Mostrar los datos
+print("\nTabla comparativa:\n", table_str)
+print(f"\nMi ndarray!!\n", datosNum)
 
 #* =======[Guardar los datos en un archivo]=======
 #! Escribir en el archivo txt las tablas
 with open('tablas.txt', 'a') as file:
     file.write(table_str)
+
 #! Escribir los datos numericos en un csv
 with open('tablas.csv', 'a') as file:
     np.savetxt(file, datosNum, delimiter=',')
-
-
-# print(f"Mejor camino encontrado: {mejorCamino}")
-# print(f"Distancia recorrida: {dist}")
-# print(f"Tiempo de ejecucion: {round(tiempo, 2)} seg.")
 
 if(graf):
     plt.show()

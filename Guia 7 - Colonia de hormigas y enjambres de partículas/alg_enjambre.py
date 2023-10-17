@@ -22,10 +22,10 @@ def enjambre_mejor_global(func, cantIdv, maxIter, c1, c2, xmin, xmax):
     velActualIdv = np.zeros(shape=(cantIdv, dim))
 
     mejorPosIdv = posActualIdv.copy()    # inicialmente la mejor posicion es la actual
-    fitness = -func(mejorPosIdv)
+    fitness = -func(mejorPosIdv)        # el signo (-) es para convertir a un problema de maximizacion
 
-    #* Queremos encontrar el minimo global, asi que invertimos el signo
-    #* y usamos max o argmax
+    # Queremos encontrar el minimo global, pero como pusimos el signo (-) usamos max o argmax
+    # ya que es un problema de maximizacion de fitness
     idxMaxFit = np.argmax(fitness)
     actualMaxFit = fitness[idxMaxFit]
     mejorPosEnjambre = mejorPosIdv[idxMaxFit]
