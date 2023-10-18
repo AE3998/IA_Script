@@ -5,7 +5,7 @@ from rich.console import Console
 from rich.live import Live
 import time
 
-# camino_optimo(nombArch, cantHorm, itMax, tasaEvap, metodoActFeromona, nodoInit)
+# camino_optimo(nombArch, cantHorm, itMax, tasaEvap, metodoDepositoFeromona, nodoInit)
 
 # Dijimos que eligiendo un valor para la tasa de evaporacion "p" (0.1, 0.90) hay que probar con 
 # distintos valores para la cantidad de feromonas "τ" (0.1, 1 y 10) y armar una tabla con esos
@@ -24,7 +24,7 @@ cantHorm = 30
 itMax = 1500
 tasaEvap = 0.9     
 # (0 = Global, 1 = Uniforme, 2 = Local)
-metodoActFeromona = [0, 1, 2]       
+metodoDepositoFeromona = [0, 1, 2]       
 nombreMetodo = ['Global', 'Uniforme', 'Local']
 nodoInit = 0   # [0 ... 17] nodo inicial donde se ubican las hormigas
 cantFeromona = [0.1, 1, 10]      # [0.1, 1, 10]  le ponemos nombre "Q" en la tabla
@@ -42,7 +42,7 @@ for dato in datos:
 
 # Manipular los resultados en forma numerica
 np.set_printoptions(precision=2, suppress=True)
-totalDatos = len(metodoActFeromona) * len(cantFeromona)
+totalDatos = len(metodoDepositoFeromona) * len(cantFeromona)
 datosNum = np.zeros(shape=(totalDatos, len(datos)), dtype=float)
 idxDatos = 0
 
@@ -51,7 +51,7 @@ minDistActual = 9999999
 mejorCaminoActual = 0
 with console.capture() as capture:
     # Aplicamos el algoritmo para cada metodo (global, uniforme y local) y para cada cant de feromonas
-    for idxMet, metodo in enumerate(metodoActFeromona):
+    for idxMet, metodo in enumerate(metodoDepositoFeromona):
         for Q in cantFeromona:
             timeInit = time.time()
 

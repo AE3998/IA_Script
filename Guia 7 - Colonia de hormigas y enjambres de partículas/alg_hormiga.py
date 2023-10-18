@@ -8,33 +8,39 @@ def cargarDatos(nombArch):
 
 def obtenerProximoNodo(idx_i, sigmaPorEta, idxBool, idxCamino):
     # Selecciona el proximo nodo segun la formula de probabilidad "p" que dimos
+    # Sigma es la matriz de feromonas que hay para ir de un camino a otro, y eta es la inversa
+    # de la distancia entre dos ciudades (podria ser otro costo, en nuestro caso es la distancia).
 
     # Sacar el numerador y el denominador de los caminos disponibles de ese nodo
     # Se filtra con el indexado booleano
     numerador = sigmaPorEta[idx_i, :][idxBool]
     denominador = np.sum(numerador)
 
-    # Despejar las probabilidades
+    # Calcular las probabilidades
     probabilidad = numerador/denominador
 
-    # Elejir un camino "disponible" (definido por idxBool) segun las probabilidades
+    # Elegimos al azar un camino "disponible" (definido por idxBool) segun las probabilidades
+    # Similar a un metodo de la ruleta tirando un valor al azar y segun las probabilidades elegimos
     idx_j = np.random.choice(idxCamino[idxBool], p=probabilidad)
 
     return idx_j
 
 def depositarFeromona(metodo, matrizFeromona, matrizCaminos, todoCaminoRecorrido, distRecorridas, Q):
-    
+    # -Metodo uniforme: depositar una cantidad constante τ en cada transicion. 
+    # -Metodo global: depositar una fraccion del total τ de feromonas: cantFeromona/long total del camino.
+    # Cuanto mas corto el camino, mas feromonas vamos a dejar, pero en todas las transiciones deja la misma cantidad.
+    # -Metodo local: cantFeromonas / dist. de una ciudad a la otra. En cada transicion sera distinta cantidad.
+
     cantCaminos = todoCaminoRecorrido.shape[0]
     longCaminos = todoCaminoRecorrido.shape[1]
 
-    # Inicializar el denominador como 1 Uniforme
+    # Inicializar el denominador como 1 que seria para el metodo uniforme (metodo == 1)
     denominador = 1
 
     # Recorrer cada camino de hormiga k
     for k in range(cantCaminos):
 
-        if(metodo == 0):
-            # Global
+        if(metodo == 0):    # metodo global
             denominador = distRecorridas[k]
 
         # Recorrer cada nodo recorrido por hormiga k
@@ -43,16 +49,23 @@ def depositarFeromona(metodo, matrizFeromona, matrizCaminos, todoCaminoRecorrido
             idx_i = todoCaminoRecorrido[k, i]
             idx_j = todoCaminoRecorrido[k, i + 1]
 
-            if(metodo == 2):
-                # Local
+            if(metodo == 2):    # metodo Local
                 denominador = matrizCaminos[idx_i, idx_j]
 
+            # Deposito de feromona
             matrizFeromona[idx_i, idx_j] += Q/denominador
 
     return matrizFeromona
 
-def camino_optimo(nombArch, cantHorm, itMax, tasaEvap, metodoActFeromona, nodoInit, Q, graf=False):
-
+def camino_optimo(nombArch, cantHorm, itMax, tasaEvap, metodoDepositoFeromona, nodoInit, Q, graf=False):
+    """
+        Algoritmo de colonia de hormigas para obtener camino optimo.
+        Entradas: nombre del archivo de datos, cant de hormigas, numero max de iteraciones,
+        tasa de evaporacion, metodo de deposito de feromonas, nodo inicial para las hormigas,
+        cantidad de feromonas (Q) y si se desea graficar o no.
+        Salida: mejor camino, distancias recorridas y numero de iteraciones.
+    """
+    
     matrizCaminos = cargarDatos(nombArch)
 
     # Con el archivo gr17.csv vamos a tener una matriz de 17x17, asi que la matriz de caminos
@@ -67,7 +80,7 @@ def camino_optimo(nombArch, cantHorm, itMax, tasaEvap, metodoActFeromona, nodoIn
     # sigma es la cantidad de feromonas, y ƞ (eta) es el costo de hacer ese paso, que en nuestro 
     # caso es la distancia del camino pero podria ser otro costo
 
-    diag = np.diag_indices_from(matrizCaminos)
+    diag = np.diag_indices_from(matrizCaminos)  # indices de la diag principal
     # Despejar la matriz Eta que es 1/dist
     matrizEta = matrizCaminos.copy()
     matrizEta[diag] = 1         # 1 en la diagonal para evitar division por 0
@@ -100,6 +113,7 @@ def camino_optimo(nombArch, cantHorm, itMax, tasaEvap, metodoActFeromona, nodoIn
         todoCaminoRecorrido = np.empty(shape=(cantHorm, dim0 + 1), dtype=int)
 
         # (Sigma ij)^alpha * (Eta ij)^beta
+        # sigma es la matriz de feromonas
         sigmaPorEta = matrizFeromona * matrizEta    # numerador de la formula de probabilidad "p"
 
         # Recorrer cada hormiga
@@ -110,8 +124,8 @@ def camino_optimo(nombArch, cantHorm, itMax, tasaEvap, metodoActFeromona, nodoIn
             caminoRecorrido[0] = nodoInit
             caminoRecorrido[-1] = nodoInit
 
-            # idx boolean para descartar aquellos nodos ya visitados
-            idxBool = np.full(shape=(dim0), fill_value=True, dtype=bool)
+            # idx boolean para ir descatando los nodos ya visitados (por la lista de vecinos con tabu)
+            idxBool = np.full(shape=(dim0), fill_value=True, dtype=bool)    # matriz de tamanio shape con valores fill_value
             idxBool[nodoInit] = False
 
             # Seleccion de caminos hasta el ultimo nodo disponible
@@ -127,7 +141,7 @@ def camino_optimo(nombArch, cantHorm, itMax, tasaEvap, metodoActFeromona, nodoIn
                 idxBool[idx_j] = False
                 distRecorridas[k] += matrizCaminos[idx_i, idx_j]
 
-            ultimoNodo = caminoRecorrido[-2]
+            ultimoNodo = caminoRecorrido[-2]    # nodo antes de volver al nodo inicial
             distRecorridas[k] += matrizCaminos[ultimoNodo, nodoInit]
 
             # Chequear si el camino recorrido es igual que el camino de la 
@@ -143,10 +157,10 @@ def camino_optimo(nombArch, cantHorm, itMax, tasaEvap, metodoActFeromona, nodoIn
         else:
             cantCaminoIgual = 0
 
-        # Actualizar la Feromona segun la tasa de evaporacion
+        # Actualizar la feromona segun la tasa de evaporacion
         matrizFeromona = (1 - tasaEvap) * matrizFeromona
-
-        matrizFeromona = depositarFeromona(metodoActFeromona, matrizFeromona, 
+        # Depositar feromona en el camino
+        matrizFeromona = depositarFeromona(metodoDepositoFeromona, matrizFeromona, 
                                            matrizCaminos, todoCaminoRecorrido, distRecorridas, Q)
 
         # Actualizar grafica de feromonas cada n iteraciones
