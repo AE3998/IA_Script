@@ -56,6 +56,7 @@ def depositarFeromona(metodo, matrizFeromona, matrizCaminos, todoCaminoRecorrido
             # Deposito de feromona en esa transicion del camino
             # Q es la cant de feromonas y se recibe como parametro
             matrizFeromona[idx_i, idx_j] += Q/denominador
+            # matrizFeromona[idx_j, idx_i] += Q/denominador     # esto es si queremos mostrar la matriz de feromonas simetrica, pero funciona mal algo
 
     return matrizFeromona
 

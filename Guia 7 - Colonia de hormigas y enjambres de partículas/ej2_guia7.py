@@ -28,7 +28,7 @@ metodoDepositoFeromona = [0, 1, 2]
 nombreMetodo = ['Global', 'Uniforme', 'Local']
 nodoInit = 0   # [0 ... 17] nodo inicial donde se ubican las hormigas
 cantFeromona = [0.1, 1, 10]      # [0.1, 1, 10]  le ponemos nombre "Q" en la tabla
-graf = False
+graf = False    # si se quiere graficar la matriz de feromonas (poner un solo valor para el metodo y cantFeromona)
 
 #* =======[Inicializacion de los parametros del ciclo]=======
 tiempo = 0
@@ -57,7 +57,7 @@ parametros = ""
 
 # numero de repeticiones con cada combinacion de parametros para calcular un promedio
 # si se quiere probar una sola, usar n = 1
-n = 2   #* recordar que con tasaEvap = 0.9 anda rapido pero con 0.1 demora mas
+n = 1   #* recordar que con tasaEvap = 0.9 anda rapido pero con 0.1 demora mas
 
 with console.capture() as capture:
     # Aplicamos el algoritmo para cada metodo (global, uniforme y local) y para cada cant de feromonas
@@ -114,8 +114,8 @@ print(f"\nMi ndarray!!\n", datosNum)
 
 #* =======[Guardar los datos en un archivo]=======
 #! Escribir en el archivo txt las tablas
-with open('tablas.txt', 'a') as file:
-    file.write(table_str)
+# with open('tablas.txt', 'a') as file:
+#     file.write(table_str)
 
 #! Escribir los datos numericos en un csv
 with open('tablas.csv', 'a') as file:
