@@ -36,7 +36,7 @@ def enjambre_mejor_global(func, cantIdv, maxIter, c1, c2, xmin, xmax):
     idxMejor = 0
     n = 0
 
-    # c1 y c2 son dos constantes que nos permiten controlar cusnta importancia le damos 
+    # c1 y c2 son dos constantes que nos permiten controlar cuanta importancia le damos 
     # a la experiencia personal de la particula y cuanta a la experiencia del enjambre, 
     # para el calculo de la velocidad. 
     # Hacemos que varien a lo largo de las iteraciones.
@@ -69,7 +69,7 @@ def enjambre_mejor_global(func, cantIdv, maxIter, c1, c2, xmin, xmax):
             n += 1
 
         # Segundo criterio de corte: 10 generaciones seguidas sin mejora
-        if(n >= 10):
+        if(n >= 15):
             print("Corto por", n, "iteraciones sin mejoras")
             break
 
